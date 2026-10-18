@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Spotify AI DJ Studio: Architecture",
+    "subtitle": "Collaborative Live Queue Curation & Sentiment-Aware Audio Engine",
+    "output": "docs/architecture.html",
+    "visual_preset": "signal-flow",
+    "animation": "trace",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "realtime_flow",
+        "label": "Real-time Queue & Sync",
+        "focus": ["client", "socket_gw", "room_mgr", "event_buffer", "db"],
+        "note": "Authoritative FIFO reducer syncs queue snapshots <100ms and buffers events for persistence."
+      },
+      {
+        "id": "acoustic_rag",
+        "label": "Acoustic Matching & DJ RAG",
+        "focus": ["room_mgr", "ai_engine", "llm_adapter"],
+        "note": "Deterministic BPM ±8% and Camelot filtering with strictly grounded Ollama RAG."
+      },
+      {
+        "id": "storage_durability",
+        "label": "Storage & Offline Fitting",
+        "focus": ["event_buffer", "db", "rec_worker", "asset_store"],
+        "note": "Transactional event batches (1s/50ev) into MongoDB replica set and offline hybrid worker."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "frontend",
+      "label": "React DJ Console",
+      "sublabel": "Browser Client / Vite SPA",
+      "brand": "react",
+      "pos": [40, 300],
+      "size": [132, 64],
+      "tag": "Web Audio API"
+    },
+    {
+      "id": "api_gw",
+      "type": "backend",
+      "label": "Express API",
+      "sublabel": "REST Gateway :3000",
+      "brand": "node-js",
+      "pos": [230, 300],
+      "size": [136, 62],
+      "tag": "Base /api/v1"
+    },
+    {
+      "id": "socket_gw",
+      "type": "messagebus",
+      "label": "Socket.IO Gateway",
+      "sublabel": "Namespace /lounges",
+      "pos": [230, 440],
+      "size": [136, 62],
+      "tag": "<100ms sync"
+    },
+    {
+      "id": "auth",
+      "type": "security",
+      "label": "Auth & RBAC",
+      "sublabel": "Argon2id + JWT / Refresh",
+      "pos": [230, 160],
+      "size": [136, 60],
+      "tag": "4-Role Matrix"
+    },
+    {
+      "id": "room_mgr",
+      "type": "backend",
+      "label": "Room State Engine",
+      "sublabel": "Serialized FIFO Reducer",
+      "pos": [430, 300],
+      "size": [140, 64],
+      "tag": "Authoritative"
+    },
+    {
+      "id": "ai_engine",
+      "type": "backend",
+      "label": "Acoustic & Sentiment",
+      "sublabel": "Harmonic Filter + 30s Window",
+      "pos": [430, 160],
+      "size": [140, 60],
+      "tag": "BPM ±8% & Camelot"
+    },
+    {
+      "id": "event_buffer",
+      "type": "backend",
+      "label": "Bounded Buffer",
+      "sublabel": "Batch Writer (1s / 50ev)",
+      "pos": [430, 440],
+      "size": [140, 60],
+      "tag": "Watermarked"
+    },
+    {
+      "id": "rec_worker",
+      "type": "backend",
+      "label": "Rec Worker",
+      "sublabel": "Worker Thread (Offline)",
+      "pos": [430, 570],
+      "size": [140, 60],
+      "tag": "Hybrid Model"
+    },
+    {
+      "id": "llm_adapter",
+      "type": "external",
+      "label": "Local LLM / RAG",
+      "sublabel": "Ollama :11434 (Loopback)",
+      "brand": "ollama",
+      "pos": [650, 160],
+      "size": [136, 60],
+      "tag": "Authored Metadata"
+    },
+    {
+      "id": "asset_store",
+      "type": "cloud",
+      "label": "Local Audio Assets",
+      "sublabel": "FS Volume / Range 206",
+      "pos": [650, 300],
+      "size": [136, 62],
+      "tag": "No Real Spotify"
+    },
+    {
+      "id": "db",
+      "type": "database",
+      "label": "MongoDB Replica Set",
+      "sublabel": "rs0 :27017 (ACID)",
+      "brand": "mongodb",
+      "pos": [650, 440],
+      "size": [148, 62],
+      "tag": "Transactions"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Private Host Environment (Isolated Deployment)",
+      "wraps": ["api_gw", "socket_gw", "auth", "room_mgr", "ai_engine", "event_buffer", "rec_worker", "llm_adapter", "asset_store", "db"],
+      "pad": 22
+    },
+    {
+      "kind": "security-group",
+      "label": "Single Node.js Runtime Process",
+      "wraps": ["api_gw", "socket_gw", "auth", "room_mgr", "ai_engine", "event_buffer", "rec_worker"],
+      "pad": 14
+    }
+  ],
+  "connections": [
+    {
+      "from": "client",
+      "to": "api_gw",
+      "label": "HTTPS REST",
+      "variant": "emphasis"
+    },
+    {
+      "from": "client",
+      "to": "socket_gw",
+      "label": "WSS Realtime",
+      "variant": "emphasis",
+      "route": "orthogonal-h"
+    },
+    {
+      "from": "api_gw",
+      "to": "auth",
+      "label": "verify token",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "socket_gw",
+      "to": "auth",
+      "label": "handshake auth",
+      "variant": "security",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "api_gw",
+      "to": "room_mgr",
+      "label": "command",
+      "variant": "default"
+    },
+    {
+      "from": "socket_gw",
+      "to": "room_mgr",
+      "label": "lounge.command",
+      "variant": "default",
+      "route": "orthogonal-h"
+    },
+    {
+      "from": "room_mgr",
+      "to": "ai_engine",
+      "label": "filter & rank",
+      "variant": "emphasis",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "from": "ai_engine",
+      "to": "llm_adapter",
+      "label": "lore citations",
+      "variant": "dashed"
+    },
+    {
+      "from": "api_gw",
+      "to": "asset_store",
+      "label": "Range stream",
+      "variant": "default"
+    },
+    {
+      "from": "room_mgr",
+      "to": "event_buffer",
+      "label": "append event",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "from": "event_buffer",
+      "to": "db",
+      "label": "ACID batch",
+      "variant": "emphasis"
+    },
+    {
+      "from": "rec_worker",
+      "to": "db",
+      "label": "interactions & models",
+      "variant": "dashed",
+      "route": "orthogonal-h"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Authoritative Room State",
+      "items": [
+        "Per-room serialized in-memory FIFO queue with pure state reducer",
+        "Deterministic BPM ±8% and Camelot key eligibility enforced before any segue commit",
+        "Atomic revisioned snapshot broadcast ensures consistent client synchronization"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Storage & Durability",
+      "items": [
+        "In-memory operational authority with bounded event batching (1s / 50 events)",
+        "MongoDB replica set (rs0) provides transactional multi-document ACID persistence",
+        "Authenticated HTTP 206 Range streaming for local assets; zero external Spotify ingestion"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Security & Grounded AI",
+      "items": [
+        "15-minute access JWTs with rotating HttpOnly refresh cookies and 4-tier RBAC",
+        "Local Ollama RAG constrained strictly to authored metadata and verified citations",
+        "Graceful fallback to deterministic templates on model timeout or offline runtime"
+      ]
+    }
+  ]
+}

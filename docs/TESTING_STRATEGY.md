@@ -1,0 +1,39 @@
+# Testing strategy
+
+The table below is the full target suite. Foundation coverage has been executed with Jest/Supertest, socket.io-client and a real isolated MongoDB replica set, plus a two-context Playwright browser journey. See [implementation status](IMPLEMENTATION_STATUS.md) for exact results; do not treat future queue/AI/performance tests as passed. Mock the LLM for deterministic CI; run real-model evaluation separately and label it. Every test report records commit, runtime/dependency versions, hardware, dataset hash, workload and failures.
+
+| Test ID | Requirements | Procedure and measurable acceptance |
+| --- | --- | --- |
+| TEST-001 | REQ-003,021 | Register/login/refresh/logout; all 4 roles across HTTP/socket; expiry, wrong issuer/audience, revoked family, forged role. Every unauthorized mutation rejected; no leaked credentials |
+| TEST-002 | REQ-004,010 | Create/join, invite rotation/lock/capacity, seed chain, profile values at boundaries. Invalid values rejected; no orphan memberships/assets |
+| TEST-003 | REQ-005,018 | 100 concurrent vote commands across ≥10 users plus duplicate retries; compare snapshot hashes at settled revision. Exactly one vote per identity/entry, deterministic order, zero divergent clients |
+| TEST-004 | REQ-006,008 | Join/resync mid-track, reconnect/gap, two tabs/user, Host last socket disconnect, transfer/remove/mute. Snapshot <2 s; freeze deterministic; removed sockets cannot mutate; no duplicate presence |
+| TEST-005 | REQ-011,012 | ≥20 simulated decisions plus all 24 keys and boundary tempo/half/double cases; no candidate, incompatible promotion, stale proposal. 100% selected tracks satisfy both hard rules |
+| TEST-006 | REQ-014 | Supported/unknown questions, bad citation IDs, malicious metadata, stale generated response, model timeout. Zero unsupported factual claims on audited test set; all cited IDs valid; fallback explicitly labeled |
+| TEST-007 | REQ-007,013 | Persist/reload chat/reactions; typing expiry; held-out sentiment evaluation and positive→negative burst. Accuracy ≥85%, confusion matrix reported; score shifts within 30 s under proposed settings |
+| TEST-008 | REQ-009,017 | Battle 2/4 candidates, simultaneous close/vote, tie/zero votes, repeat resolution, incompatible winner and host freeze. One resolution/splice/announcement; summary counts reconcile exactly |
+| TEST-009 | REQ-019 | Instrument local API, queue and AI workloads. Non-AI P95 <200 ms; transition P95 <3 s; queue apply delay <100 ms and room fan-out <500 ms under declared conditions |
+| TEST-010 | REQ-018,020 | Kill process before/after flush, fail DB, retry partially attempted batch, restart and replay, graceful end barrier. No duplicate persisted events; bounded unflushed loss reported; recovered room paused/new epoch |
+| TEST-011 | REQ-001,021 | XSS/NoSQL injection/path traversal/oversize audio/CSRF/Origin/rate-limit/prompt injection tests; inspect outbound requests. No unauthorized file/data access, model never gets Spotify content, no secrets in logs |
+| TEST-012 | REQ-006,018,019,020 | Slow consumers, two+ rooms, 5–10 then up to 50 clients/room, bounded buffers, readiness with DB down. No cross-room events; degradation visible; no unbounded memory growth |
+| TEST-013 | REQ-015 | Chronological split, ≥5 unseen candidates/user, content and collaborative baselines, update fitting, cold start. Precision@5 ≥0.6 with denominator/coverage/data hash; changed data produces new model without redeploy |
+| TEST-014 | REQ-016,017 | Manually log one session's starts/ends/presence/battles/questions/ticks and compare dashboard/summary/replay. Exact counts/timeline/duration under documented definitions; only own history visible |
+| TEST-015 | REQ-002,022 | Clean checkout install/migrate/seed/start; two-browser auth→room→vote→chat→battle→segue/Q&A→end→dashboard; keyboard controls. All required path evidence saved; docs match actual behavior |
+
+## Performance protocol
+
+Use a local multi-client harness sharing a monotonic clock where possible; for browsers estimate server offset via ping/pong and record clock uncertainty. Queue metric is command receipt to application of identical revision on the last connected healthy client, plus max inter-client apply skew. Track both, not only server emit time. A command ack is not evidence that all clients rendered it. Require max <100 ms for queue events under declared normal local conditions; also report P50/P95/P99/max and sample count. General fan-out max <500 ms is a separate looser target, not a replacement.
+
+Proposed run: 1-minute warmup plus 10-minute measurement, two rooms, 5–10 users/room, 2 queue mutations/second/room and 1 chat/second/room, each acknowledging applied revision. Then stress 50 users/room when hardware allows. Separate disconnect/packet-loss tests from normal-network pass data; include timeouts/dropped clients in failure accounting rather than silently excluding them. PRD permits smaller load tests, but results at 10 users do not prove 50-user performance.
+
+Measure AI latency from configured outro trigger through validated text delivered/rendered, not just provider duration. Report warm/cold, template fallbacks, stale/cancelled generations and real model calls separately. A fallback may protect UX but cannot mask missing model evidence. Non-AI API timings include validation, auth and database work as applicable. Publish raw traces alongside percentile calculations.
+
+## Data and AI validity
+
+Store seed fixtures apart from evaluation datasets. At least three legal tracks prove the segue chain; create a larger evaluation catalog for recommendations. Manually label sentiment without letting the scorer produce labels. Split by template/author and use a held-out file hash to prevent accidental retuning. For recommendations use time-separated sessions and report how relevance is defined (proposed completed/liked). Reproduce all evaluation scripts from a locked seed; report synthetic-data limitations.
+
+For grounding, manually audit a proposed ≥30 questions, including ≥10 unsupported questions, and transition explanations. Verify source IDs and each factual claim; a valid JSON response is not proof of truth. Property tests enforce key/tempo invariants; fuzz invalid numeric/payload input. Model output tests must not make unstable exact-string assertions.
+
+## CI and evidence
+
+Pull requests: lint, schema/unit/API tests and relevant persistence/socket integration suites. Release: full E2E, real-model evaluation, security scans, performance and restore rehearsal. Keep test reports under a future `evidence/` directory with no real passwords, emails or copyrighted media. Capture multi-session queue changes, one complete battle, valid segue plus grounded Q&A, sentiment shift, server-side RBAC denial, recommendation update and analytics reconciliation. The final retrospective must describe unmet targets and scope changes; no target is marked passed in this planning package.

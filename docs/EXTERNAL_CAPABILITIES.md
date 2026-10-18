@@ -1,0 +1,28 @@
+# External capabilities and verification record
+
+Checked against official sources on 18 October 2026. This file exists to resolve the request's Spotify/API validation requirement without injecting a prohibited integration into the PRD. No account credentials, app-specific endpoint probes or model benchmarks were available; documentation-level capability is not proof of access for a particular account.
+
+## Spotify scope and policy
+
+The PRD §4.2 explicitly excludes real Spotify infrastructure, accounts, catalog and user data. Therefore none of the following is an application dependency. Spotify's [Developer Policy](https://developer.spotify.com/policy) restricts mixing/overlap of its content, analysis of its content/service and ingestion into AI/ML models. These restrictions conflict with treating Spotify tracks as this prototype's acoustic/RAG training corpus. The proposed local-media architecture avoids that dependency; this is an engineering scope conclusion, not permission for a future Spotify product.
+
+| Area | Verified finding and official reference | Consequence |
+| --- | --- | --- |
+| Audio features/recommendations | New-use-case access to audio features, audio analysis and recommendations was restricted in the [November 2024 API update](https://developer.spotify.com/blog/2024-11-27-changes-to-the-web-api) | Reference endpoint existence does not establish entitlement; never assume these sources for the project |
+| Development access | [Quota modes](https://developer.spotify.com/documentation/web-api/concepts/quota-modes) describes Premium app-owner requirement and up to five authorized users; broader access needs separate approval | Cannot equate 50 lounge participants with development API entitlement |
+| Changing limits | [July 2026 update](https://developer.spotify.com/blog/2026-07-23-web-api-quota-updates) raises Client ID limit to 25 and shares quota per developer account; quota-related 429 includes QUOTA_EXCEEDED | Do not repeat February's one-client-ID rule as current; distinguish quota and rate-limit responses |
+| Conflicting migration timing | [February announcement, March 9 update](https://developer.spotify.com/blog/2026-02-06-update-on-developer-access-and-platform-security) postpones endpoint changes for existing integrations, while the [migration guide](https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide) still describes March migration | Existing/new app behavior must be confirmed in the dashboard and live authorized tests; do not infer broad legacy exemptions |
+| Playback control | [Start/resume playback](https://developer.spotify.com/documentation/web-api/reference/start-a-users-playback) requires Premium and user-modify-playback-state; operation order with other player endpoints is not guaranteed | Remote control is not arbitrary audio access, DSP or an atomic collaborative queue |
+| OAuth | [Authorization](https://developer.spotify.com/documentation/web-api/concepts/authorization) documents code/code-PKCE/client credentials; [redirect requirements](https://developer.spotify.com/documentation/web-api/concepts/redirect_uri) require HTTPS except explicit loopback and do not accept localhost | A separately approved future user integration needs correct scopes/state/redirects and protected refresh tokens; project login is its own JWT system |
+
+No verified path here grants raw Spotify audio access or custom mixing. Future investigation must also review attribution, caching, playback device availability, account scope and current policy; it must not silently reuse local-media AI functionality with Spotify data.
+
+## Selected supporting services
+
+Socket.IO [delivery guarantees](https://socket.io/docs/v4/delivery-guarantees/) document ordering but default at-most-once delivery. Proposed command deduplication, epoch/revision and snapshots are application responsibilities, not built-in durability.
+
+MongoDB [transactions](https://www.mongodb.com/docs/manual/core/transactions/) support multi-document transactions on replica sets/sharded deployments. Plan a local replica set for transactional event batches; a plain standalone instance is not equivalent.
+
+Ollama [generation API](https://docs.ollama.com/api/generate) accepts a model, prompt and output format; streaming must be explicitly disabled for the planned complete-response validator. [Structured output documentation](https://docs.ollama.com/capabilities/structured-outputs) documents schema output and notes cloud limitations. Schema output cannot guarantee factual correctness or a three-second response. Context length, license, quantization, hardware memory and warm/cold latency depend on the specific model and remain unverified until TASK-003.
+
+No paid/hosted AI provider has been selected. If one is chosen, record its official model/version, context/output limits, rate limits, retention/training policy, region and cost before enabling it. Core matching and sentiment must remain functional if generation is unavailable.

@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+client/dist/
+coverage/
+test-results/
+playwright-report/
+data/assets/*
+!data/assets/.gitkeep
+data/models/
+data/local-db/
+*.log
