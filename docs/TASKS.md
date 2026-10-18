@@ -11,10 +11,10 @@ Implementation has started; unchecked tasks may contain completed sub-items in [
 | [ ] | TASK-002 | P0 / P0 | Legal media/profile and larger eval dataset plan, REQ-010,015 | TASK-001 | ≥3-track chain feasible; licenses recorded, Precision@5 data plan | [AI](AI_MUSIC_ENGINE.md) |
 | [ ] | TASK-003 | P0 / P0 | Model/hardware feasibility and behavior decisions, REQ-011,014,018,019 | TASK-001 | OQ-03–06 answered; model/license/context/latency assessed | [Requirements](PROJECT_REQUIREMENTS.md) |
 | [x] | TASK-004 | P0 / P1 | Scaffold JavaScript workspaces/CI/Compose, REQ-002,022 | Independent scaffold implemented while TASK-002/003 gates remain open | Local install/build/lint/tests verified; Docker execution remains untested | [Setup](ENVIRONMENT_SETUP.md) |
-| [ ] | TASK-005 | P0 / P1 | Schema migrations/indexes/seed, REQ-010,018 | TASK-004 | Fresh and rerun seed stable; invalid profiles rejected, TEST-002 | [Schema](DATABASE_SCHEMA.md) |
-| [ ] | TASK-006 | P0 / P1 | Auth/refresh/RBAC, REQ-003,021 | TASK-005 | All roles tested, replay/expiry rejected, TEST-001 | [Security](SECURITY.md) |
-| [ ] | TASK-007 | P1 / P1 | Catalog/media/profile API, REQ-001,010 | TASK-005, TASK-006 | Legal assets play privately; admin validation, TEST-002/011 | [API](API_SPECIFICATION.md) |
-| [ ] | TASK-008 | P1 / P1 | Create/invite/join and initial UI, REQ-004,006 | TASK-006, TASK-007 | Two sessions see shared snapshot, TEST-002/015 | [Architecture](ARCHITECTURE.md) |
+| [x] | TASK-005 | P0 / P1 | Schema migrations/indexes/seed, REQ-010,018 | TASK-004 | Fresh and rerun seed stable; invalid profiles rejected, TEST-002 | [Schema](DATABASE_SCHEMA.md) |
+| [x] | TASK-006 | P0 / P1 | Auth/refresh/RBAC, REQ-003,021 | TASK-005 | All roles tested, replay/expiry rejected, TEST-001 | [Security](SECURITY.md) |
+| [x] | TASK-007 | P1 / P1 | Catalog/media/profile API, REQ-001,010 | TASK-005, TASK-006 | Legal assets play privately; admin validation, TEST-002/011 | [API](API_SPECIFICATION.md) |
+| [x] | TASK-008 | P1 / P1 | Create/invite/join and initial UI, REQ-004,006 | TASK-006, TASK-007 | Two sessions see shared snapshot, TEST-002/015 | [Architecture](ARCHITECTURE.md) |
 | [ ] | TASK-009 | P0 / P2 | Pure room reducer and concurrent votes, REQ-005 | TASK-008 | Atomic deterministic sort/idempotency, TEST-003 | [Architecture](ARCHITECTURE.md) |
 | [ ] | TASK-010 | P0 / P2 | Event batch writer/replay/degradation, REQ-018,020 | TASK-009 | Flush/retry/crash tests and durable watermark, TEST-010 | [Schema](DATABASE_SCHEMA.md) |
 | [ ] | TASK-011 | P1 / P2 | Socket snapshots/presence/reconnect, REQ-006,019 | TASK-009, TASK-010 | Join <2 s, gaps recover, TEST-004/012 | [API](API_SPECIFICATION.md) |

@@ -6,7 +6,8 @@ import { connect, migrate } from '../server/src/persistence.js';
 import { importMedia } from '../server/src/import-media.js';
 process.loadEnvFile(path.join(root, '.env'));
 const folder = path.join(root, 'data/local-db'); await mkdir(folder, { recursive: true });
-const repl = await MongoMemoryReplSet.create({ instanceOpts: [{ dbPath: folder }], replSet: { count: 1, storageEngine: 'wiredTiger' } });
+const port = Number(process.env.LOCAL_MONGO_PORT || 50109);
+const repl = await MongoMemoryReplSet.create({ instanceOpts: [{ dbPath: folder, port }], replSet: { count: 1, storageEngine: 'wiredTiger' } });
 let db;
 try {
   const config = readConfig({ ...process.env, MONGODB_URI: repl.getUri('ai_dj_local') }); db = await connect(config.mongoUri);

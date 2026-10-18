@@ -48,27 +48,27 @@ Implementation note (18 October 2026): the user's request to start was applied t
 - [x] Provide `.env.example` with documented non-secret defaults.
 - [x] Configure root test scripts: `npm test`, `npm run test:integration`, `npm run lint`.
 
-### [ ] TASK-005: Schema Migrations, Indexes & Deterministic Seed
-- [ ] Build migration runner with checksum validation and `schema_migrations` collection ledger ([DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#L61)).
+### [x] TASK-005: Schema Migrations, Indexes & Deterministic Seed
+- [x] Build migration runner with checksum validation and `schema_migrations` collection ledger ([DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#L61)).
 - [x] Implement Mongoose models with validation: `users`, `refresh_sessions`, `tracks`, `audio_assets`, `lounges`, `memberships`.
 - [x] Apply unique and compound indexes (normalized email, active invite code, acoustic BPM/key).
-- [ ] Author idempotent seeder `npm run db:seed` inserting $\ge 3$ verified seed tracks and acoustic profiles.
+- [x] Author idempotent seeder `npm run db:seed` inserting $\ge 3$ verified seed tracks and acoustic profiles.
 - [x] Write CLI admin creation command: `npm run admin:create` ([TEST-002](TESTING_STRATEGY.md#L8)).
 
-### [ ] TASK-006: Authentication, Token Lifecycle & RBAC Engine
-- [ ] Implement password hashing with Argon2id and calibrated parameters ([SECURITY.md](SECURITY.md#L20)).
+### [x] TASK-006: Authentication, Token Lifecycle & RBAC Engine
+- [x] Implement password hashing with Argon2id and calibrated parameters ([SECURITY.md](SECURITY.md#L20)).
 - [x] Build JWT issuance: 15-minute access token in memory, 7-day rotating refresh token in `HttpOnly`, `Secure`, `SameSite=Strict` cookie ([ADR-011](DECISIONS.md#L17)).
 - [x] Implement token family replay detection and family-wide revocation ([SECURITY.md](SECURITY.md#L22)).
-- [ ] Implement 4-tier permission middleware: Listener, Co-DJ, Host, Admin with room-scoped isolation ([SECURITY.md](SECURITY.md#L7)).
-- [ ] Implement route-level and handshake rate limiting (login throttling, auth checks) ([TEST-001](TESTING_STRATEGY.md#L7)).
+- [x] Implement 4-tier permission middleware: Listener, Co-DJ, Host, Admin with room-scoped isolation ([SECURITY.md](SECURITY.md#L7)).
+- [x] Implement route-level and handshake rate limiting (login throttling, auth checks) ([TEST-001](TESTING_STRATEGY.md#L7)).
 
-### [ ] TASK-007: Catalog, Media Streaming & Acoustic Profile API
+### [x] TASK-007: Catalog, Media Streaming & Acoustic Profile API
 - [x] Build `POST /api/v1/assets` multipart upload for Admins with MIME/magic-byte checks and private root containment ([API_SPECIFICATION.md](API_SPECIFICATION.md#L29)).
 - [x] Build `GET /api/v1/assets/:id/content` supporting authenticated HTTP 206 Partial Content Range streaming ([API_SPECIFICATION.md](API_SPECIFICATION.md#L30)).
 - [x] Build `POST /api/v1/tracks` and `GET /api/v1/tracks` catalog search with cursor pagination.
 - [x] Build `GET /api/v1/tracks/:id/acoustic-profile` and `PUT` versioned profile editor with `expectedProfileVersion` conflict protection ([API_SPECIFICATION.md](API_SPECIFICATION.md#L32)).
 
-### [ ] TASK-008: Lounge Management & Initial Console UI
+### [x] TASK-008: Lounge Management & Initial Console UI
 - [x] Build `POST /api/v1/lounges` (Host lounge creation, invite hash generation, initial state) ([API_SPECIFICATION.md](API_SPECIFICATION.md#L72)).
 - [x] Build `POST /api/v1/lounges/join` (idempotent invite join, capacity check $[2, 50]$ participants).
 - [x] Implement minimal Socket.IO handshake authentication verifying JWT and lounge membership.

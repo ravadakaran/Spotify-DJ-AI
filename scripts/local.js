@@ -8,8 +8,9 @@ import { createApplication } from "../server/src/app.js";
 process.loadEnvFile(path.join(root, ".env"));
 const folder = path.join(root, "data/local-db");
 await mkdir(folder, { recursive: true });
+const port = Number(process.env.LOCAL_MONGO_PORT || 50109);
 const repl = await MongoMemoryReplSet.create({
-  instanceOpts: [{ dbPath: folder }],
+  instanceOpts: [{ dbPath: folder, port }],
   replSet: { count: 1, storageEngine: "wiredTiger" },
 });
 const config = readConfig({
