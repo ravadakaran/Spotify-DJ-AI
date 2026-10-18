@@ -14,6 +14,7 @@ import { catalogRouter } from "./catalog.js";
 import { RoomService } from "./rooms.js";
 import { HttpError } from "./validation.js";
 import { root } from "./config.js";
+import { createThrottle } from './throttle.js';
 
 export function createApplication({
   models,
@@ -23,16 +24,17 @@ export function createApplication({
 }) {
   const app = express();
   const server = createServer(app);
+  const handshakeAllowed = createThrottle({ limit: config.handshakeLimit || 30 });
   const io = new Server(server, {
     cors: { origin: config.origin, credentials: true },
     maxHttpBufferSize: 65536,
-    allowRequest: (req, cb) => cb(null, req.headers.origin === config.origin),
+    allowRequest: (req, cb) => cb(null, req.headers.origin === config.origin && handshakeAllowed(req.socket.remoteAddress)),
   });
   const namespace = io.of("/lounges");
   const auth = createAuth(models, config, (id) =>
     namespace.in(`session:${id}`).disconnectSockets(true),
   );
-  const rooms = new RoomService(models, connection);
+  const rooms = new RoomService(models, connection, config.key);
   const envelope = (state) => ({
     event: "lounge.state.snapshot",
     loungeId: state.loungeId,
@@ -130,7 +132,7 @@ export function createApplication({
   });
   api.use(catalogRouter(models, auth, config));
   api.post("/lounges", async (req, res) =>
-    res.status(201).json(await rooms.create(req.auth.user._id, req.body)),
+    res.status(201).json(await rooms.create(req.auth.user._id, req.body, req.headers['x-command-id'])),
   );
   api.post("/lounges/join", async (req, res) =>
     res.json(await rooms.join(req.auth.user._id, req.body)),

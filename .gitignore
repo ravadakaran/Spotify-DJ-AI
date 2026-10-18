@@ -10,4 +10,7 @@ data/assets/*
 !data/assets/.gitkeep
 data/models/
 data/local-db/
+data/backups/
+data/import-reports/
+data/local-connection.json
 *.log

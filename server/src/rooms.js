@@ -1,14 +1,15 @@
-import { randomBytes, randomUUID } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 import { hash } from "./auth.js";
 import { HttpError, parse, schemas, requireId } from "./validation.js";
 
 export class RoomService {
-  constructor(models, connection) {
+  constructor(models, connection, receiptKey) {
     this.models = models;
     this.connection = connection;
     this.epoch = randomUUID();
     this.locks = new Map();
     this.publish = () => {};
+    this.receiptKey = receiptKey;
   }
   async serial(id, operation) {
     const prior = this.locks.get(id) || Promise.resolve();
@@ -69,12 +70,23 @@ export class RoomService {
       })),
     };
   }
-  async create(userId, input) {
+  async create(userId, input, commandId = randomUUID()) {
+    requireId(commandId);
+    return this.serial(`create:${userId}`, () => this.createOnce(userId, input, commandId));
+  }
+  async createOnce(userId, input, commandId) {
     const body = parse(schemas.create, input);
+    const requestHash = hash(JSON.stringify(body));
+    const inviteCode = createHmac('sha256', this.receiptKey).update(`${userId}:${commandId}`).digest('hex').slice(0, 16).toUpperCase();
+    const previous = await this.models.Receipt.findOne({ actorId: userId, commandId });
+    if (previous) {
+      if (previous.requestHash !== requestHash) throw new HttpError(409, 'COMMAND_CONFLICT', 'Command ID already used for a different request.');
+      return { ...(await this.snapshot(previous.response.loungeId)), inviteCode, createdAt: previous.response.createdAt };
+    }
     if (!(await this.models.Track.exists({ _id: body.seedTrackId })))
       throw new HttpError(422, "INVALID_TRACK", "Choose a catalog track.");
-    const inviteCode = randomBytes(8).toString("hex").toUpperCase();
     const id = randomUUID();
+    const createdAt = new Date().toISOString();
     await this.connection.transaction(async (session) => {
       await this.models.Lounge.create(
         [
@@ -99,11 +111,12 @@ export class RoomService {
         [{ loungeId: id, userId, role: "host" }],
         { session },
       );
+      await this.models.Receipt.create([{ actorId: userId, commandId, requestHash, response: { loungeId: id, createdAt }, expiresAt: new Date(Date.now() + 86400000) }], { session });
     });
     return {
       ...(await this.snapshot(id)),
       inviteCode,
-      createdAt: new Date().toISOString(),
+      createdAt,
     };
   }
   async join(userId, input) {

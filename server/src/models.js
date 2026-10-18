@@ -47,7 +47,8 @@ export function createModels(connection) {
       sha256: String,
       licenseLabel: { type: String, required: true },
       sourceAttribution: { type: String, required: true },
-      uploadedBy: ref("users"),
+      uploadedBy: { type: String, ref: 'users', default: null },
+      importActor: String,
     },
     [[{ storageKey: 1 }, { unique: true }]],
   );
@@ -58,7 +59,8 @@ export function createModels(connection) {
       artist: { type: String, required: true },
       durationSeconds: { type: Number, required: true, min: 0.001 },
       assetId: { type: String, ref: "audio_assets", default: null },
-      acoustic: {
+      profileStatus: { type: String, enum: ['ready', 'pending'], default: 'ready' },
+      acoustic: { type: new Schema({
         bpm: { type: Number, required: true, min: 0.001 },
         camelotKey: {
           type: String,
@@ -67,7 +69,7 @@ export function createModels(connection) {
         },
         energy: { type: Number, required: true, min: 0, max: 1 },
         valence: { type: Number, required: true, min: 0, max: 1 },
-      },
+      }, { _id: false }), default: null },
       timeline: [
         {
           _id: false,
@@ -122,5 +124,6 @@ export function createModels(connection) {
     },
     [[{ loungeId: 1, userId: 1 }, { unique: true }]],
   );
-  return { User, Session, Asset, Track, Lounge, Membership };
+  const Receipt = model('command_receipts', { actorId: ref('users'), commandId: String, requestHash: String, response: Schema.Types.Mixed, expiresAt: Date }, [[{ actorId: 1, commandId: 1 }, { unique: true }], [{ expiresAt: 1 }, { expireAfterSeconds: 0 }]]);
+  return { User, Session, Asset, Track, Lounge, Membership, Receipt };
 }

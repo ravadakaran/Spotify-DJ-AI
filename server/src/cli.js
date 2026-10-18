@@ -4,7 +4,11 @@ import { readConfig } from "./config.js";
 import { connect, migrate, seed } from "./persistence.js";
 import { passwordOptions } from "./auth.js";
 import { schemas } from "./validation.js";
+import { readFile } from 'node:fs/promises';
+import { root } from './config.js';
+import path from 'node:path';
 const config = readConfig();
+if(process.argv.includes('--local')) config.mongoUri=JSON.parse(await readFile(path.join(root,'data/local-connection.json'),'utf8')).mongoUri;
 const db = await connect(config.mongoUri);
 try {
   const command = process.argv[2];

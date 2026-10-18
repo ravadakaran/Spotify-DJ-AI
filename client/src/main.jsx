@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { io } from "socket.io-client";
 import "./style.css";
+import Catalog from './Catalog.jsx';
 
 function App() {
   const [session, setSession] = useState(null);
@@ -36,7 +37,7 @@ function App() {
         });
     return refreshRef.current;
   }
-  async function api(route, { method = "GET", body } = {}, retry = true) {
+  async function api(route, { method = "GET", body, commandId = crypto.randomUUID() } = {}, retry = true) {
     const multipart = body instanceof FormData;
     const response = await fetch(`/api/v1${route}`, {
       method,
@@ -46,13 +47,14 @@ function App() {
           ? { Authorization: `Bearer ${tokenRef.current}` }
           : {}),
         "X-CSRF-Protection": "1",
+        'X-Command-Id': commandId,
       },
       body: body ? (multipart ? body : JSON.stringify(body)) : undefined,
     });
     if (response.status === 401 && retry && !route.startsWith("/auth/")) {
       try {
         await refresh();
-        return api(route, { method, body }, false);
+        return api(route, { method, body, commandId }, false);
       } catch {
         setSession(null);
         setRoom(null);
@@ -83,7 +85,7 @@ function App() {
   }, []);
   useEffect(() => {
     if (!session) return;
-    Promise.all([api("/tracks"), api("/users/me/lounges")])
+    Promise.all([api("/tracks?limit=100"), api("/users/me/lounges")])
       .then(([catalog, lounges]) => {
         setTracks(catalog.items);
         setHistory(lounges.items);
@@ -204,7 +206,7 @@ function App() {
           timeline: [],
         },
       });
-      setTracks((await api("/tracks")).items);
+      setTracks((await api("/tracks?limit=100")).items);
       setNotice("Track profile added.");
       form.reset();
     });
@@ -419,15 +421,15 @@ function App() {
                 <p className="subtle">{seed?.artist}</p>
                 <div className="track-stats">
                   <span>
-                    {seed?.acoustic.bpm || "—"}
+                    {seed?.acoustic?.bpm || "—"}
                     <small>BPM</small>
                   </span>
                   <span>
-                    {seed?.acoustic.camelotKey || "—"}
+                    {seed?.acoustic?.camelotKey || "—"}
                     <small>KEY</small>
                   </span>
                   <span>
-                    {seed ? Math.round(seed.acoustic.energy * 100) : "—"}
+                    {seed?.acoustic ? Math.round(seed.acoustic.energy * 100) : "—"}
                     <small>ENERGY</small>
                   </span>
                 </div>
@@ -513,7 +515,7 @@ function App() {
                     </option>
                     {tracks.map((track) => (
                       <option key={track.trackId} value={track.trackId}>
-                        {track.title} · {track.acoustic.bpm} BPM
+                        {track.title} · {track.acoustic ? `${track.acoustic.bpm} BPM` : 'Profile needed'}
                       </option>
                     ))}
                   </select>
@@ -583,6 +585,7 @@ function App() {
                 </div>
               )}
             </section>
+            <Catalog tracks={tracks} token={session.accessToken} api={api} isAdmin={session.user.isAdmin} reload={async()=>setTracks((await api('/tracks?limit=100')).items)}/>
             {session.user.isAdmin && (
               <details className="panel admin">
                 <summary>Admin · Authorized local catalog</summary>

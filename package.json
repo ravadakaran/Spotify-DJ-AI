@@ -23,7 +23,10 @@
     "admin:create": "node --env-file-if-exists=.env server/src/cli.js admin",
     "setup": "node scripts/setup.js",
     "dev:local": "node scripts/local.js",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "library:import": "node scripts/library.js",
+    "password:calibrate": "node scripts/calibrate-passwords.js",
+    "admin:create:local": "node --env-file-if-exists=.env server/src/cli.js admin --local"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

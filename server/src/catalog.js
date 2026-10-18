@@ -161,6 +161,7 @@ export function catalogRouter(models, auth, config) {
     acoustic: track.acoustic,
     timeline: track.timeline,
     profileVersion: track.profileVersion,
+    profileStatus: track.profileStatus || 'ready',
   });
   router.get("/tracks", async (req, res) => {
     const limit = Number(req.query.limit || 20);
@@ -242,7 +243,7 @@ export function catalogRouter(models, auth, config) {
     const track = await models.Track.findOneAndUpdate(
       { _id: id, profileVersion: body.expectedProfileVersion },
       {
-        $set: { acoustic: body.acoustic, timeline: body.timeline },
+        $set: { acoustic: body.acoustic, timeline: body.timeline, profileStatus: 'ready' },
         $inc: { profileVersion: 1 },
       },
       { new: true, runValidators: true },

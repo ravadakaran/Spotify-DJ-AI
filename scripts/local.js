@@ -1,5 +1,5 @@
 import { MongoMemoryReplSet } from "mongodb-memory-server";
-import { mkdir } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { spawn } from "node:child_process";
 import { root, readConfig } from "../server/src/config.js";
@@ -16,6 +16,7 @@ const config = readConfig({
   ...process.env,
   MONGODB_URI: repl.getUri("ai_dj_local"),
 });
+await writeFile(path.join(root, 'data/local-connection.json'), JSON.stringify({ mongoUri: config.mongoUri }), { mode: 0o600 });
 await mkdir(config.assetRoot, { recursive: true });
 const db = await connect(config.mongoUri);
 await migrate(db.connection, db.models);
