@@ -1,6 +1,25 @@
 import { schemas, validateTimeline } from "../src/validation.js";
 import { parseRange } from "../src/catalog.js";
 import { seedProfiles } from "../src/persistence.js";
+import { createThrottle } from "../src/throttle.js";
+
+test("handshake limiter bounds identities and resets expired windows", () => {
+  let time = 0;
+  const allow = createThrottle({
+    limit: 2,
+    maxKeys: 2,
+    windowMs: 100,
+    now: () => time,
+  });
+  expect(allow("a")).toBe(true);
+  expect(allow("a")).toBe(true);
+  expect(allow("a")).toBe(false);
+  expect(allow("b")).toBe(true);
+  expect(allow("c")).toBe(false);
+  time = 100;
+  expect(allow("c")).toBe(true);
+  expect(allow("a")).toBe(true);
+});
 describe("Untrusted profile and range boundaries", () => {
   test("accepts all 24 keys and rejects invalid profiles", () => {
     for (let n = 1; n <= 12; n++)

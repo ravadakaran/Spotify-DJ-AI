@@ -1,5 +1,7 @@
 # Architecture
 
+Phase 1 implementation note (19 October 2026): one process serializes lounge creation by actor and joins by room. Transactional creation receipts prevent duplicate lounges on network retries; they are not exactly-once delivery. A bounded per-IP handshake throttle precedes socket authentication. Private library import detects audio content and hashes files, leaving unverified acoustic data pending. Browser previews use authenticated asset fetches and do not advance the shared room clock. High-frequency queue/event authority remains Phase 2.
+
 Recommended baseline: Track A, PRD Option B, one Node/Express/Socket.IO process, MongoDB through one pooled Mongoose client, React JavaScript client, local asset volume and optional local LLM runtime. Logical modules are isolated; deployable microservices are unnecessary for a single-operator prototype. Requirements: REQ-001–022.
 
 Implementation status: only auth, catalog/media, lounge membership and initial authenticated snapshots are built. `server/src/app.js` wires the modules, `rooms.js` serializes joins and `persistence.js` initializes indexes/seeds. No queue reducer, batch writer, model or playback scheduler exists yet. The diagrams below remain the target architecture; the supplied interactive diagram is preserved. See [current limitations](IMPLEMENTATION_STATUS.md).

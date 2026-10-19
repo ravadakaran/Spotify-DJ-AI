@@ -6,6 +6,8 @@ The initial pasted request required planning first; that package was delivered. 
 
 ## Source and interpretation rules
 
+Current user scope clarification (19 October 2026): import the supplied YouTube-sourced files for private local preview, retaining unverified provenance. This does not certify licensing or satisfy the verified demo chain; no automatic acoustic values or lore are invented. See [decisions](DECISIONS.md).
+
 **E** = explicit PRD requirement. **P** = provisional engineering recommendation. Requirements below are E unless marked P. The task prompt's candidate stack is not a replacement for PRD §8. Questions remain visible; suggested answers are not silently treated as approved requirements.
 
 | ID | Requirement and source | Delivery |

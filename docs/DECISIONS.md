@@ -31,6 +31,8 @@ ADR-017: a dependency override pins js-yaml 4.3.2 for development tooling to rem
 
 ## Deferred decisions and change criteria
 
+19 October 2026 implementation scope clarification: the user explicitly requested adding their YouTube-sourced local songs. Private local import and authenticated previews are implemented with unverified provenance recorded, without claiming rights clearance, publishing media or ingesting it into AI. This exception does not close TASK-002. Content detection supports audio-only MP4/AAC as well as WAV/MP3 because the supplied files have misleading `.mp3` extensions. Acoustic profiles stay pending until authored or measured.
+
 OQ-03 selects exact Node/package versions, model/license/runtime and hardware. Pin supported compatible releases and lockfiles during implementation; this plan makes no “latest version” claims. OQ-04 resolves data loss/recovery requirements. OQ-07 sets sentiment language/window, recency depth and outro timing. OQ-09 sets privacy retention and deletion. OQ-10 confirms that local scheduling is sufficient for playback expectations.
 
 Add Redis/distributed room ownership only when a measured single-instance limitation requires it. Add embeddings only if lexical retrieval demonstrably misses authored facts. Add automatic audio analysis only for authorized local files and when manual profiles become a proven bottleneck. Revisit database/stack only through an explicit source deviation, not incidental implementation convenience. Real Spotify integration is a separate scope/policy assessment, not a future checkbox automatically inherited from this plan.

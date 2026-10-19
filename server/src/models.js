@@ -47,7 +47,7 @@ export function createModels(connection) {
       sha256: String,
       licenseLabel: { type: String, required: true },
       sourceAttribution: { type: String, required: true },
-      uploadedBy: { type: String, ref: 'users', default: null },
+      uploadedBy: { type: String, ref: "users", default: null },
       importActor: String,
     },
     [[{ storageKey: 1 }, { unique: true }]],
@@ -59,17 +59,27 @@ export function createModels(connection) {
       artist: { type: String, required: true },
       durationSeconds: { type: Number, required: true, min: 0.001 },
       assetId: { type: String, ref: "audio_assets", default: null },
-      profileStatus: { type: String, enum: ['ready', 'pending'], default: 'ready' },
-      acoustic: { type: new Schema({
-        bpm: { type: Number, required: true, min: 0.001 },
-        camelotKey: {
-          type: String,
-          required: true,
-          match: /^(?:[1-9]|1[0-2])[AB]$/,
-        },
-        energy: { type: Number, required: true, min: 0, max: 1 },
-        valence: { type: Number, required: true, min: 0, max: 1 },
-      }, { _id: false }), default: null },
+      profileStatus: {
+        type: String,
+        enum: ["ready", "pending"],
+        default: "ready",
+      },
+      acoustic: {
+        type: new Schema(
+          {
+            bpm: { type: Number, required: true, min: 0.001 },
+            camelotKey: {
+              type: String,
+              required: true,
+              match: /^(?:[1-9]|1[0-2])[AB]$/,
+            },
+            energy: { type: Number, required: true, min: 0, max: 1 },
+            valence: { type: Number, required: true, min: 0, max: 1 },
+          },
+          { _id: false },
+        ),
+        default: null,
+      },
       timeline: [
         {
           _id: false,
@@ -124,6 +134,19 @@ export function createModels(connection) {
     },
     [[{ loungeId: 1, userId: 1 }, { unique: true }]],
   );
-  const Receipt = model('command_receipts', { actorId: ref('users'), commandId: String, requestHash: String, response: Schema.Types.Mixed, expiresAt: Date }, [[{ actorId: 1, commandId: 1 }, { unique: true }], [{ expiresAt: 1 }, { expireAfterSeconds: 0 }]]);
+  const Receipt = model(
+    "command_receipts",
+    {
+      actorId: ref("users"),
+      commandId: String,
+      requestHash: String,
+      response: Schema.Types.Mixed,
+      expiresAt: Date,
+    },
+    [
+      [{ actorId: 1, commandId: 1 }, { unique: true }],
+      [{ expiresAt: 1 }, { expireAfterSeconds: 0 }],
+    ],
+  );
   return { User, Session, Asset, Track, Lounge, Membership, Receipt };
 }

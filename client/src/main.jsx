@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { io } from "socket.io-client";
 import "./style.css";
-import Catalog from './Catalog.jsx';
+import Catalog from "./Catalog.jsx";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -37,7 +37,11 @@ function App() {
         });
     return refreshRef.current;
   }
-  async function api(route, { method = "GET", body, commandId = crypto.randomUUID() } = {}, retry = true) {
+  async function api(
+    route,
+    { method = "GET", body, commandId = crypto.randomUUID() } = {},
+    retry = true,
+  ) {
     const multipart = body instanceof FormData;
     const response = await fetch(`/api/v1${route}`, {
       method,
@@ -47,7 +51,7 @@ function App() {
           ? { Authorization: `Bearer ${tokenRef.current}` }
           : {}),
         "X-CSRF-Protection": "1",
-        'X-Command-Id': commandId,
+        "X-Command-Id": commandId,
       },
       body: body ? (multipart ? body : JSON.stringify(body)) : undefined,
     });
@@ -429,7 +433,9 @@ function App() {
                     <small>KEY</small>
                   </span>
                   <span>
-                    {seed?.acoustic ? Math.round(seed.acoustic.energy * 100) : "—"}
+                    {seed?.acoustic
+                      ? Math.round(seed.acoustic.energy * 100)
+                      : "—"}
                     <small>ENERGY</small>
                   </span>
                 </div>
@@ -515,7 +521,10 @@ function App() {
                     </option>
                     {tracks.map((track) => (
                       <option key={track.trackId} value={track.trackId}>
-                        {track.title} · {track.acoustic ? `${track.acoustic.bpm} BPM` : 'Profile needed'}
+                        {track.title} ·{" "}
+                        {track.acoustic
+                          ? `${track.acoustic.bpm} BPM`
+                          : "Profile needed"}
                       </option>
                     ))}
                   </select>
@@ -585,7 +594,15 @@ function App() {
                 </div>
               )}
             </section>
-            <Catalog tracks={tracks} token={session.accessToken} api={api} isAdmin={session.user.isAdmin} reload={async()=>setTracks((await api('/tracks?limit=100')).items)}/>
+            <Catalog
+              tracks={tracks}
+              token={session.accessToken}
+              api={api}
+              isAdmin={session.user.isAdmin}
+              reload={async () =>
+                setTracks((await api("/tracks?limit=100")).items)
+              }
+            />
             {session.user.isAdmin && (
               <details className="panel admin">
                 <summary>Admin · Authorized local catalog</summary>
@@ -597,11 +614,11 @@ function App() {
                   <form onSubmit={upload}>
                     <h3>1. Upload audio</h3>
                     <label>
-                      WAV or MP3
+                      WAV, MP3 or M4A
                       <input
                         type="file"
                         name="file"
-                        accept="audio/wav,audio/mpeg"
+                        accept="audio/wav,audio/mpeg,audio/mp4,.m4a"
                         required
                       />
                     </label>

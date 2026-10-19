@@ -1,0 +1,53 @@
+# Local REST-client examples. Fill variables with your own local credentials.
+# Keep actual passwords, access tokens and invite codes out of version control.
+@base = http://127.0.0.1:3000/api/v1
+@email = replace@example.test
+@password = REPLACE_WITH_A_LOCAL_PASSWORD
+@accessToken = REPLACE_FROM_LOGIN_RESPONSE
+@inviteCode = REPLACE_FROM_CREATE_RESPONSE
+@loungeId = REPLACE_FROM_CREATE_RESPONSE
+
+### Register
+POST {{base}}/auth/register
+Content-Type: application/json
+
+{"email":"{{email}}","password":"{{password}}","displayName":"Local listener"}
+
+### Login (client must retain refresh cookie)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{"email":"{{email}}","password":"{{password}}"}
+
+### Catalog
+GET {{base}}/tracks?limit=20
+Authorization: Bearer {{accessToken}}
+
+### Create (use a new UUID for a different request)
+POST {{base}}/lounges
+Authorization: Bearer {{accessToken}}
+X-Command-Id: 9e628b81-2c19-4f15-801a-5bb4e760e259
+Content-Type: application/json
+
+{"seedTrackId":"00000000-0000-4000-8000-000000000001","vibeProfile":"After Hours","maxParticipants":10,"bpmTolerancePct":8,"soundclashEnabled":true,"aiVerbosity":"normal"}
+
+### Join using the second user's access token
+POST {{base}}/lounges/join
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"inviteCode":"{{inviteCode}}"}
+
+### Snapshot (membership required)
+GET {{base}}/lounges/{{loungeId}}
+Authorization: Bearer {{accessToken}}
+
+### Refresh with retained cookie
+POST {{base}}/auth/refresh
+Origin: http://127.0.0.1:5173
+X-CSRF-Protection: 1
+
+### Logout with retained cookie
+POST {{base}}/auth/logout
+Origin: http://127.0.0.1:5173
+X-CSRF-Protection: 1

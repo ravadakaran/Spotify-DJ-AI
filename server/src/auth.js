@@ -113,13 +113,11 @@ export function createAuth(models, config, onRevoke = () => {}) {
         consumedHashes: [],
         expiresAt: new Date(Date.now() + 7 * 86400000),
       });
-      res
-        .cookie("refresh", token, cookieOptions)
-        .json({
-          user: publicUser(user),
-          accessToken: issue(user, session),
-          expiresIn: 900,
-        });
+      res.cookie("refresh", token, cookieOptions).json({
+        user: publicUser(user),
+        accessToken: issue(user, session),
+        expiresIn: 900,
+      });
     },
     refresh: async (req, res) => {
       const value = req.cookies.refresh;

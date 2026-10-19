@@ -1,4 +1,4 @@
-# Implementation status — 18 October 2026
+# Implementation status — 19 October 2026
 
 The user asked to review their changes and start implementation. Preserved their interactive architecture HTML/JSON, granular phase checklist and sentiment-driven energy clarification. Also repaired the clarification's Markdown table formatting without changing its meaning.
 
@@ -19,19 +19,22 @@ Windows host, Node 24.13.0, approximately 32 GiB system RAM. No production bench
 | Check | Result |
 | --- | --- |
 | `npm run lint` | Passed |
-| `npm test` | 10 passed: profile/range boundaries, role injection, migration/seed, pagination, concurrent joins, admin/stale profile controls, socket isolation/snapshot equality, refresh replay and media protection |
+| `npm test` | 15 passed: profile/range boundaries, role injection, migration/seed/checksum/lock, raw database validation, pagination, concurrent joins/create retries, admin/stale profile controls, socket isolation/snapshot equality, invalid JWT claims, refresh replay, media protection, import deduplication and bounded throttle |
 | `npm run build` | Passed; client production assets generated |
-| `npm run test:e2e` | Passed: two isolated browser contexts register/login, create/join, matching snapshots, refresh after reload, rejoin, mobile overflow and logout |
+| `npm run test:e2e` | Passed: two isolated browser contexts register/login, test-fixture audio preview, create/join, matching snapshots, refresh after reload, rejoin, mobile overflow and logout |
 | `npm audit` | Zero vulnerabilities after js-yaml override and dependency deduplication |
 | Visual inspection | Desktop welcome/lounge and 390px mobile screenshots inspected; no clipping/overflow found |
 | Normal startup | `npm run setup` then `npm run dev:local` succeeded; API readiness returned `ready`; app available at http://127.0.0.1:5173 |
-| Repository hygiene | Git initialized on main; .env and local database verified ignored; no commit or remote push made |
+| Repository hygiene | .env, local database, assets, backups and private import reports ignored; changes committed and pushed to origin/main per user instruction |
+| Private import | 51 imported; rerun 51 existing, 0 failed, 1 non-audio file skipped; originals preserved |
+| Imported AAC browser decode | Chromium decoded a local sample, duration 234.707302 seconds, playback clock advanced, no decode error; not a full listening audit of all songs |
+| Password calibration | 10 measured hash/verify samples after warmup; P95 108 ms on this Windows host, target 500 ms; raw evidence in password-calibration.json |
 
 Evidence: [welcome](../evidence/foundation-welcome.png), [lounge](../evidence/foundation-lounge.png), [mobile](../evidence/foundation-mobile.png). These screenshots contain disposable test identities/invites, not a real user's session. Automated test source lives in `server/tests/` and `tests/browser/`; dependency versions in package-lock.json. Tests are not evidence for unimplemented queue/AI requirements.
 
 ## Gates and limitations
 
-**Phase 0 is not complete.** The user supplied `D:\DJ` and said the MP3s came from YouTube. Filename inventory was read; files were not copied, decoded, sent to a model or made public. This does not establish reuse rights. Original recordings or documented licenses are still needed. The three fixture profiles have no audio and do not satisfy the legal-audio exit gate. Their empty lore timelines do not satisfy RAG evidence either.
+**Phase 0 is not complete.** At the user's explicit request, 51 files from `D:\DJ` were imported for private local previews with provenance recorded as YouTube-sourced, license unverified. Their `.mp3` names concealed MP4/AAC content; the importer detects the container and stores correct MIME types without transcoding. A second import reported 51 existing, zero new, zero failed; one non-audio file was skipped. Private database backups and import reports are under ignored `data/`. No audio was published or sent to a model. Reuse rights remain unverified. Imported tracks have null acoustic data and `profileStatus: pending`; the three separate metadata fixtures still have no audio. The legal-audio chain and grounded-lore gates remain open.
 
 No Ollama runtime/model was found or installed; no model license, latency or quality benchmark has passed. Phase 0 decisions on data-loss, ties and host loss remain provisional for future queue work. The user's instruction to start was applied to independent foundation tasks while retaining these gates, not treating them as silently approved/completed.
 
@@ -39,7 +42,7 @@ No Ollama runtime/model was found or installed; no model license, latency or qua
 
 Current room capacity counts reserved memberships, not concurrent online users. No leave/moderation/host-transfer API exists yet. Room revisions currently describe low-frequency persisted membership changes; high-frequency in-memory queue authority, append-only batched events, durable watermarks and crash replay are Phase 2 work. Do not interpret initial snapshots as implemented queue recovery. Membership history currently caps at 50 rows, without the final pagination contract.
 
-Playback, queue votes, presence quality, Host freeze, Soundclash, chat/sentiment, grounded generation, hybrid recommendations and analytics remain unimplemented. `/health/ready` currently checks DB/assets only; future batch-writer health must be added with Phase 2. Docker Compose is local development only; production deployment, TLS/DB auth, security review and backup/restore rehearsal are not complete.
+Shared lounge playback, queue votes, presence quality, Host freeze, Soundclash, chat/sentiment, grounded generation, hybrid recommendations and analytics remain unimplemented. `/health/ready` currently checks DB/assets only; future batch-writer health must be added with Phase 2. Docker Compose is local development only; production deployment, TLS/DB auth, security review and backup/restore rehearsal are not complete.
 
 ## Next implementation slice
 

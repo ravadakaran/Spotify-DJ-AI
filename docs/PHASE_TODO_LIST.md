@@ -52,7 +52,7 @@ Implementation note (18 October 2026): the user's request to start was applied t
 - [x] Build migration runner with checksum validation and `schema_migrations` collection ledger ([DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#L61)).
 - [x] Implement Mongoose models with validation: `users`, `refresh_sessions`, `tracks`, `audio_assets`, `lounges`, `memberships`.
 - [x] Apply unique and compound indexes (normalized email, active invite code, acoustic BPM/key).
-- [x] Author idempotent seeder `npm run db:seed` inserting $\ge 3$ verified seed tracks and acoustic profiles.
+- [x] Author idempotent seeder `npm run db:seed` inserting three validated metadata fixtures with authored acoustic profiles. Playable verified demo audio remains the separate TASK-002 gate; imported songs have pending profiles.
 - [x] Write CLI admin creation command: `npm run admin:create` ([TEST-002](TESTING_STRATEGY.md#L8)).
 
 ### [x] TASK-006: Authentication, Token Lifecycle & RBAC Engine

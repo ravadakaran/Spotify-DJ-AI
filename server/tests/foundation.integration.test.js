@@ -1,8 +1,10 @@
 import { MongoMemoryReplSet } from "mongodb-memory-server";
-import { mkdtemp, rm } from "node:fs/promises";
+import { mkdtemp, rm, mkdir, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { randomBytes } from "node:crypto";
+import { randomBytes, randomUUID } from "node:crypto";
+import jwt from "jsonwebtoken";
+import { importMedia } from "../src/import-media.js";
 import argon2 from "argon2";
 import request from "supertest";
 import { io } from "socket.io-client";
@@ -14,6 +16,7 @@ let repl, db, application, folder, baseUrl;
 const origin = "http://127.0.0.1:5173";
 const credentials = {};
 const silent = { info() {}, error() {} };
+const signingKey = randomBytes(48).toString("hex");
 const bearer = (name) => `Bearer ${credentials[name].accessToken}`;
 const body = {
   seedTrackId: seedProfiles[0]._id,
@@ -23,6 +26,139 @@ const body = {
   soundclashEnabled: true,
   aiVerbosity: "normal",
 };
+test("create retries are atomic and reject reuse with a changed body", async () => {
+  const commandId = randomUUID();
+  const before = await db.models.Lounge.countDocuments();
+  const create = (payload) =>
+    request(application.app)
+      .post("/api/v1/lounges")
+      .set("Authorization", bearer("host"))
+      .set("X-Command-Id", commandId)
+      .send(payload);
+  const results = await Promise.all([create(body), create(body), create(body)]);
+  expect(results.map((r) => r.status)).toEqual([201, 201, 201]);
+  expect(new Set(results.map((r) => r.body.loungeId)).size).toBe(1);
+  expect(new Set(results.map((r) => r.body.inviteCode)).size).toBe(1);
+  expect(await db.models.Lounge.countDocuments()).toBe(before + 1);
+  await create({ ...body, vibeProfile: "Different" }).expect(409);
+});
+
+test("database validators, migration lock and immutable checksums fail closed", async () => {
+  await expect(
+    db.connection.collection("tracks").insertOne({
+      ...seedProfiles[0],
+      _id: randomUUID(),
+      acoustic: { ...seedProfiles[0].acoustic, bpm: -1 },
+      profileVersion: 1,
+      profileStatus: "ready",
+    }),
+  ).rejects.toMatchObject({ code: 121 });
+  const locks = db.connection.collection("migration_locks");
+  await locks.insertOne({ _id: "runner", owner: "test" });
+  try {
+    await expect(migrate(db.connection, db.models)).rejects.toThrow("locked");
+  } finally {
+    await locks.deleteOne({ _id: "runner", owner: "test" });
+  }
+  const ledger = db.connection.collection("schema_migrations");
+  const original = await ledger.findOne({ _id: "002-phase-one" });
+  await ledger.updateOne(
+    { _id: original._id },
+    { $set: { checksum: "changed" } },
+  );
+  try {
+    await expect(migrate(db.connection, db.models)).rejects.toThrow(
+      "checksum changed",
+    );
+  } finally {
+    await ledger.updateOne(
+      { _id: original._id },
+      { $set: { checksum: original.checksum } },
+    );
+  }
+  await migrate(db.connection, db.models);
+});
+
+test("expired, wrong-issuer and wrong-audience tokens fail HTTP and socket authentication", async () => {
+  const claims = jwt.decode(credentials.host.accessToken);
+  for (const overrides of [{ exp: 1 }, { iss: "other" }, { aud: "other" }]) {
+    const token = jwt.sign({ ...claims, ...overrides }, signingKey, {
+      algorithm: "HS256",
+    });
+    await request(application.app)
+      .get("/api/v1/users/me")
+      .set("Authorization", `Bearer ${token}`)
+      .expect(401);
+    const socket = io(`${baseUrl}/lounges`, {
+      auth: { accessToken: token },
+      extraHeaders: { Origin: origin },
+      transports: ["websocket"],
+      reconnection: false,
+    });
+    try {
+      await new Promise((resolve, reject) => {
+        socket.once("connect_error", resolve);
+        socket.once("connect", () =>
+          reject(new Error("Invalid token connected")),
+        );
+      });
+    } finally {
+      socket.disconnect();
+    }
+  }
+});
+
+test("local import detects content, deduplicates and keeps acoustic metadata pending", async () => {
+  const source = path.join(folder, "source");
+  await mkdir(source);
+  const wave = Buffer.alloc(1644);
+  wave.write("RIFF");
+  wave.writeUInt32LE(1636, 4);
+  wave.write("WAVEfmt ", 8);
+  wave.writeUInt32LE(16, 16);
+  wave.writeUInt16LE(1, 20);
+  wave.writeUInt16LE(1, 22);
+  wave.writeUInt32LE(8000, 24);
+  wave.writeUInt32LE(16000, 28);
+  wave.writeUInt16LE(2, 32);
+  wave.writeUInt16LE(16, 34);
+  wave.write("data", 36);
+  wave.writeUInt32LE(1600, 40);
+  await writeFile(path.join(source, "misnamed.mp3"), wave);
+  await writeFile(path.join(source, "invalid.mp3"), "not audio");
+  const options = { source, assetRoot: folder, ...db };
+  const first = await importMedia(options);
+  const second = await importMedia(options);
+  expect(first.imported).toHaveLength(1);
+  expect(first.failed).toHaveLength(1);
+  expect(second.imported).toHaveLength(0);
+  expect(second.existing).toHaveLength(1);
+  const track = await db.models.Track.findById(first.imported[0].trackId);
+  expect(track.acoustic).toBeNull();
+  expect(track.profileStatus).toBe("pending");
+  const asset = await db.models.Asset.findById(track.assetId);
+  expect(asset.mimeType).toBe("audio/wav");
+  expect(asset.licenseLabel).toContain("unverified");
+  await request(application.app)
+    .get(`/api/v1/assets/${asset._id}/content`)
+    .set("Authorization", bearer("host"))
+    .set("Range", "bytes=0-9")
+    .expect(206);
+  const updated = await request(application.app)
+    .put(`/api/v1/tracks/${track._id}/acoustic-profile`)
+    .set("Authorization", bearer("admin"))
+    .send({
+      expectedProfileVersion: 1,
+      acoustic: seedProfiles[0].acoustic,
+      timeline: [],
+    })
+    .expect(200);
+  expect(updated.body.profileStatus).toBe("ready");
+  await importMedia(options);
+  expect((await db.models.Track.findById(track._id)).profileVersion).toBe(2);
+  // Keep the original catalog pagination test independent of this fixture.
+  await db.models.Track.deleteOne({ _id: track._id });
+});
 beforeAll(async () => {
   folder = await mkdtemp(path.join(os.tmpdir(), "dj-test-assets-"));
   repl = await MongoMemoryReplSet.create({
@@ -34,7 +170,7 @@ beforeAll(async () => {
   application = createApplication({
     ...db,
     config: {
-      key: randomBytes(48).toString("hex"),
+      key: signingKey,
       issuer: "tests",
       audience: "tests",
       origin,

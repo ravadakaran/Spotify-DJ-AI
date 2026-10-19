@@ -4,7 +4,7 @@ import path from "node:path";
 import { mkdir, writeFile, unlink, stat, realpath } from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { randomUUID } from "node:crypto";
-import { parseBuffer } from "music-metadata";
+import { inspectAudio } from "./audio.js";
 import { hash } from "./auth.js";
 import {
   HttpError,
@@ -60,31 +60,15 @@ export function catalogRouter(models, auth, config) {
           "Audio, license and attribution are required.",
         );
       const b = file.buffer;
-      const wav =
-        b.toString("ascii", 0, 4) === "RIFF" &&
-        b.toString("ascii", 8, 12) === "WAVE";
-      const mp3 =
-        b.toString("ascii", 0, 3) === "ID3" ||
-        (b[0] === 255 && (b[1] & 0xe0) === 0xe0);
-      if (!wav && !mp3)
-        throw new HttpError(
-          422,
-          "INVALID_AUDIO",
-          "Only valid WAV or MP3 audio is accepted.",
-        );
-      const mimeType = wav ? "audio/wav" : "audio/mpeg";
-      let metadata;
+      let metadata, mimeType, extension;
       try {
-        metadata = await parseBuffer(
-          b,
-          { mimeType, size: b.length },
-          { duration: true },
-        );
-      } catch {
+        ({ metadata, mimeType, extension } = await inspectAudio(b));
+      } catch (err) {
         throw new HttpError(
           422,
           "INVALID_AUDIO",
-          "Cannot decode audio metadata.",
+          err.message ||
+            "Only valid WAV, MP3 or audio-only MP4 audio is accepted.",
         );
       }
       const durationSeconds = metadata.format.duration;
@@ -95,7 +79,7 @@ export function catalogRouter(models, auth, config) {
           "Audio duration could not be verified.",
         );
       await mkdir(config.assetRoot, { recursive: true });
-      const storageKey = `${randomUUID()}.${wav ? "wav" : "mp3"}`;
+      const storageKey = `${randomUUID()}.${extension}`;
       const target = path.join(config.assetRoot, storageKey);
       await writeFile(target, b, { flag: "wx" });
       try {
@@ -161,7 +145,7 @@ export function catalogRouter(models, auth, config) {
     acoustic: track.acoustic,
     timeline: track.timeline,
     profileVersion: track.profileVersion,
-    profileStatus: track.profileStatus || 'ready',
+    profileStatus: track.profileStatus || "ready",
   });
   router.get("/tracks", async (req, res) => {
     const limit = Number(req.query.limit || 20);
@@ -243,7 +227,11 @@ export function catalogRouter(models, auth, config) {
     const track = await models.Track.findOneAndUpdate(
       { _id: id, profileVersion: body.expectedProfileVersion },
       {
-        $set: { acoustic: body.acoustic, timeline: body.timeline, profileStatus: 'ready' },
+        $set: {
+          acoustic: body.acoustic,
+          timeline: body.timeline,
+          profileStatus: "ready",
+        },
         $inc: { profileVersion: 1 },
       },
       { new: true, runValidators: true },

@@ -2,9 +2,9 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import mongoose from "mongoose";
 import { createModels } from "./models.js";
-import { randomUUID } from 'node:crypto';
-import { createModels as initialModels } from '../migrations/001-foundation-models.js';
-import { up as phaseOne } from '../migrations/002-phase-one.js';
+import { randomUUID } from "node:crypto";
+import { createModels as initialModels } from "../migrations/001-foundation-models.js";
+import { up as phaseOne } from "../migrations/002-phase-one.js";
 export async function connect(uri) {
   const connection = await mongoose
     .createConnection(uri, {
@@ -17,22 +17,56 @@ export async function connect(uri) {
 }
 export async function migrate(connection, models) {
   const ledger = connection.collection("schema_migrations");
-  const owner = randomUUID(); const locks = connection.collection('migration_locks');
-  try { await locks.insertOne({ _id: 'runner', owner, startedAt: new Date() }); } catch (error) { if (error.code === 11000) throw new Error('Migration runner locked. Verify the prior runner stopped before manually clearing its lock.'); throw error; }
+  const owner = randomUUID();
+  const locks = connection.collection("migration_locks");
+  try {
+    await locks.insertOne({ _id: "runner", owner, startedAt: new Date() });
+  } catch (error) {
+    if (error.code === 11000)
+      throw new Error(
+        "Migration runner locked. Verify the prior runner stopped before manually clearing its lock.",
+      );
+    throw error;
+  }
   try {
     const migrations = [
-      { id: '001-foundation', file: '../migrations/001-foundation-models.js', up: async () => { const isolated = connection.useDb(connection.name); const initial = initialModels(isolated); for (const model of Object.values(initial)) { await model.createCollection(); await model.createIndexes(); } } },
-      { id: '002-phase-one', file: '../migrations/002-phase-one.js', up: () => phaseOne(connection, models) }
+      {
+        id: "001-foundation",
+        file: "../migrations/001-foundation-models.js",
+        up: async () => {
+          const isolated = connection.useDb(connection.name);
+          const initial = initialModels(isolated);
+          for (const model of Object.values(initial)) {
+            await model.createCollection();
+            await model.createIndexes();
+          }
+        },
+      },
+      {
+        id: "002-phase-one",
+        file: "../migrations/002-phase-one.js",
+        up: () => phaseOne(connection, models),
+      },
     ];
     for (const migration of migrations) {
       const source = await readFile(new URL(migration.file, import.meta.url));
-      const checksum = createHash('sha256').update(source).digest('hex');
+      const checksum = createHash("sha256").update(source).digest("hex");
       const existing = await ledger.findOne({ _id: migration.id });
-      if (existing) { if (existing.checksum !== checksum) throw new Error(`Migration checksum changed: ${migration.id}`); continue; }
+      if (existing) {
+        if (existing.checksum !== checksum)
+          throw new Error(`Migration checksum changed: ${migration.id}`);
+        continue;
+      }
       await migration.up();
-      await ledger.insertOne({ _id: migration.id, checksum, appliedAt: new Date() });
+      await ledger.insertOne({
+        _id: migration.id,
+        checksum,
+        appliedAt: new Date(),
+      });
     }
-  } finally { await locks.deleteOne({ _id: 'runner', owner }); }
+  } finally {
+    await locks.deleteOne({ _id: "runner", owner });
+  }
 }
 export const seedProfiles = [
   {

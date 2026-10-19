@@ -72,16 +72,34 @@ export class RoomService {
   }
   async create(userId, input, commandId = randomUUID()) {
     requireId(commandId);
-    return this.serial(`create:${userId}`, () => this.createOnce(userId, input, commandId));
+    return this.serial(`create:${userId}`, () =>
+      this.createOnce(userId, input, commandId),
+    );
   }
   async createOnce(userId, input, commandId) {
     const body = parse(schemas.create, input);
     const requestHash = hash(JSON.stringify(body));
-    const inviteCode = createHmac('sha256', this.receiptKey).update(`${userId}:${commandId}`).digest('hex').slice(0, 16).toUpperCase();
-    const previous = await this.models.Receipt.findOne({ actorId: userId, commandId });
+    const inviteCode = createHmac("sha256", this.receiptKey)
+      .update(`${userId}:${commandId}`)
+      .digest("hex")
+      .slice(0, 16)
+      .toUpperCase();
+    const previous = await this.models.Receipt.findOne({
+      actorId: userId,
+      commandId,
+    });
     if (previous) {
-      if (previous.requestHash !== requestHash) throw new HttpError(409, 'COMMAND_CONFLICT', 'Command ID already used for a different request.');
-      return { ...(await this.snapshot(previous.response.loungeId)), inviteCode, createdAt: previous.response.createdAt };
+      if (previous.requestHash !== requestHash)
+        throw new HttpError(
+          409,
+          "COMMAND_CONFLICT",
+          "Command ID already used for a different request.",
+        );
+      return {
+        ...(await this.snapshot(previous.response.loungeId)),
+        inviteCode,
+        createdAt: previous.response.createdAt,
+      };
     }
     if (!(await this.models.Track.exists({ _id: body.seedTrackId })))
       throw new HttpError(422, "INVALID_TRACK", "Choose a catalog track.");
@@ -111,7 +129,18 @@ export class RoomService {
         [{ loungeId: id, userId, role: "host" }],
         { session },
       );
-      await this.models.Receipt.create([{ actorId: userId, commandId, requestHash, response: { loungeId: id, createdAt }, expiresAt: new Date(Date.now() + 86400000) }], { session });
+      await this.models.Receipt.create(
+        [
+          {
+            actorId: userId,
+            commandId,
+            requestHash,
+            response: { loungeId: id, createdAt },
+            expiresAt: new Date(Date.now() + 86400000),
+          },
+        ],
+        { session },
+      );
     });
     return {
       ...(await this.snapshot(id)),

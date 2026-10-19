@@ -17,7 +17,11 @@ const config = readConfig({
   ...process.env,
   MONGODB_URI: repl.getUri("ai_dj_local"),
 });
-await writeFile(path.join(root, 'data/local-connection.json'), JSON.stringify({ mongoUri: config.mongoUri }), { mode: 0o600 });
+await writeFile(
+  path.join(root, "data/local-connection.json"),
+  JSON.stringify({ mongoUri: config.mongoUri }),
+  { mode: 0o600 },
+);
 await mkdir(config.assetRoot, { recursive: true });
 const db = await connect(config.mongoUri);
 await migrate(db.connection, db.models);

@@ -1,5 +1,7 @@
 # Testing strategy
 
+Phase 1 hardening coverage now includes concurrent create retries/body conflicts, migration locking/checksum rejection, raw MongoDB validator rejection, expired/wrong-issuer/wrong-audience JWT rejection on HTTP and sockets, bounded handshake throttling, import deduplication/content detection and pending-to-ready profile edits. Browser coverage includes a generated test-only silence WAV preview in addition to the two-user create/join/snapshot journey. Test silence is not a music seed or legal demo-chain claim. The private 51-file library was separately imported twice: 51 created, then 51 existing, with zero failures.
+
 The table below is the full target suite. Foundation coverage has been executed with Jest/Supertest, socket.io-client and a real isolated MongoDB replica set, plus a two-context Playwright browser journey. See [implementation status](IMPLEMENTATION_STATUS.md) for exact results; do not treat future queue/AI/performance tests as passed. Mock the LLM for deterministic CI; run real-model evaluation separately and label it. Every test report records commit, runtime/dependency versions, hardware, dataset hash, workload and failures.
 
 | Test ID | Requirements | Procedure and measurable acceptance |
