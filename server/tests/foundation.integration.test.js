@@ -356,18 +356,28 @@ test("authenticated sockets receive matching snapshots and reject cross-room sub
     const listener = await socketFor("listener");
     expect((await subscribe(listener)).error.code).toBe("FORBIDDEN");
     expect((await subscribe(host)).ok).toBe(true);
-    const hostUpdate = new Promise((resolve) =>
-      host.once("lounge.state.snapshot", resolve),
-    );
     await application.rooms.join(credentials.listener.user.id, {
       inviteCode: lounge.inviteCode,
+    });
+    const hostUpdate = new Promise((resolve) => {
+      const handler = (event) => {
+        if (event.payload.participantCount === 2) {
+          host.off("lounge.state.snapshot", handler);
+          resolve(event);
+        }
+      };
+      host.on("lounge.state.snapshot", handler);
     });
     const listenerUpdate = new Promise((resolve) =>
       listener.once("lounge.state.snapshot", resolve),
     );
     expect((await subscribe(listener)).ok).toBe(true);
     const [a, b] = await Promise.all([hostUpdate, listenerUpdate]);
-    expect(a.payload).toEqual(b.payload);
+    // Transport sampling times may differ; authoritative state at the revision must match.
+    expect({ ...a.payload, serverTime: 0 }).toEqual({
+      ...b.payload,
+      serverTime: 0,
+    });
   } finally {
     sockets.forEach((socket) => socket.disconnect());
   }

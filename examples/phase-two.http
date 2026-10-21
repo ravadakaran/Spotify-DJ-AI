@@ -1,0 +1,54 @@
+# Use foundation.http to register/login/create/join first.
+@base = http://127.0.0.1:3000/api/v1
+@accessToken = REPLACE_WITH_LOCAL_TOKEN
+@loungeId = REPLACE_WITH_LOUNGE_UUID
+@entryId = REPLACE_WITH_ENTRY_UUID
+@userId = REPLACE_WITH_MEMBER_UUID
+@revision = 1
+
+### Read the current revision before structural commands
+GET {{base}}/lounges/{{loungeId}}
+Authorization: Bearer {{accessToken}}
+
+### Enqueue as Host/Co-DJ; use a fresh command UUID for each different request
+POST {{base}}/lounges/{{loungeId}}/queue
+Authorization: Bearer {{accessToken}}
+X-Command-Id: 8c03f593-f08b-4e9e-8f45-922dfbcad0af
+Content-Type: application/json
+
+{"trackId":"00000000-0000-4000-8000-000000000002","expectedRevision":{{revision}}}
+
+### Vote as a member (no revision precondition)
+PUT {{base}}/lounges/{{loungeId}}/queue/{{entryId}}/vote
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"upvoted":true}
+
+### Reserve immediate next, subject to current profile eligibility
+POST {{base}}/lounges/{{loungeId}}/queue/{{entryId}}/promote
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"expectedRevision":{{revision}}}
+
+### Playback: start / pause / resume / advance; Host must have a connected tab
+POST {{base}}/lounges/{{loungeId}}/playback
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"action":"start","expectedRevision":{{revision}}}
+
+### Atomic Host transfer to another connected member
+POST {{base}}/lounges/{{loungeId}}/host-transfer
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"userId":"{{userId}}","expectedRevision":{{revision}}}
+
+### Mute a member
+PATCH {{base}}/lounges/{{loungeId}}/members/{{userId}}
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{"muted":true,"expectedRevision":{{revision}}}

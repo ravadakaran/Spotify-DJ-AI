@@ -84,42 +84,44 @@ Implementation note (18 October 2026): the user's request to start was applied t
 
 **Objective:** Single-source-of-truth live queue with deterministic vote reordering, presence tracking, host-loss freezing, and bounded-batch crash recovery.
 
-### [ ] TASK-009: Per-Room Serialized Reducer & Concurrent Vote Authority
-- [ ] Implement per-room in-memory command FIFO serializer in `server/src/rooms/` ([ARCHITECTURE.md](ARCHITECTURE.md#L31)).
-- [ ] Author pure state reducer handling `queue.enqueue`, `queue.remove`, `queue.vote`, `queue.promote` ([ARCHITECTURE.md](ARCHITECTURE.md#L44)).
-- [ ] Enforce deterministic tie-breaking for Next Up: `voteCount DESC` $\to$ `enqueueSequence ASC` $\to$ `entryId ASC`.
-- [ ] Implement idempotent upvoting (1 vote per user per track entry; PUT toggles/deduplicates).
-- [ ] Build concurrency test simulating 100 concurrent votes from 10 users verifying zero state divergence ([TEST-003](TESTING_STRATEGY.md#L9)).
+### [x] TASK-009: Per-Room Serialized Reducer & Concurrent Vote Authority
+- [x] Implement per-room in-memory command FIFO serializer in `server/src/rooms/` ([ARCHITECTURE.md](ARCHITECTURE.md#L31)).
+- [x] Author pure state reducer handling `queue.enqueue`, `queue.remove`, `queue.vote`, `queue.promote` ([ARCHITECTURE.md](ARCHITECTURE.md#L44)).
+- [x] Enforce deterministic tie-breaking for Next Up: `voteCount DESC` $\to$ `enqueueSequence ASC` $\to$ `entryId ASC`.
+- [x] Implement idempotent upvoting (1 vote per user per track entry; PUT toggles/deduplicates).
+- [x] Build concurrency test simulating 100 concurrent votes from 10 users verifying zero state divergence ([TEST-003](TESTING_STRATEGY.md#L9)).
 
-### [ ] TASK-010: Bounded Event Buffer, Batch Writer & Crash Recovery
-- [ ] Implement in-memory bounded ring buffer flushing every 1 second or 50 events ([ARCHITECTURE.md](ARCHITECTURE.md#L75)).
-- [ ] Author transactional batch writer inserting into `queue_events` and updating `room_snapshots` watermark using MongoDB replica set transactions ([DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#L18)).
-- [ ] Implement write failure degradation: mark room degraded, pause mutations, cap buffer, set `/health/ready` to 503.
-- [ ] Implement crash recovery: replay events from durable snapshot watermark, issue new epoch, pause playback, and await Host resume ([TEST-010](TESTING_STRATEGY.md#L16)).
+### [x] TASK-010: Bounded Event Buffer, Batch Writer & Crash Recovery
+- [x] Implement in-memory bounded ring buffer flushing every 1 second or 50 events ([ARCHITECTURE.md](ARCHITECTURE.md#L75)).
+- [x] Author transactional batch writer inserting into `queue_events` and updating `room_snapshots` watermark using MongoDB replica set transactions ([DATABASE_SCHEMA.md](DATABASE_SCHEMA.md#L18)).
+- [x] Implement write failure degradation: mark room degraded, pause mutations, cap buffer, set `/health/ready` to 503.
+- [x] Implement crash recovery: replay events from durable snapshot watermark, issue new epoch, pause playback, and await Host resume ([TEST-010](TESTING_STRATEGY.md#L16)).
 
-### [ ] TASK-011: Socket.IO Gateway, Presence & Snapshot Catch-Up
-- [ ] Implement Socket.IO room lifecycle: join room on 1st tab, leave room after 10-second grace on 0 tabs ([ARCHITECTURE.md](ARCHITECTURE.md#L73)).
-- [ ] Implement unique-user presence counting (tabs do not multiply user presence).
-- [ ] Build snapshot catch-up protocol: clients buffering newer events until snapshot installed; resync on epoch change or sequence gap ([REQ-006](PROJECT_REQUIREMENTS.md#L18)).
-- [ ] Implement periodic RTT ping/pong (`lounge.sync.ping` / `pong`) estimating server clock offset for clients ([API_SPECIFICATION.md](API_SPECIFICATION.md#L122)).
-- [ ] Verify snapshot acquisition and render latency $<2\text{ s}$ on new join ([TEST-004](TESTING_STRATEGY.md#L10)).
+### [x] TASK-011: Socket.IO Gateway, Presence & Snapshot Catch-Up
+- [x] Implement Socket.IO room lifecycle: join room on 1st tab, leave room after 10-second grace on 0 tabs ([ARCHITECTURE.md](ARCHITECTURE.md#L73)).
+- [x] Implement unique-user presence counting (tabs do not multiply user presence).
+- [x] Build snapshot catch-up protocol: clients buffering newer events until snapshot installed; resync on epoch change or sequence gap ([REQ-006](PROJECT_REQUIREMENTS.md#L18)).
+- [x] Implement periodic RTT ping/pong (`lounge.sync.ping` / `pong`) estimating server clock offset for clients ([API_SPECIFICATION.md](API_SPECIFICATION.md#L122)).
+- [x] Verify snapshot acquisition and render latency $<2\text{ s}$ on new join ([TEST-004](TESTING_STRATEGY.md#L10)).
 
-### [ ] TASK-012: Host Disconnect Freeze, Moderation & Authority Transfer
-- [ ] Detect last-host-socket disconnection and trigger immediate `mutationFrozen=true` ([ADR-009](DECISIONS.md#L15)).
-- [ ] Block queue advance and battle timers while frozen; preserve chat and read availability.
-- [ ] Implement `POST /api/v1/lounges/:id/host-transfer` (atomic Host reassignment, old Host demoted to Co-DJ) ([API_SPECIFICATION.md](API_SPECIFICATION.md#L41)).
-- [ ] Implement member moderation: mute user (reject chat/reactions) and remove user (disconnect all active sockets) ([REQ-008](PROJECT_REQUIREMENTS.md#L20)).
+### [x] TASK-012: Host Disconnect Freeze, Moderation & Authority Transfer
+- [x] Detect last-host-socket disconnection and trigger immediate `mutationFrozen=true` ([ADR-009](DECISIONS.md#L15)).
+- [x] Block queue advance and playback timers while frozen; preserve read availability. Battle/chat routes remain later phases and will use the same guard.
+- [x] Implement `POST /api/v1/lounges/:id/host-transfer` (atomic Host reassignment, old Host demoted to Co-DJ) ([API_SPECIFICATION.md](API_SPECIFICATION.md#L41)).
+- [x] Implement member moderation: persist mute state with a tested unmuted-member guard, and remove users from every room subscription. Chat/reaction route wiring remains Phase 4 ([REQ-008](PROJECT_REQUIREMENTS.md#L20)).
 
-### [ ] TASK-013: Web Audio Player, Monotonic Clock & Queue Console UI
-- [ ] Build React Now Playing console with elapsed time bar driven by server timestamps and monotonic duration.
-- [ ] Implement browser audio unlock button (handling autoplay restrictions gracefully).
-- [ ] Build interactive Next Up list with real-time upvote counters and position re-sort animations.
-- [ ] Display visual connection quality indicator and frozen-room overlay banner.
-- [ ] Implement Host controls: Play, Pause, Skip/Advance, Lock Room, Rotate Invite ([TEST-015](TESTING_STRATEGY.md#L21)).
+### [x] TASK-013: Web Audio Player, Monotonic Clock & Queue Console UI
+- [x] Build React Now Playing console with elapsed time bar driven by server timestamps and monotonic duration.
+- [x] Implement browser audio unlock button (handling autoplay restrictions gracefully).
+- [x] Build interactive Next Up list with real-time upvote counters and position re-sort animations.
+- [x] Display visual connection quality indicator and frozen-room overlay banner.
+- [x] Implement Host controls: Play, Pause, Skip/Advance, Lock Room, Rotate Invite ([TEST-015](TESTING_STRATEGY.md#L21)).
 
 **Phase 2 Exit Gate:** Queue operations replicate in $<100\text{ ms}$, snapshot syncs in $<2\text{ s}$, host disconnect freezes playback cleanly, and process restart recovers state up to the durable watermark.
 
 ---
+
+Evidence (21 October 2026): 27 Jest tests and the multi-browser journey pass. Twenty local sequential votes rendered on both clients within 42.69 ms maximum; one join rendered within 265.20 ms. Real transaction abort/retry and killed-process recovery tests passed. These results cover this declared local workload, not Phase 6 load certification. See [implementation status](IMPLEMENTATION_STATUS.md) and [Phase 2 behavior/limits](PHASE_TWO_IMPLEMENTATION.md).
 
 ## Phase 3: Acoustic Matching & Grounded AI DJ
 

@@ -3,6 +3,8 @@ import { createRoot } from "react-dom/client";
 import { io } from "socket.io-client";
 import "./style.css";
 import Catalog from "./Catalog.jsx";
+import LoungeConsole from "./LoungeConsole.jsx";
+import { createRoomSync } from "./room-sync.js";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -19,6 +21,11 @@ function App() {
   const socketRef = useRef(null);
   const tokenRef = useRef(null);
   const refreshRef = useRef(null);
+  const clockRef = useRef({
+    serverAt: Date.now(),
+    monotonicAt: performance.now(),
+  });
+  const [rtt, setRtt] = useState(null);
   async function refresh() {
     if (!refreshRef.current)
       refreshRef.current = fetch("/api/v1/auth/refresh", {
@@ -103,24 +110,80 @@ function App() {
       auth: { accessToken: session.accessToken },
     });
     socketRef.current = socket;
+    let retryTimer,
+      retryMs = 1000,
+      syncReady = false;
+    const sync = createRoomSync({
+      apply: (state) =>
+        setRoom((current) =>
+          current?.loungeId === state.loungeId ? state : current,
+        ),
+      resync: () => subscribe("lounge.resync"),
+    });
+    const subscribe = (event) => {
+      clearTimeout(retryTimer);
+      syncReady = false;
+      setConnection("Syncing");
+      socket
+        .timeout(3000)
+        .emit(event, { loungeId: room.loungeId }, (error, ack) => {
+          if (error || !ack?.ok) {
+            setConnection("Sync unavailable");
+            setError("Unable to synchronize this lounge.");
+            if (ack?.error?.code === "FORBIDDEN") {
+              setRoom(null);
+              return;
+            }
+            retryTimer = setTimeout(() => {
+              if (socket.connected) subscribe("lounge.resync");
+            }, retryMs);
+            retryMs = Math.min(10000, retryMs * 2);
+            return;
+          }
+          sync.snapshot(ack.snapshot);
+          syncReady = true;
+          retryMs = 1000;
+          setConnection("Connected");
+        });
+    };
+    const ping = () => {
+      if (!socket.connected) return;
+      const start = performance.now();
+      socket
+        .timeout(3000)
+        .emit(
+          "lounge.sync.ping",
+          { clientSentAt: Date.now() },
+          (error, pong) => {
+            if (error) {
+              setConnection("Connection unavailable");
+              return;
+            }
+            const elapsed = performance.now() - start;
+            if (syncReady) setConnection("Connected");
+            setRtt(Math.round(elapsed));
+            clockRef.current = {
+              serverAt: pong.serverSentAt + elapsed / 2,
+              monotonicAt: performance.now(),
+            };
+          },
+        );
+    };
+    const pingTimer = setInterval(ping, 5000);
     socket.on("connect", () => {
       setConnection("Syncing");
-      socket.emit("lounge.subscribe", { loungeId: room.loungeId }, (ack) => {
-        if (!ack.ok) setError("Unable to subscribe to this lounge.");
-        else setConnection("Connected");
-      });
+      sync.begin();
+      subscribe("lounge.subscribe");
+      ping();
     });
-    socket.on("lounge.state.snapshot", ({ payload }) =>
-      setRoom((current) =>
-        !current || current.loungeId !== payload.loungeId
-          ? current
-          : current.epoch !== payload.epoch ||
-              payload.revision >= current.revision
-            ? payload
-            : current,
-      ),
-    );
+    socket.on("lounge.state.snapshot", ({ payload }) => sync.receive(payload));
+    socket.on("lounge.membership.detached", () => {
+      setRoom(null);
+      setInvite("");
+    });
     socket.on("disconnect", (reason) => {
+      syncReady = false;
+      clearTimeout(retryTimer);
       setConnection("Reconnecting");
       if (reason === "io server disconnect")
         refresh().catch(() => {
@@ -130,6 +193,8 @@ function App() {
     });
     socket.on("connect_error", () => setConnection("Connection unavailable"));
     return () => {
+      clearInterval(pingTimer);
+      clearTimeout(retryTimer);
       socket.removeAllListeners();
       socket.disconnect();
       socketRef.current = null;
@@ -215,7 +280,6 @@ function App() {
       form.reset();
     });
   };
-  const seed = tracks.find((t) => t.trackId === room?.seedTrackId);
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -307,9 +371,8 @@ function App() {
                 <span className="record-caption">SIDE A / A NEW BEGINNING</span>
               </div>
               <div className="build-note">
-                <span className="pill">FOUNDATION RELEASE</span> Account access,
-                invitations and shared room state are ready to explore. Playback
-                and AI arrive in later phases.
+                <span className="pill">LIVE ROOM RELEASE</span> Create a room,
+                build the queue together and listen to your local music.
               </div>
             </div>
             <form className="panel auth-panel" onSubmit={login}>
@@ -392,6 +455,16 @@ function App() {
                 <span className="status-dot" />
                 {connection}
               </span>
+              {rtt !== null && (
+                <small className="connection-quality">
+                  {rtt} ms ·{" "}
+                  {rtt < 150
+                    ? "Good connection"
+                    : rtt < 500
+                      ? "Fair connection"
+                      : "Slow connection"}
+                </small>
+              )}
             </section>
             {invite && (
               <div className="invite-banner">
@@ -412,75 +485,17 @@ function App() {
                 </button>
               </div>
             )}
-            <div className="console-grid">
-              <section className="panel track-panel">
-                <div className="section-top">
-                  <span className="eyebrow">STARTING POINT</span>
-                  <span className="pill">SCHEDULED</span>
-                </div>
-                <div className="mini-record" aria-hidden="true">
-                  ◉
-                </div>
-                <h2>{seed?.title || "Selected track"}</h2>
-                <p className="subtle">{seed?.artist}</p>
-                <div className="track-stats">
-                  <span>
-                    {seed?.acoustic?.bpm || "—"}
-                    <small>BPM</small>
-                  </span>
-                  <span>
-                    {seed?.acoustic?.camelotKey || "—"}
-                    <small>KEY</small>
-                  </span>
-                  <span>
-                    {seed?.acoustic
-                      ? Math.round(seed.acoustic.energy * 100)
-                      : "—"}
-                    <small>ENERGY</small>
-                  </span>
-                </div>
-                <p className="form-footnote">
-                  {seed?.demoMetadataOnly
-                    ? "Metadata-only fixture · no audio file attached."
-                    : "Local audio attached."}{" "}
-                  Playback is not yet implemented.
-                </p>
-              </section>
-              <section className="panel">
-                <div className="section-top">
-                  <h2>In this lounge</h2>
-                  <span className="count">
-                    {room.members.length} / {room.settings.maxParticipants}
-                  </span>
-                </div>
-                <p className="subtle">
-                  Members share the same server snapshot.
-                </p>
-                <div className="members">
-                  {room.members.map((m) => (
-                    <div className="member" key={m.userId}>
-                      <div className="avatar">
-                        {m.displayName.slice(0, 1).toUpperCase()}
-                      </div>
-                      <div>
-                        <strong>{m.displayName}</strong>
-                        <small>
-                          {m.userId === session.user.id
-                            ? "You"
-                            : "Lounge member"}
-                        </small>
-                      </div>
-                      <span className="role">{m.role.replace("_", "-")}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="sync-footer">
-                  Snapshot revision {room.revision} · {room.status}
-                  <br />
-                  <span>Queue voting, battles and AI are upcoming phases.</span>
-                </div>
-              </section>
-            </div>
+            <LoungeConsole
+              room={room}
+              tracks={tracks}
+              session={session}
+              api={api}
+              run={run}
+              setInvite={setInvite}
+              setRoom={setRoom}
+              clock={clockRef}
+              connection={connection}
+            />
           </>
         ) : (
           <>

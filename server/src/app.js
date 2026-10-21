@@ -11,7 +11,7 @@ import { Server } from "socket.io";
 import { ZodError } from "zod";
 import { createAuth, publicUser } from "./auth.js";
 import { catalogRouter } from "./catalog.js";
-import { RoomService } from "./rooms.js";
+import { RoomService } from "./live-rooms.js";
 import { HttpError } from "./validation.js";
 import { root } from "./config.js";
 import { createThrottle } from "./throttle.js";
@@ -41,19 +41,113 @@ export function createApplication({
   const auth = createAuth(models, config, (id) =>
     namespace.in(`session:${id}`).disconnectSockets(true),
   );
-  const rooms = new RoomService(models, connection, config.key);
+  const rooms = new RoomService(
+    models,
+    connection,
+    config.key,
+    config.roomOptions,
+  );
   const envelope = (state) => ({
     event: "lounge.state.snapshot",
     loungeId: state.loungeId,
     epoch: state.epoch,
     revision: state.revision,
-    ts: Date.now(),
+    eventSeq: 0,
+    ts: rooms.now(),
     payload: state,
   });
-  rooms.publish = (state) =>
-    namespace
-      .to(`lounge:${state.loungeId}`)
-      .emit("lounge.state.snapshot", envelope(state));
+  const pendingSnapshots = new Map(),
+    lastFanout = new Map();
+  let fanoutScheduled = false;
+  const fanout = (state) => {
+    const prior = lastFanout.get(state.loungeId),
+      notifications = [];
+    if (
+      !prior ||
+      JSON.stringify(prior.nextUp) !== JSON.stringify(state.nextUp) ||
+      JSON.stringify(prior.nowPlaying) !== JSON.stringify(state.nowPlaying) ||
+      prior.reservedEntryId !== state.reservedEntryId
+    )
+      notifications.push([
+        "lounge.queue.update",
+        {
+          queue: state.nextUp,
+          nowPlaying: state.nowPlaying,
+          reservation: state.reservedEntryId,
+          reason: state.lastEventType === "queue.vote" ? "vote" : "manual",
+        },
+      ]);
+    for (const participantId of state.presentUserIds)
+      if (!prior?.presentUserIds.includes(participantId))
+        notifications.push([
+          "lounge.presence.update",
+          {
+            participantId,
+            action: "joined",
+            participantCount: state.participantCount,
+          },
+        ]);
+    for (const participantId of prior?.presentUserIds || [])
+      if (!state.presentUserIds.includes(participantId))
+        notifications.push([
+          "lounge.presence.update",
+          {
+            participantId,
+            action: "left",
+            participantCount: state.participantCount,
+          },
+        ]);
+    if (
+      !prior ||
+      prior.status !== state.status ||
+      prior.mutationFrozen !== state.mutationFrozen
+    )
+      notifications.push([
+        "lounge.status.update",
+        {
+          status: state.status,
+          hostConnected: state.hostConnected,
+          mutationFrozen: state.mutationFrozen,
+        },
+      ]);
+    lastFanout.set(state.loungeId, state);
+    for (const socket of namespace.sockets.values()) {
+      if (!socket.rooms.has(`lounge:${state.loungeId}`)) continue;
+      // Do not accumulate snapshots behind a slow transport.
+      if (socket.conn.writeBuffer.length > 20) {
+        socket.disconnect(true);
+        continue;
+      }
+      socket.emit("lounge.state.snapshot", envelope(state));
+      notifications.forEach(([event, payload], index) =>
+        socket.volatile.emit(event, {
+          ...envelope(state),
+          event,
+          eventSeq: index + 1,
+          payload,
+        }),
+      );
+    }
+  };
+  rooms.publish = (state) => {
+    pendingSnapshots.set(state.loungeId, state);
+    if (fanoutScheduled) return;
+    fanoutScheduled = true;
+    setImmediate(() => {
+      fanoutScheduled = false;
+      for (const latest of pendingSnapshots.values()) fanout(latest);
+      pendingSnapshots.clear();
+    });
+  };
+  rooms.detach = (id, userId) => {
+    rooms.presence.get(id)?.delete(userId);
+    for (const socket of namespace.sockets.values())
+      if (socket.data.loungeId === id && socket.data.auth.user._id === userId) {
+        socket.emit("lounge.membership.detached", { loungeId: id });
+        socket.data.loungeId = null;
+        socket.leave(`lounge:${id}`);
+      }
+  };
   app.disable("x-powered-by");
   app.use(helmet());
   app.use(express.json({ limit: "64kb" }));
@@ -99,6 +193,7 @@ export function createApplication({
   app.get("/api/v1/health/ready", async (_req, res) => {
     try {
       if (connection.readyState !== 1) throw new Error();
+      if (!rooms.healthy || rooms.degradedAt !== null) throw new Error();
       await connection.db.admin().ping();
       await access(config.assetRoot, constants.R_OK | constants.W_OK);
       res.json({ status: "ready" });
@@ -153,9 +248,42 @@ export function createApplication({
     res.json(await rooms.join(req.auth.user._id, req.body)),
   );
   api.get("/lounges/:id", async (req, res) => {
-    await rooms.member(req.params.id, req.auth.user._id);
-    res.json(await rooms.snapshot(req.params.id));
+    res.json(
+      await rooms.serial(req.params.id, async () => {
+        await rooms.member(req.params.id, req.auth.user._id);
+        return rooms.snapshot(req.params.id);
+      }),
+    );
   });
+  for (const [method, route, type] of [
+    ["post", "/lounges/:id/queue", "queue.enqueue"],
+    ["delete", "/lounges/:id/queue/:entryId", "queue.remove"],
+    ["put", "/lounges/:id/queue/:entryId/vote", "queue.vote"],
+    ["post", "/lounges/:id/queue/:entryId/promote", "queue.promote"],
+    ["post", "/lounges/:id/playback", "playback.control"],
+    ["patch", "/lounges/:id/settings", "room.settings"],
+    ["post", "/lounges/:id/invites/rotate", "room.invite"],
+    ["patch", "/lounges/:id/members/:userId", "member.update"],
+    ["post", "/lounges/:id/host-transfer", "host.transfer"],
+    ["post", "/lounges/:id/leave", "member.leave"],
+  ])
+    api[method](route, async (req, res) => {
+      const payload = {
+        ...req.body,
+        ...(req.params.entryId ? { entryId: req.params.entryId } : {}),
+        ...(req.params.userId ? { userId: req.params.userId } : {}),
+      };
+      const result = await rooms.command(
+        req.params.id,
+        req.auth.user._id,
+        type,
+        payload,
+        req.headers["x-command-id"],
+      );
+      res
+        .status(type === "queue.enqueue" || type === "room.invite" ? 201 : 200)
+        .json(result);
+    });
   app.use("/api/v1", api);
   app.use("/api", (_req, _res, next) =>
     next(new HttpError(404, "NOT_FOUND", "Endpoint not implemented.")),
@@ -209,7 +337,17 @@ export function createApplication({
       () => socket.disconnect(true),
       Math.max(0, claims.exp * 1000 - Date.now()),
     );
-    socket.on("disconnect", () => clearTimeout(timer));
+    socket.on("disconnect", () => {
+      clearTimeout(timer);
+      if (socket.data.loungeId)
+        rooms
+          .disconnected(
+            socket.data.loungeId,
+            socket.data.auth.user._id,
+            socket.id,
+          )
+          .catch(() => {});
+    });
     let count = 0;
     let windowAt = Date.now();
     const subscribe = async (input, ack) => {
@@ -223,16 +361,43 @@ export function createApplication({
       try {
         const current = await auth.verify(socket.handshake.auth.accessToken);
         const id = input?.loungeId;
-        await rooms.member(id, current.user._id);
+        if (socket.data.loungeId && socket.data.loungeId !== id) {
+          const old = socket.data.loungeId;
+          socket.data.loungeId = null;
+          await socket.leave(`lounge:${old}`);
+          await rooms.disconnected(old, current.user._id, socket.id);
+        }
         await rooms.serial(id, async () => {
-          for (const room of socket.rooms)
-            if (room.startsWith("lounge:")) await socket.leave(room);
+          await rooms.member(id, current.user._id);
+          if (!socket.connected) return;
+          socket.data.loungeId = id;
           await socket.join(`lounge:${id}`);
+          await rooms.attach(id, current.user._id, socket.id);
+          if (!socket.connected) {
+            rooms
+              .disconnected(id, current.user._id, socket.id, true)
+              .catch(() => {});
+            return;
+          }
           const state = await rooms.snapshot(id);
           socket.emit("lounge.state.snapshot", envelope(state));
-          ack({ ok: true, epoch: state.epoch, revision: state.revision });
+          ack({
+            ok: true,
+            epoch: state.epoch,
+            revision: state.revision,
+            durableRevision: state.durableRevision,
+            snapshot: state,
+          });
         });
       } catch (error) {
+        if (socket.data.loungeId) {
+          const old = socket.data.loungeId;
+          socket.data.loungeId = null;
+          await socket.leave(`lounge:${old}`);
+          await rooms
+            .disconnected(old, socket.data.auth.user._id, socket.id, true)
+            .catch(() => {});
+        }
         ack({
           ok: false,
           error: {
@@ -244,15 +409,70 @@ export function createApplication({
         });
       }
     };
-    socket.on("lounge.subscribe", subscribe);
-    socket.on("lounge.resync", subscribe);
-    socket.on("lounge.sync.ping", (input, ack) => {
-      if (typeof ack === "function")
+    let subscriptions = Promise.resolve(),
+      queuedSubscriptions = 0;
+    const scheduleSubscription = (input, ack) => {
+      if (queuedSubscriptions >= 30) {
+        if (typeof ack === "function")
+          ack({ ok: false, error: { code: "RATE_LIMITED" } });
+        return;
+      }
+      queuedSubscriptions++;
+      subscriptions = subscriptions
+        .catch(() => {})
+        .then(() => subscribe(input, ack))
+        .finally(() => queuedSubscriptions--);
+    };
+    socket.on("lounge.subscribe", scheduleSubscription);
+    socket.on("lounge.resync", scheduleSubscription);
+    const commandAllowed = createThrottle({ limit: 240, maxKeys: 1 });
+    socket.on("lounge.command", async (input, ack) => {
+      if (typeof ack !== "function") return;
+      if (!commandAllowed("socket"))
+        return ack({ ok: false, error: { code: "RATE_LIMITED" } });
+      try {
+        const current = await auth.verify(socket.handshake.auth.accessToken);
+        if (!socket.data.loungeId)
+          throw new HttpError(403, "FORBIDDEN", "Subscribe to a room first.");
+        const payload = {
+          ...input?.payload,
+          ...(input?.expectedRevision !== undefined
+            ? { expectedRevision: input.expectedRevision }
+            : {}),
+        };
+        ack(
+          await rooms.command(
+            socket.data.loungeId,
+            current.user._id,
+            input?.type,
+            payload,
+            input?.commandId,
+          ),
+        );
+      } catch (error) {
         ack({
-          clientSentAt: input?.clientSentAt,
-          serverReceivedAt: Date.now(),
-          serverSentAt: Date.now(),
+          ok: false,
+          error: {
+            code:
+              error instanceof ZodError
+                ? "VALIDATION_FAILED"
+                : error.code || "INTERNAL_ERROR",
+            message:
+              error.status < 500
+                ? error.message
+                : "Command could not be completed.",
+          },
         });
+      }
+    });
+    socket.on("lounge.sync.ping", (input, ack) => {
+      const pong = {
+        clientSentAt: input?.clientSentAt,
+        serverReceivedAt: rooms.now(),
+        serverSentAt: rooms.now(),
+      };
+      if (typeof ack === "function") ack(pong);
+      socket.emit("lounge.sync.pong", pong);
     });
   });
   return {
@@ -261,6 +481,9 @@ export function createApplication({
     io,
     rooms,
     auth,
-    close: () => new Promise((resolve) => io.close(resolve)),
+    close: async () => {
+      await new Promise((resolve) => io.close(resolve));
+      await rooms.close();
+    },
   };
 }

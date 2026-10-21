@@ -1,4 +1,27 @@
-# Implementation status — 19 October 2026
+# Implementation status — 21 October 2026
+
+## Phase 2 complete — TASK-009 through TASK-013
+
+Implemented the per-room FIFO and pure queue reducer, deterministic identity-based voting, Host/Co-DJ controls, transactional bounded event batches, failure degradation, durable replay/new epochs, tab-deduplicated presence, immediate Host-loss freeze, moderation/transfer/leave, snapshot catch-up, RTT clock sampling and the Web Audio console. Manual promotion/advance recheck current BPM/Camelot profiles. No TypeScript, model integration or additional application instance was introduced.
+
+Current verification on Windows, Node v24.13.0, Intel Core i7-10875H and 32 GiB RAM:
+
+| Check | Actual result |
+| --- | --- |
+| `npm run lint` | Passed, zero lint errors |
+| `npm test` | 27 tests passed across 4 suites; real isolated MongoDB replica sets |
+| TEST-003 | 100 concurrent socket votes from 10 users; one vote per identity and matching ordered state across 11 clients; HTTP/socket permission denials and retry conflicts tested |
+| TEST-004 | Multiple-tab presence, departure grace, immediate last-Host-socket freeze, rejoin, atomic transfer/removal/leave and epoch/gap catch-up passed |
+| TEST-010 | Automatic cadence, real transaction rollback, lost commit response, deduplicated retry, readiness 503, bounded buffer, older-checkpoint replay and killed-Node-process restart recovery passed |
+| `npm run test:e2e` | Passed: two Chromium contexts, authenticated audio ranges/Web Audio, playback pause/advance, reservation, live vote reorder, Host-loss banner, rejoin, mobile layout and logout |
+| Queue render timing | 20 sequential votes after 2 warmups: P50 14.93 ms, P95 42.66 ms, maximum 42.69 ms, measured from command receipt to last of two client DOM revisions |
+| Join render timing | 265.20 ms from join click through connected snapshot render, one local sample |
+| `npm run build` | Passed, production client generated |
+| Local rollout | Private Extended JSON backup saved before migration 003; all three migration ledger entries verified; 51 local audio tracks and 51 pending profiles preserved; restarted app readiness returned `ready` |
+
+Raw timing and declared workload: [phase-two-browser-latency.json](../evidence/phase-two-browser-latency.json). Screenshots below now show the live Phase 2 console; synthetic test audio is not demonstration music. These small local checks do not certify the Phase 6 50-client/long-duration workload. Implementation details, bounded retry semantics, API changes and migration/rollback review: [Phase 2 implementation](PHASE_TWO_IMPLEMENTATION.md).
+
+The original Phase 1 record follows. Its test counts describe that earlier checkpoint; the table above is the current result.
 
 The user asked to review their changes and start implementation. Preserved their interactive architecture HTML/JSON, granular phase checklist and sentiment-driven energy clarification. Also repaired the clarification's Markdown table formatting without changing its meaning.
 
@@ -36,14 +59,14 @@ Evidence: [welcome](../evidence/foundation-welcome.png), [lounge](../evidence/fo
 
 **Phase 0 is not complete.** At the user's explicit request, 51 files from `D:\DJ` were imported for private local previews with provenance recorded as YouTube-sourced, license unverified. Their `.mp3` names concealed MP4/AAC content; the importer detects the container and stores correct MIME types without transcoding. A second import reported 51 existing, zero new, zero failed; one non-audio file was skipped. Private database backups and import reports are under ignored `data/`. No audio was published or sent to a model. Reuse rights remain unverified. Imported tracks have null acoustic data and `profileStatus: pending`; the three separate metadata fixtures still have no audio. The legal-audio chain and grounded-lore gates remain open.
 
-No Ollama runtime/model was found or installed; no model license, latency or quality benchmark has passed. Phase 0 decisions on data-loss, ties and host loss remain provisional for future queue work. The user's instruction to start was applied to independent foundation tasks while retaining these gates, not treating them as silently approved/completed.
+No Ollama runtime/model was found or installed; no model license, latency or quality benchmark has passed. The explicit Phase 2 request now fixes bounded-loss persistence and Host-loss freeze for this slice; battle ties and model choices remain future decisions. The user's instruction to continue does not silently close the media/model gates.
 
 **Phase 1 foundation and hardening are complete.** Versioned migrations with distributed runner locking (`server/migrations/`, `migration_locks`), database-level strict `$jsonSchema` validators via `collMod`, Argon2id password calibration (`evidence/password-calibration.json`), Socket.IO handshake rate throttling (`server/src/throttle.js`), transactional command receipts for lounge creation idempotency with deterministic HMAC invites (`command_receipts`), local media ingestion (`server/src/import-media.js`), and private catalog previews/profile editing (`client/src/Catalog.jsx`) are implemented, verified, and checked off.
 
-Current room capacity counts reserved memberships, not concurrent online users. No leave/moderation/host-transfer API exists yet. Room revisions currently describe low-frequency persisted membership changes; high-frequency in-memory queue authority, append-only batched events, durable watermarks and crash replay are Phase 2 work. Do not interpret initial snapshots as implemented queue recovery. Membership history currently caps at 50 rows, without the final pagination contract.
+Current room capacity counts reserved memberships; online presence is separate and deduplicated. Leave retains membership for rejoin, while removal revokes access. Phase 2 queue authority, batched event history, durable watermarks and restart recovery are implemented. The instance caps loaded rooms at 50, queue entries at 200, buffered event/checkpoint pairs at 500 and pending operations per room at 512. Recent live command receipts are bounded to 256 per room; exactly-once delivery and zero-loss crash recovery are not claimed. Membership history still caps at 50 rows without the final pagination contract.
 
-Shared lounge playback, queue votes, presence quality, Host freeze, Soundclash, chat/sentiment, grounded generation, hybrid recommendations and analytics remain unimplemented. `/health/ready` currently checks DB/assets only; future batch-writer health must be added with Phase 2. Docker Compose is local development only; production deployment, TLS/DB auth, security review and backup/restore rehearsal are not complete.
+Soundclash, chat/reactions/sentiment, grounded generation, hybrid recommendations and analytics remain unimplemented. Mute state and its server guard are tested, but chat/reaction route enforcement will be wired when those Phase 4 routes exist. Playback uses bounded authenticated range fetches assembled before local playback, not sample-accurate device synchronization; track end pauses for explicit advance. `/health/ready` checks DB, writable assets and batch-writer health. Docker Compose remains local development only; production deployment, TLS/DB auth, full security review and restore rehearsal are not complete.
 
 ## Next implementation slice
 
-Advance to Phase 2: TASK-009/010/011 (pure queue reducer, per-room serialized commands, bounded batched event writer/replay, presence, and reconnect/sync behavior). Add tests for concurrency, failed writes and new-epoch recovery before playback or AI.
+Next is Phase 3, TASK-014–016: extend the hard compatibility guard with ranking, grounded retrieval/Q&A and stale-safe segue proposals. Keep the unresolved Phase 0 model and verified media/profile gates explicit.

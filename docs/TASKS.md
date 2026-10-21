@@ -1,6 +1,6 @@
 # Ordered implementation backlog
 
-Implementation has started; unchecked tasks may contain completed sub-items in [the phase checklist](PHASE_TODO_LIST.md). Full phase gates remain open. See [implementation status](IMPLEMENTATION_STATUS.md) for evidence and scope gaps. P0 means release-critical prerequisite, P1 means required MVP, P2 means optional later work. Phase order is in [implementation plan](IMPLEMENTATION_PLAN.md); TEST IDs refer to [testing](TESTING_STRATEGY.md). Dependencies are task IDs, not calendar dates. Every task's DoD includes reviewed code, relevant passing checks and updated documentation.
+Phases 1 and 2 are implemented; unchecked tasks may contain completed sub-items in [the phase checklist](PHASE_TODO_LIST.md). Phase 0 media/model gates and later release gates remain open. See [implementation status](IMPLEMENTATION_STATUS.md) for evidence and scope gaps. P0 means release-critical prerequisite, P1 means required MVP, P2 means optional later work. Phase order is in [implementation plan](IMPLEMENTATION_PLAN.md); TEST IDs refer to [testing](TESTING_STRATEGY.md). Dependencies are task IDs, not calendar dates. Every task's DoD includes reviewed code, relevant passing checks and updated documentation.
 
 > [!TIP]
 > For a granular, actionable breakdown of every task with sub-item checklists and phase exit gates, see [PHASE_TODO_LIST.md](PHASE_TODO_LIST.md).
@@ -15,11 +15,11 @@ Implementation has started; unchecked tasks may contain completed sub-items in [
 | [x] | TASK-006 | P0 / P1 | Auth/refresh/RBAC, REQ-003,021 | TASK-005 | All roles tested, replay/expiry rejected, TEST-001 | [Security](SECURITY.md) |
 | [x] | TASK-007 | P1 / P1 | Catalog/media/profile API, REQ-001,010 | TASK-005, TASK-006 | Legal assets play privately; admin validation, TEST-002/011 | [API](API_SPECIFICATION.md) |
 | [x] | TASK-008 | P1 / P1 | Create/invite/join and initial UI, REQ-004,006 | TASK-006, TASK-007 | Two sessions see shared snapshot, TEST-002/015 | [Architecture](ARCHITECTURE.md) |
-| [ ] | TASK-009 | P0 / P2 | Pure room reducer and concurrent votes, REQ-005 | TASK-008 | Atomic deterministic sort/idempotency, TEST-003 | [Architecture](ARCHITECTURE.md) |
-| [ ] | TASK-010 | P0 / P2 | Event batch writer/replay/degradation, REQ-018,020 | TASK-009 | Flush/retry/crash tests and durable watermark, TEST-010 | [Schema](DATABASE_SCHEMA.md) |
-| [ ] | TASK-011 | P1 / P2 | Socket snapshots/presence/reconnect, REQ-006,019 | TASK-009, TASK-010 | Join <2 s, gaps recover, TEST-004/012 | [API](API_SPECIFICATION.md) |
-| [ ] | TASK-012 | P1 / P2 | Host moderation/transfer/freeze, REQ-008,021 | TASK-011 | Room-scoped role checks incl. sockets, TEST-001/004 | [Security](SECURITY.md) |
-| [ ] | TASK-013 | P1 / P2 | Local playback clock and queue console, REQ-001,005,006 | TASK-011, TASK-012 | Unlock, pause/resume, frozen UI, TEST-015 | [Architecture](ARCHITECTURE.md) |
+| [x] | TASK-009 | P0 / P2 | Pure room reducer and concurrent votes, REQ-005 | TASK-008 | Atomic deterministic sort/idempotency, TEST-003 | [Architecture](ARCHITECTURE.md) |
+| [x] | TASK-010 | P0 / P2 | Event batch writer/replay/degradation, REQ-018,020 | TASK-009 | Flush/retry/crash tests and durable watermark, TEST-010 | [Schema](DATABASE_SCHEMA.md) |
+| [x] | TASK-011 | P1 / P2 | Socket snapshots/presence/reconnect, REQ-006,019 | TASK-009, TASK-010 | Join <2 s, gaps recover, TEST-004/012 | [API](API_SPECIFICATION.md) |
+| [x] | TASK-012 | P1 / P2 | Host moderation/transfer/freeze, REQ-008,021 | TASK-011 | Room-scoped role checks incl. sockets, TEST-001/004 | [Security](SECURITY.md) |
+| [x] | TASK-013 | P1 / P2 | Local playback clock and queue console, REQ-001,005,006 | TASK-011, TASK-012 | Unlock, pause/resume, frozen UI, TEST-015 | [Architecture](ARCHITECTURE.md) |
 | [ ] | TASK-014 | P0 / P3 | BPM/Camelot filter and weighted ranking, REQ-011,012 | TASK-007, TASK-009 | ≥20 decisions 100% valid, TEST-005 | [AI](AI_MUSIC_ENGINE.md) |
 | [ ] | TASK-015 | P1 / P3 | Retrieval/generation/Q&A and citations, REQ-014 | TASK-003, TASK-014 | Unsupported queries declined; audited facts, TEST-006 | [AI](AI_MUSIC_ENGINE.md) |
 | [ ] | TASK-016 | P1 / P3 | Outro proposals/approve/reject/stale checks, REQ-012,014 | TASK-013, TASK-015 | One full chain and bounded fallback, TEST-005/006/009 | [API](API_SPECIFICATION.md) |
@@ -43,3 +43,5 @@ No subagents or parallel staffing are assumed. Work that can be interleaved: fix
 ## Coverage audit
 
 REQ-001–022 each appears in at least one task and one test. Storage covers profiles/timeline, membership, queue/battles/votes through snapshot/events, chat/reactions, interactions/model versions and final summaries. APIs route each mutation through the same room authority. Requirements spanning phases are not considered met until all linked behaviors pass. Track scope changes in [decisions](DECISIONS.md), then update this backlog, API/schema and tests together.
+
+Phase 2 completion (21 October 2026): TASK-009–013 are implemented and verified with 27 tests, the two-context browser journey and measured local sync/join timing. [Current evidence and limitations](IMPLEMENTATION_STATUS.md) distinguish this slice from future chat/battles/AI and Phase 6 performance acceptance.

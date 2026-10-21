@@ -148,5 +148,47 @@ export function createModels(connection) {
       [{ expiresAt: 1 }, { expireAfterSeconds: 0 }],
     ],
   );
-  return { User, Session, Asset, Track, Lounge, Membership, Receipt };
+  const QueueEvent = model(
+    "queue_events",
+    {
+      loungeId: ref("lounges"),
+      epoch: { type: String, required: true },
+      revision: { type: Number, required: true, min: 0 },
+      eventSeq: { type: Number, required: true, min: 0 },
+      commandId: { type: String, required: true },
+      actorId: String,
+      type: { type: String, required: true },
+      payload: { type: Schema.Types.Mixed, required: true },
+      reducerVersion: { type: Number, required: true },
+      occurredAt: { type: Date, required: true },
+      receipt: Schema.Types.Mixed,
+    },
+    [
+      [{ loungeId: 1, epoch: 1, revision: 1, eventSeq: 1 }, { unique: true }],
+      [{ loungeId: 1, commandId: 1 }, {}],
+    ],
+  );
+  const RoomSnapshot = model(
+    "room_snapshots",
+    {
+      loungeId: ref("lounges"),
+      epoch: { type: String, required: true },
+      revision: { type: Number, required: true, min: 0 },
+      reducerVersion: { type: Number, required: true },
+      state: { type: Schema.Types.Mixed, required: true },
+      persistedAt: { type: Date, required: true },
+    },
+    [[{ loungeId: 1 }, { unique: true }]],
+  );
+  return {
+    User,
+    Session,
+    Asset,
+    Track,
+    Lounge,
+    Membership,
+    Receipt,
+    QueueEvent,
+    RoomSnapshot,
+  };
 }

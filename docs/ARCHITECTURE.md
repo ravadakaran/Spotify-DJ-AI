@@ -4,7 +4,7 @@ Phase 1 implementation note (19 October 2026): one process serializes lounge cre
 
 Recommended baseline: Track A, PRD Option B, one Node/Express/Socket.IO process, MongoDB through one pooled Mongoose client, React JavaScript client, local asset volume and optional local LLM runtime. Logical modules are isolated; deployable microservices are unnecessary for a single-operator prototype. Requirements: REQ-001–022.
 
-Implementation status: only auth, catalog/media, lounge membership and initial authenticated snapshots are built. `server/src/app.js` wires the modules, `rooms.js` serializes joins and `persistence.js` initializes indexes/seeds. No queue reducer, batch writer, model or playback scheduler exists yet. The diagrams below remain the target architecture; the supplied interactive diagram is preserved. See [current limitations](IMPLEMENTATION_STATUS.md).
+Implementation status: Phase 2 adds the live queue reducer, bounded event writer, presence/moderation, recovery and local playback console. The implemented decisions and transport bounds are in [Phase 2 implementation](PHASE_TWO_IMPLEMENTATION.md). The diagrams below still include future AI, chat and analytics; the supplied interactive diagram is preserved. See [current limitations](IMPLEMENTATION_STATUS.md).
 
 > [!TIP]
 > An interactive, verified standalone architecture diagram generated with Archify is available at [architecture.html](architecture.html) (source: [architecture.json](architecture.json)). It features signal-flow animations, guided focus tours, and theme switching.

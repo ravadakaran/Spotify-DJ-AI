@@ -2,6 +2,8 @@
 
 The **foundation is runnable**. Use the current instructions below; the later sections describe the full future setup contract and include settings/features not implemented yet.
 
+Phase 2 is now included in these commands. Stop the prior app before migration. Migration 003 adds live event/checkpoint collections; preserve a database backup and asset manifest first. The `library:import` helper creates an ignored Extended JSON backup before migrating the persistent local database. Never run two application instances against these room states. Recovery pauses playback and requires Host resume. See [Phase 2 operating and rollback notes](PHASE_TWO_IMPLEMENTATION.md).
+
 ## Current quick start (Windows / Node 24.13.0)
 
 ```powershell

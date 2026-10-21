@@ -5,6 +5,7 @@ import { createModels } from "./models.js";
 import { randomUUID } from "node:crypto";
 import { createModels as initialModels } from "../migrations/001-foundation-models.js";
 import { up as phaseOne } from "../migrations/002-phase-one.js";
+import { up as liveRooms } from "../migrations/003-live-rooms.js";
 export async function connect(uri) {
   const connection = await mongoose
     .createConnection(uri, {
@@ -46,6 +47,11 @@ export async function migrate(connection, models) {
         id: "002-phase-one",
         file: "../migrations/002-phase-one.js",
         up: () => phaseOne(connection, models),
+      },
+      {
+        id: "003-live-rooms",
+        file: "../migrations/003-live-rooms.js",
+        up: () => liveRooms(connection, models),
       },
     ];
     for (const migration of migrations) {

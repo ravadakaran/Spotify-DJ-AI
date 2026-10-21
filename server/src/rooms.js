@@ -8,16 +8,24 @@ export class RoomService {
     this.connection = connection;
     this.epoch = randomUUID();
     this.locks = new Map();
+    this.pendingCounts = new Map();
     this.publish = () => {};
     this.receiptKey = receiptKey;
   }
   async serial(id, operation) {
+    const count = this.pendingCounts.get(id) || 0;
+    if (count >= 512)
+      throw new HttpError(429, "ROOM_BUSY", "Too many pending room commands.");
+    this.pendingCounts.set(id, count + 1);
     const prior = this.locks.get(id) || Promise.resolve();
     const next = prior.catch(() => {}).then(operation);
     this.locks.set(id, next);
     try {
       return await next;
     } finally {
+      const remaining = this.pendingCounts.get(id) - 1;
+      if (remaining) this.pendingCounts.set(id, remaining);
+      else this.pendingCounts.delete(id);
       if (this.locks.get(id) === next) this.locks.delete(id);
     }
   }
@@ -37,6 +45,9 @@ export class RoomService {
     return member;
   }
   async snapshot(id) {
+    return this.databaseSnapshot(id);
+  }
+  async databaseSnapshot(id) {
     const lounge = await this.models.Lounge.findById(id).lean();
     if (!lounge) throw new HttpError(404, "NOT_FOUND", "Lounge not found.");
     const memberships = await this.models.Membership.find({
@@ -58,6 +69,7 @@ export class RoomService {
       vibeProfile: lounge.vibeProfile,
       settings: lounge.settings,
       seedTrackId: lounge.seedTrackId,
+      locked: lounge.locked,
       nowPlaying: null,
       nextUp: [],
       battle: null,
@@ -65,6 +77,7 @@ export class RoomService {
       members: memberships.map((m) => ({
         userId: m.userId,
         role: m.role,
+        muted: m.muted,
         displayName:
           users.find((u) => u._id === m.userId)?.displayName || "Participant",
       })),
@@ -161,10 +174,20 @@ export class RoomService {
         "Invite is invalid or expired.",
       );
     return this.serial(lounge._id, async () => {
+      await this.beforeMembershipChange?.(lounge._id);
       await this.connection.transaction(async (session) => {
         const current = await this.models.Lounge.findById(lounge._id).session(
           session,
         );
+        if (
+          current.inviteHash !== hash(inviteCode.toUpperCase()) ||
+          current.inviteExpiresAt <= new Date()
+        )
+          throw new HttpError(
+            404,
+            "INVITE_NOT_FOUND",
+            "Invite is invalid or expired.",
+          );
         const existing = await this.models.Membership.findOne({
           loungeId: lounge._id,
           userId,
@@ -198,6 +221,7 @@ export class RoomService {
           { session },
         );
       });
+      await this.afterMembershipChange?.(lounge._id);
       const state = await this.snapshot(lounge._id);
       this.publish(state);
       return state;
