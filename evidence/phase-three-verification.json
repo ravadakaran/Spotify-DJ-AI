@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-26",
+  "baseCommit": "aca573c34d6de48af263fffbeb6647ab9c1f3c6b",
+  "revision": "Uncommitted Phase 3 working tree; SHA-256 hashes identify tested source and controlled fixture definitions",
+  "runtime": "v24.13.0",
+  "hardware": "Windows; Intel Core i7-10875H; 32 GiB RAM",
+  "checks": {
+    "fullJest": "34 tests / 6 suites passed",
+    "build": "passed",
+    "finalTargetedJest": "7 tests / 2 Phase 3 suites passed after response text/context changes",
+    "lint": "passed",
+    "browser": "Final two-Chromium-context journey passed after queue animation correction, including expanded mobile citation and no horizontal overflow; 1 test, 35.5s total"
+  },
+  "dataset": "Authored metadata/silence fixtures; 576 Camelot pairs, 24 ranked decisions, 20 supported and 10 unsupported controlled questions. No real-model benchmark.",
+  "model": "Disabled by default; injected mock providers only",
+  "hashes": {
+    "server/src/room-ai.js": "2574e70bb01d9ee277b91070caaac52f5b0de6ca90ad4f0a079bea2a1755685a",
+    "tests/browser/foundation.spec.js": "290bd433c1510509d5655f1558e3e1e183cc995bed0c79776874deb64c6e373e",
+    "package-lock.json": "72eaae63c3fba077440782dc00e07f01ec21ca311b1280354b2c7fd8bdb2cc1b",
+    "server/tests/phase-three.test.js": "dcd757e1219ba9d8cccdd9a2739065532bddf13adc8487451511fb7da599af2f",
+    "server/tests/phase-three.integration.test.js": "b8bc5868f76e20c7956b44ebd4fa4901642c834100bc1e18459dd744bc39df4d",
+    "server/src/grounding.js": "aa224680819131db4d914bf602d44a83cc4ae9a69200d51c38f719303ee0bc3a",
+    "server/src/music-engine.js": "8e5d31319a860f6dc3928812d276959b3c127de1f74331859c6f37420654b955",
+    "client/src/LoungeConsole.jsx": "71efcf5b64363122eee96639e0cc1b7fdcd7705f19b4cc9345e81f078683b2d1"
+  }
+}

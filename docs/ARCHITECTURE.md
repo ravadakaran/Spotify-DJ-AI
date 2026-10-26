@@ -1,5 +1,7 @@
 # Architecture
 
+Phase 3 as built (26 October 2026): `music-engine.js` ranks after hard filtering; `grounding.js` retrieves/version-tags facts and provides constrained local generation with labeled fallbacks; `room-ai.js` captures and publishes through the room FIFO while generation runs outside it. The reducer persists proposal/decision/question-count events. React renders citations and approval controls from full snapshots. Bounds and stale checks are specified in [Phase 3 implementation](PHASE_THREE_IMPLEMENTATION.md). Existing one-process/one-pool architecture is retained.
+
 Phase 1 implementation note (19 October 2026): one process serializes lounge creation by actor and joins by room. Transactional creation receipts prevent duplicate lounges on network retries; they are not exactly-once delivery. A bounded per-IP handshake throttle precedes socket authentication. Private library import detects audio content and hashes files, leaving unverified acoustic data pending. Browser previews use authenticated asset fetches and do not advance the shared room clock. High-frequency queue/event authority remains Phase 2.
 
 Recommended baseline: Track A, PRD Option B, one Node/Express/Socket.IO process, MongoDB through one pooled Mongoose client, React JavaScript client, local asset volume and optional local LLM runtime. Logical modules are isolated; deployable microservices are unnecessary for a single-operator prototype. Requirements: REQ-001–022.

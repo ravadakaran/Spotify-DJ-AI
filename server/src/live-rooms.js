@@ -4,6 +4,9 @@ import { RoomService as FoundationRooms } from "./rooms.js";
 import { hash } from "./auth.js";
 import { HttpError, requireId } from "./validation.js";
 import { EventWriter } from "./event-writer.js";
+import { aiCommand } from "./room-ai.js";
+import { ollamaAdapter } from "./grounding.js";
+import { createThrottle } from "./throttle.js";
 import {
   compatible,
   position,
@@ -14,6 +17,13 @@ import {
 const revision = z.number().int().nonnegative();
 const id = z.string().uuid();
 const commands = {
+  "ai.decision": z
+    .object({
+      proposalId: id,
+      expectedRevision: revision,
+      decision: z.enum(["approve", "reject"]),
+    })
+    .strict(),
   "queue.enqueue": z
     .object({ trackId: id, expectedRevision: revision })
     .strict(),
@@ -78,6 +88,16 @@ export class RoomService extends FoundationRooms {
     this.presence = new Map();
     this.grace = new Map();
     this.receipts = new Map();
+    this.aiJobs = new Map();
+    this.outroAttempts = new Map();
+    this.aiProvider = options.aiProvider ?? ollamaAdapter(options.ollamaModel);
+    this.aiTimeoutMs = options.aiTimeoutMs ?? 2300;
+    this.aiMetrics = { model: 0, template: 0 };
+    this.aiAllowed = createThrottle({
+      limit: 12,
+      windowMs: 60000,
+      maxKeys: 2500,
+    });
     const wall = Date.now(),
       mono = performance.now();
     this.now = options.now || (() => wall + performance.now() - mono);
@@ -177,6 +197,7 @@ export class RoomService extends FoundationRooms {
       presentUserIds: [],
       hostConnected: false,
       mutationFrozen: true,
+      segueProposal: null,
     };
     if (checkpoint) {
       state.recovery = {
@@ -311,6 +332,8 @@ export class RoomService extends FoundationRooms {
   async command(loungeId, userId, type, input, commandId = randomUUID()) {
     requireId(commandId);
     requireId(loungeId);
+    if (["ai.segue", "ai.question"].includes(type))
+      return aiCommand(this, loungeId, userId, type, input, commandId);
     if (!commands[type]) bad("INVALID_COMMAND", "Unknown room command.", 422);
     const body = commands[type].parse(input);
     return this.serial(loungeId, async () => {
@@ -359,11 +382,14 @@ export class RoomService extends FoundationRooms {
       if (hostOnly.includes(type)) this.roomMember(state, userId, ["host"]);
       if (
         (type.startsWith("queue.") && type !== "queue.vote") ||
-        type === "playback.control"
+        type === "playback.control" ||
+        type === "ai.decision"
       )
         this.roomMember(state, userId, ["host", "co_dj"]);
       if (
-        (type.startsWith("queue.") || type === "playback.control") &&
+        (type.startsWith("queue.") ||
+          type === "playback.control" ||
+          type === "ai.decision") &&
         (state.mutationFrozen || !this.hasSockets(loungeId, state.hostUserId))
       )
         bad(
@@ -384,6 +410,35 @@ export class RoomService extends FoundationRooms {
         payload = { ...body },
         result = {};
       delete payload.expectedRevision;
+      if (type === "ai.decision") {
+        const p = state.segueProposal;
+        if (!p || p.proposalId !== body.proposalId || p.status !== "pending")
+          bad("PROPOSAL_UNAVAILABLE", "Request a new segue proposal.");
+        if (body.decision === "approve") {
+          if (
+            p.epoch !== state.epoch ||
+            p.revision !== state.revision ||
+            p.playbackId !== state.nowPlaying?.playbackId
+          )
+            bad("STALE_PROPOSAL", "Room changed. Request a new proposal.");
+          const current = await this.track(p.currentTrackId),
+            selected = await this.track(p.selectedTrackId);
+          if (
+            current.profileVersion !== p.currentProfileVersion ||
+            selected.profileVersion !== p.selectedProfileVersion ||
+            !state.nextUp.some(
+              (e) => e.entryId === p.entryId && e.trackId === p.selectedTrackId,
+            )
+          )
+            bad(
+              "STALE_PROPOSAL",
+              "Profiles or queue changed. Request a new proposal.",
+            );
+          await this.eligible(state, p.selectedTrackId);
+          if (!selected.assetId)
+            bad("AUDIO_UNAVAILABLE", "This track has no playable local audio.");
+        }
+      }
       if (type === "queue.enqueue") {
         payload = {
           entryId: randomUUID(),
@@ -663,6 +718,21 @@ export class RoomService extends FoundationRooms {
           !s.mutationFrozen &&
           s.nowPlaying &&
           !s.nowPlaying.paused &&
+          position(s.nowPlaying, this.now()) >=
+            Math.max(0, s.nowPlaying.durationSeconds - 10) &&
+          this.outroAttempts.get(id) !== s.nowPlaying.playbackId
+        ) {
+          this.outroAttempts.set(id, s.nowPlaying.playbackId);
+          // Do not await a command while holding its FIFO lock.
+          this.command(id, s.hostUserId, "ai.segue", {
+            expectedRevision: s.revision,
+          }).catch(() => {});
+        }
+        if (
+          this.healthy &&
+          !s.mutationFrozen &&
+          s.nowPlaying &&
+          !s.nowPlaying.paused &&
           position(s.nowPlaying, this.now()) >= s.nowPlaying.durationSeconds
         )
           this.commit(s, "playback.pause", { now: this.now() });
@@ -672,6 +742,9 @@ export class RoomService extends FoundationRooms {
     this.closing = true;
     clearInterval(this.tickTimer);
     this.writer.stop();
+    await Promise.allSettled(
+      [...this.aiJobs.values()].map((job) => job.promise),
+    );
     for (const timer of this.grace.values()) clearTimeout(timer);
     await Promise.allSettled([...this.locks.values()]);
     if (flush) await this.writer.flush();

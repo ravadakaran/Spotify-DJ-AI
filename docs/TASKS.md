@@ -1,6 +1,6 @@
 # Ordered implementation backlog
 
-Phases 1 and 2 are implemented; unchecked tasks may contain completed sub-items in [the phase checklist](PHASE_TODO_LIST.md). Phase 0 media/model gates and later release gates remain open. See [implementation status](IMPLEMENTATION_STATUS.md) for evidence and scope gaps. P0 means release-critical prerequisite, P1 means required MVP, P2 means optional later work. Phase order is in [implementation plan](IMPLEMENTATION_PLAN.md); TEST IDs refer to [testing](TESTING_STRATEGY.md). Dependencies are task IDs, not calendar dates. Every task's DoD includes reviewed code, relevant passing checks and updated documentation.
+Phases 1–3 have software implementations; Phase 3 real-model/legal-chain acceptance remains open (see PHASE_THREE_IMPLEMENTATION.md); unchecked tasks may contain completed sub-items in [the phase checklist](PHASE_TODO_LIST.md). Phase 0 media/model gates and later release gates remain open. See [implementation status](IMPLEMENTATION_STATUS.md) for evidence and scope gaps. P0 means release-critical prerequisite, P1 means required MVP, P2 means optional later work. Phase order is in [implementation plan](IMPLEMENTATION_PLAN.md); TEST IDs refer to [testing](TESTING_STRATEGY.md). Dependencies are task IDs, not calendar dates. Every task's DoD includes reviewed code, relevant passing checks and updated documentation.
 
 > [!TIP]
 > For a granular, actionable breakdown of every task with sub-item checklists and phase exit gates, see [PHASE_TODO_LIST.md](PHASE_TODO_LIST.md).
@@ -20,9 +20,9 @@ Phases 1 and 2 are implemented; unchecked tasks may contain completed sub-items 
 | [x] | TASK-011 | P1 / P2 | Socket snapshots/presence/reconnect, REQ-006,019 | TASK-009, TASK-010 | Join <2 s, gaps recover, TEST-004/012 | [API](API_SPECIFICATION.md) |
 | [x] | TASK-012 | P1 / P2 | Host moderation/transfer/freeze, REQ-008,021 | TASK-011 | Room-scoped role checks incl. sockets, TEST-001/004 | [Security](SECURITY.md) |
 | [x] | TASK-013 | P1 / P2 | Local playback clock and queue console, REQ-001,005,006 | TASK-011, TASK-012 | Unlock, pause/resume, frozen UI, TEST-015 | [Architecture](ARCHITECTURE.md) |
-| [ ] | TASK-014 | P0 / P3 | BPM/Camelot filter and weighted ranking, REQ-011,012 | TASK-007, TASK-009 | ≥20 decisions 100% valid, TEST-005 | [AI](AI_MUSIC_ENGINE.md) |
-| [ ] | TASK-015 | P1 / P3 | Retrieval/generation/Q&A and citations, REQ-014 | TASK-003, TASK-014 | Unsupported queries declined; audited facts, TEST-006 | [AI](AI_MUSIC_ENGINE.md) |
-| [ ] | TASK-016 | P1 / P3 | Outro proposals/approve/reject/stale checks, REQ-012,014 | TASK-013, TASK-015 | One full chain and bounded fallback, TEST-005/006/009 | [API](API_SPECIFICATION.md) |
+| [x] | TASK-014 | P0 / P3 | BPM/Camelot filter and weighted ranking, REQ-011,012 | TASK-007, TASK-009 | ≥20 decisions 100% valid, TEST-005 | [AI](AI_MUSIC_ENGINE.md) |
+| [x] | TASK-015 | P1 / P3 | Retrieval/generation/Q&A and citations, REQ-014 | TASK-003, TASK-014 | Unsupported queries declined; audited facts, TEST-006 | [AI](AI_MUSIC_ENGINE.md) |
+| [x] | TASK-016 | P1 / P3 | Outro proposals/approve/reject/stale checks, REQ-012,014 | TASK-013, TASK-015 | One full chain and bounded fallback, TEST-005/006/009 | [API](API_SPECIFICATION.md) |
 | [ ] | TASK-017 | P1 / P4 | Chat/history/typing/reactions UI+API, REQ-007 | TASK-010, TASK-012 | Persisted chat restored; ephemeral typing expires, TEST-007/011 | [API](API_SPECIFICATION.md) |
 | [ ] | TASK-018 | P1 / P4 | Sentiment pipeline/evaluation, REQ-013 | TASK-017, TASK-014 | ≥85% locked-set accuracy, window shift, TEST-007 | [AI](AI_MUSIC_ENGINE.md) |
 | [ ] | TASK-019 | P1 / P4 | Battle lifecycle/tie/defer/announcement, REQ-009 | TASK-012, TASK-016 | One winner effect; no incompatible splice, TEST-008 | [Architecture](ARCHITECTURE.md) |

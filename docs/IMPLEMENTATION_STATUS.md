@@ -1,4 +1,25 @@
-# Implementation status — 21 October 2026
+# Implementation status — 26 October 2026
+
+## Phase 3 software implemented — TASK-014 through TASK-016
+
+Implemented hard-filtered weighted ranking, bounded versioned lexical retrieval, constrained source-selection generation, cited Q&A, opt-in local Ollama adapter, explicit template fallback, 10-second outro proposals, approval/rejection and final compatibility revalidation. HTTP/socket commands share room authority; generation runs outside the FIFO and stale results are discarded. React includes proposal controls, match reasons, mode labels, questions and source details. The legal-audio and real-model quality/latency exit gates remain open. [Full behavior and limitations](PHASE_THREE_IMPLEMENTATION.md).
+
+Actual verification on Windows, Node v24.13.0, Intel Core i7-10875H, 32 GiB RAM:
+
+| Check | Actual result |
+| --- | --- |
+| `npm run lint` | Passed |
+| `npm test` | 34 tests passed across 6 suites, including real isolated MongoDB replica sets |
+| TEST-005 | 576 key pairs, 24 ranked decisions, tempo boundary/half/double cases, ranking/reservation rules and stale approval checks passed |
+| TEST-006 | Controlled 30-question audit (20 supported/10 unsupported), citation/schema rejection, injected model prose, missing metadata and timeout fallback passed; mock providers only |
+| Phase 3 integration | Simulated A→B→C chain, HTTP/socket role denial, duplicate question receipts, concurrent votes during generation, stale revisions/profiles, one outro trigger, end pause and older-checkpoint replay passed |
+| `npm run test:e2e` | Two Chromium contexts passed playback, voting, suggestion approval, Q&A, reconnect, Host freeze, mobile overflow and logout |
+| `npm run build` | Passed |
+| Visual inspection | 390px mobile screenshot inspected; no clipping/overflow |
+
+Raw small-workload queue timing remains separate from AI latency: [Phase 3 browser timings](../evidence/phase-three-browser-latency.json). [Console](../evidence/phase-three-lounge.png) and [mobile](../evidence/phase-three-mobile.png) use disposable identities and test-only silence, not licensed demonstration music. Tests exercise template and mock-model modes; no Ollama runtime/model was installed, benchmarked or sent the private library. No deployment, local database migration or reset was performed. Phase 4 chat/sentiment/battles and Phase 5 recommendations/analytics remain pending.
+
+The Phase 2 and Phase 1 records below describe earlier checkpoints and retain their original test counts.
 
 ## Phase 2 complete — TASK-009 through TASK-013
 
@@ -65,8 +86,8 @@ No Ollama runtime/model was found or installed; no model license, latency or qua
 
 Current room capacity counts reserved memberships; online presence is separate and deduplicated. Leave retains membership for rejoin, while removal revokes access. Phase 2 queue authority, batched event history, durable watermarks and restart recovery are implemented. The instance caps loaded rooms at 50, queue entries at 200, buffered event/checkpoint pairs at 500 and pending operations per room at 512. Recent live command receipts are bounded to 256 per room; exactly-once delivery and zero-loss crash recovery are not claimed. Membership history still caps at 50 rows without the final pagination contract.
 
-Soundclash, chat/reactions/sentiment, grounded generation, hybrid recommendations and analytics remain unimplemented. Mute state and its server guard are tested, but chat/reaction route enforcement will be wired when those Phase 4 routes exist. Playback uses bounded authenticated range fetches assembled before local playback, not sample-accurate device synchronization; track end pauses for explicit advance. `/health/ready` checks DB, writable assets and batch-writer health. Docker Compose remains local development only; production deployment, TLS/DB auth, full security review and restore rehearsal are not complete.
+Soundclash, chat/reactions/sentiment, hybrid recommendations and analytics remain unimplemented. Phase 3 grounded generation is now implemented as recorded above. Mute state and its server guard are tested, but chat/reaction route enforcement will be wired when those Phase 4 routes exist. Playback uses bounded authenticated range fetches assembled before local playback, not sample-accurate device synchronization; track end pauses for explicit advance. `/health/ready` checks DB, writable assets and batch-writer health. Docker Compose remains local development only; production deployment, TLS/DB auth, full security review and restore rehearsal are not complete.
 
 ## Next implementation slice
 
-Next is Phase 3, TASK-014–016: extend the hard compatibility guard with ranking, grounded retrieval/Q&A and stale-safe segue proposals. Keep the unresolved Phase 0 model and verified media/profile gates explicit.
+Next is Phase 4, TASK-017–019: chat/reactions/typing, sentiment and Soundclash. Phase 3 real-model and legal playable-chain acceptance remains open alongside Phase 0 gates.

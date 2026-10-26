@@ -1,5 +1,7 @@
 # Architecture decisions
 
+26 October 2026 — ADR-018: user requested Phase 3. Implement TASK-014–016 with constrained source-ID selection, default labeled templates, explicit Host/Co-DJ reservation approval and existing explicit Advance. Generation runs outside room serialization and revalidates on publish/approval. All new requests use server-owned context. Model/license/legal media gates remain open; see [Phase 3 implementation](PHASE_THREE_IMPLEMENTATION.md) for bounds, compatibility and rollout/rollback consequences.
+
 Status: foundation implementation started on user instruction, 18 October 2026. Track A/Option B is the implemented baseline; unimplemented behavior choices remain provisional. Source requirements outrank these recommendations. Record future changes with date, owner, affected REQ IDs and migration/test consequences.
 
 ## Implementation update — 18 October 2026

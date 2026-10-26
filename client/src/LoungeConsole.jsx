@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import AiConsole from "./AiConsole.jsx";
 
 function elapsed(p, now) {
   return p
@@ -198,7 +199,9 @@ export default function LoungeConsole({
   useEffect(() => {
     for (const element of list.current?.children || []) {
       const old = positions.current.get(element.dataset.id),
-        top = element.getBoundingClientRect().top;
+        top =
+          element.getBoundingClientRect().top -
+          list.current.getBoundingClientRect().top;
       if (
         old !== undefined &&
         old !== top &&
@@ -462,6 +465,14 @@ export default function LoungeConsole({
           <p className="empty">The queue is empty. Add the next track.</p>
         )}
       </section>
+      <AiConsole
+        room={room}
+        dj={dj}
+        disabled={busy || disabled}
+        api={api}
+        run={run}
+        command={command}
+      />
     </>
   );
 }

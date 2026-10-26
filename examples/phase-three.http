@@ -1,0 +1,36 @@
+@base = http://127.0.0.1:3000/api/v1
+@token = REPLACE_WITH_ACCESS_TOKEN
+@room = REPLACE_WITH_LOUNGE_UUID
+@track = REPLACE_WITH_CURRENT_TRACK_UUID
+@proposal = REPLACE_WITH_PROPOSAL_UUID
+
+### Read revision; connect the Host socket before mutations.
+GET {{base}}/lounges/{{room}}
+Authorization: Bearer {{token}}
+
+### Use a fresh command UUID for each new request; preserve on retry.
+POST {{base}}/lounges/{{room}}/ai/segue
+Authorization: Bearer {{token}}
+Origin: http://127.0.0.1:5173
+Content-Type: application/json
+X-Command-Id: 3541f407-8541-427c-9874-1c87b9201010
+
+{"expectedRevision":12}
+
+### Approve using the proposal's published revision; Advance separately.
+POST {{base}}/lounges/{{room}}/ai/segue/{{proposal}}/decision
+Authorization: Bearer {{token}}
+Origin: http://127.0.0.1:5173
+Content-Type: application/json
+X-Command-Id: 3541f407-8541-427c-9874-1c87b9201011
+
+{"expectedRevision":13,"decision":"approve"}
+
+### Any member can ask about current/recent authored metadata.
+POST {{base}}/lounges/{{room}}/ai/questions
+Authorization: Bearer {{token}}
+Origin: http://127.0.0.1:5173
+Content-Type: application/json
+X-Command-Id: 3541f407-8541-427c-9874-1c87b9201012
+
+{"trackId":"{{track}}","question":"What is the BPM tempo?"}

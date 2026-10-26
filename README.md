@@ -2,7 +2,7 @@
 
 Planning package for **AI DJ Studio: Collaborative Live Queue Curation & Sentiment-Aware Audio Engine**. This is a private prototype based on the supplied PRD, not a Spotify integration or an assertion of Spotify affiliation.
 
-**Status: foundation implemented and locally verified.** Registration/login, rotating refresh, private catalog uploads/profile APIs, lounge creation/invite joins, and authenticated shared snapshots work. The React client supports the two-user flow. Playback, queue voting, moderation workflows, chat, battles, AI, recommendations and analytics are still upcoming. Three seed profiles are explicitly metadata-only; no songs have been imported.
+**Status: Phases 1–3 have software implementations.** Authentication, private catalog/profile APIs, lounge membership, concurrent queue/votes, playback, moderation, persistence/replay, acoustic ranking, cited Q&A and segue proposal approval work. Generation defaults to explicitly labeled templates; the local model adapter is opt-in. Chat, sentiment, battles, recommendations and analytics remain pending. Three seed profiles are metadata-only; the privately imported library has unverified reuse rights and pending acoustic profiles. Legal demonstration music and real-model quality/latency gates remain open. See [current verification](docs/IMPLEMENTATION_STATUS.md) and [Phase 3 behavior/configuration](docs/PHASE_THREE_IMPLEMENTATION.md).
 
 ## Run the current application
 

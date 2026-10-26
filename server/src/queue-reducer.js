@@ -12,7 +12,10 @@ export function compatible(a, b, tolerance = 8) {
     !Number.isFinite(a.bpm) ||
     !Number.isFinite(b.bpm) ||
     a.bpm <= 0 ||
-    b.bpm <= 0
+    b.bpm <= 0 ||
+    !Number.isFinite(tolerance) ||
+    tolerance < 0 ||
+    tolerance > 8
   )
     return false;
   const parse = (key) =>
@@ -56,6 +59,18 @@ export function reduceRoom(previous, event) {
     return value;
   };
   switch (event.type) {
+    case "ai.segue":
+      state.segueProposal = p.proposal;
+      break;
+    case "ai.question":
+      state.questionCount = (state.questionCount || 0) + 1;
+      break;
+    case "ai.decision":
+      state.segueProposal.status =
+        p.decision === "approve" ? "approved" : "rejected";
+      if (p.decision === "approve")
+        state.reservedEntryId = state.segueProposal.entryId;
+      break;
     case "queue.enqueue":
       if (state.nextUp.length >= 200)
         throw new HttpError(409, "QUEUE_FULL", "Queue limit is 200 entries.");
@@ -86,6 +101,11 @@ export function reduceRoom(previous, event) {
       state.reservedEntryId = p.entryId;
       break;
     case "playback.start":
+      state.recentTrackIds = [
+        ...(state.recentTrackIds || []),
+        ...(state.nowPlaying ? [state.nowPlaying.trackId] : []),
+      ].slice(-5);
+      state.segueProposal = null;
       state.nowPlaying = {
         ...p.track,
         playbackId: p.playbackId,

@@ -40,7 +40,7 @@ test('two independent browser sessions create/join, sync and restore authenticat
   const evidence = path.join(root, 'evidence'); await mkdir(evidence, { recursive: true });
   try {
     await host.goto('/'); await expect(host.getByRole('heading', { name: 'Good to have you back.' })).toBeVisible();
-    await host.screenshot({ path: path.join(evidence, 'foundation-welcome.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'phase-three-welcome.png'), fullPage: true });
     async function register(page, name) {
       await page.goto('/'); await page.getByRole('button', { name: 'New here? Create an account' }).click();
       await page.getByLabel('Display name').fill(name); await page.getByLabel('Email address').fill(`${name.toLowerCase()}@example.test`); await page.getByLabel('Password', { exact: true }).fill('browser-test-password');
@@ -94,19 +94,31 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await guest.getByRole('button',{name:'Upvote After the Rain',exact:true}).click();
     await expect(host.locator('.queue-row').first()).toContainText('After the Rain');
     await expect(guest.locator('.queue-row').first()).toContainText('After the Rain');
-    const night=host.locator('.queue-row').filter({hasText:'Night Geometry'});
-    await night.getByRole('button',{name:'Reserve next',exact:true}).click();
+    await host.getByRole('button',{name:'Suggest segue',exact:true}).click();
+    await expect(guest.getByText(/template · pending/)).toBeVisible();
+    await host.getByRole('button',{name:'Approve next track',exact:true}).click();
     await expect(guest.locator('.queue-row').filter({hasText:'Night Geometry'})).toContainText('Reserved next');
     await host.getByRole('button',{name:'Skip / Advance',exact:true}).click();
     await expect(guest.locator('.player h2')).toHaveText('Night Geometry');
     await host.getByRole('button',{name:'Pause',exact:true}).click();
+    await guest.getByLabel('Ask about the current track').fill('What is the BPM tempo?');
+    await guest.getByRole('button',{name:'Ask AI DJ',exact:true}).click();
+    await expect(guest.getByText('BPM tempo: 124.',{exact:true}).first()).toBeVisible();
+    await guest.getByLabel('Ask about the current track').fill('Who won a Nobel prize?');
+    await guest.getByRole('button',{name:'Ask AI DJ',exact:true}).click();
+    await expect(guest.getByText('Insufficient authored metadata to answer this question.',{exact:true})).toBeVisible();
     const sorted=[...latencies].sort((a,b)=>a-b);
-    await writeFile(path.join(evidence,'phase-two-browser-latency.json'),JSON.stringify({date:'2026-10-21',node:process.version,platform:process.platform,cpu:os.cpus()[0].model,memoryGiB:Math.round(os.totalmem()/1024**3),joinRenderMs,workload:'Two Chromium contexts; 2 warmup and 20 sequential votes; real local MongoDB replica set; command receipt to last client DOM revision apply',samplesMs:latencies,p50:sorted[9],p95:sorted[18],p99:sorted[19],max:sorted[19],limits:'Local smoke workload, not a 50-user or 10-minute performance certification'},null,2));
+    await writeFile(path.join(evidence,'phase-three-browser-latency.json'),JSON.stringify({date:'2026-10-26',node:process.version,platform:process.platform,cpu:os.cpus()[0].model,memoryGiB:Math.round(os.totalmem()/1024**3),joinRenderMs,workload:'Two Chromium contexts; 2 warmup and 20 sequential votes; real local MongoDB replica set; command receipt to last client DOM revision apply',samplesMs:latencies,p50:sorted[9],p95:sorted[18],p99:sorted[19],max:sorted[19],limits:'Local smoke workload, not a 50-user or 10-minute performance certification'},null,2));
     expect(Math.max(...latencies)).toBeLessThan(100);
-    await host.screenshot({ path: path.join(evidence, 'foundation-lounge.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'phase-three-lounge.png'), fullPage: true });
     await guest.reload(); await expect(guest.getByRole('heading', { name: 'Start a new lounge' })).toBeVisible();
     await guest.getByRole('button', { name: /After Hours .* ↗/ }).click(); await expect(guest.getByText('Connected', { exact: true })).toBeVisible();
-    await guest.setViewportSize({ width: 390, height: 844 }); await guest.screenshot({ path: path.join(evidence, 'foundation-mobile.png'), fullPage: true });
+    await guest.setViewportSize({ width: 390, height: 844 });
+    await guest.getByLabel('Ask about the current track').fill('What is the BPM tempo?');
+    await guest.getByRole('button',{name:'Ask AI DJ',exact:true}).click();
+    await expect(guest.getByText('BPM tempo: 124.',{exact:true}).first()).toBeVisible();
+    await guest.locator('.citations summary').first().click();
+    await guest.screenshot({ path: path.join(evidence, 'phase-three-mobile.png'), fullPage: true });
     expect(await guest.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await host.getByRole('button',{name:'Overview',exact:false}).click();
     await expect(guest.getByText('Host disconnected. Playback and queue changes are frozen.',{exact:true})).toBeVisible();

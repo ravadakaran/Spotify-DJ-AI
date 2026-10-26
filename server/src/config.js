@@ -22,5 +22,9 @@ export function readConfig(env = process.env) {
     port: Number(env.PORT || 3000),
     secure: env.COOKIE_SECURE === "true",
     assetRoot: path.resolve(root, env.ASSET_ROOT || "data/assets"),
+    roomOptions: {
+      ollamaModel:
+        env.AI_METADATA_APPROVED === "true" ? env.OLLAMA_MODEL : undefined,
+    },
   };
 }

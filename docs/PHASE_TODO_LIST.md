@@ -127,28 +127,30 @@ Evidence (21 October 2026): 27 Jest tests and the multi-browser journey pass. Tw
 
 **Objective:** Hard BPM and Camelot harmonic compatibility enforcement, RAG-grounded transition text, and cited track Q&A.
 
-### [ ] TASK-014: Deterministic BPM / Camelot Filter & Segue Ranker
-- [ ] Implement pure tempo matcher: $\Delta = \min(|c/(b \cdot m) - 1|)$ for $m \in \{0.5, 1, 2\}$, enforcing $\Delta \le \text{tolerancePct}/100$ (default $8\%$, range $0\text{--}8\%$) ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L7)).
-- [ ] Implement Camelot key rule: allow same key, $\pm 1$ number on same letter (with $12 \leftrightarrow 1$ wraparound), or relative major/minor (same number, opposite letter). Reject all others ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L9)).
-- [ ] Author segue ranker with PRD weights: $50\%$ Harmonic Fit ($H$), $30\%$ Energy Fit ($E$), $20\%$ Recency ($R$) ([REQ-012](PROJECT_REQUIREMENTS.md#L24)).
-- [ ] Author property tests covering all 24 Camelot keys, boundary tempos, and tempo multipliers ([TEST-005](TESTING_STRATEGY.md#L11)).
+### [x] TASK-014: Deterministic BPM / Camelot Filter & Segue Ranker
+- [x] Implement pure tempo matcher: $\Delta = \min(|c/(b \cdot m) - 1|)$ for $m \in \{0.5, 1, 2\}$, enforcing $\Delta \le \text{tolerancePct}/100$ (default $8\%$, range $0\text{--}8\%$) ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L7)).
+- [x] Implement Camelot key rule: allow same key, $\pm 1$ number on same letter (with $12 \leftrightarrow 1$ wraparound), or relative major/minor (same number, opposite letter). Reject all others ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L9)).
+- [x] Author segue ranker with PRD weights: $50\%$ Harmonic Fit ($H$), $30\%$ Energy Fit ($E$), $20\%$ Recency ($R$) ([REQ-012](PROJECT_REQUIREMENTS.md#L24)).
+- [x] Author property tests covering all 24 Camelot keys, boundary tempos, and tempo multipliers ([TEST-005](TESTING_STRATEGY.md#L11)).
 
-### [ ] TASK-015: Grounded Retrieval, Citation Engine & Track Q&A
-- [ ] Build in-process lexical retriever indexing authored timeline entries and acoustic facts for current/recent tracks ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L27)).
-- [ ] Construct strict Ollama prompt injecting retrieved context with immutable IDs; prohibit ungrounded lore generation.
-- [ ] Implement output validation pipeline: verify JSON schema, enforce character limits, and ensure all cited source IDs exist in context ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L31)).
-- [ ] Handle missing context: return explicit insufficient-metadata response (`insufficientMetadata: true`) with no invented facts.
-- [ ] Build `POST /api/v1/lounges/:id/ai/questions` endpoint with citation chips rendered in the UI ([TEST-006](TESTING_STRATEGY.md#L12)).
+### [x] TASK-015: Grounded Retrieval, Citation Engine & Track Q&A
+- [x] Build in-process lexical retriever indexing authored timeline entries and acoustic facts for current/recent tracks ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L27)).
+- [x] Construct strict Ollama prompt injecting retrieved context with immutable IDs; prohibit ungrounded lore generation.
+- [x] Implement output validation pipeline: verify JSON schema, enforce character limits, and ensure all cited source IDs exist in context ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L31)).
+- [x] Handle missing context: return explicit insufficient-metadata response (`insufficientMetadata: true`) with no invented facts.
+- [x] Build `POST /api/v1/lounges/:id/ai/questions` endpoint with citation chips rendered in the UI ([TEST-006](TESTING_STRATEGY.md#L12)).
 
-### [ ] TASK-016: Outro Trigger, Segue Proposal & Stale Guard
-- [ ] Trigger segue evaluation $10\text{ seconds}$ before track completion ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L33)).
-- [ ] Generate segue proposal including match reason, tempo delta, and text transition banter.
-- [ ] Enforce timeout deadline ($2.3\text{ s}$): fall back to deterministic template on model failure or timeout (`generationMode: "template"`).
-- [ ] Implement stale proposal check: re-verify expected revision, current track ID, and acoustic eligibility before Host commit ([ARCHITECTURE.md](ARCHITECTURE.md#L65)).
-- [ ] Require explicit Host approval: `POST /api/v1/lounges/:id/ai/segue/:proposalId/decision` ([ADR-013](DECISIONS.md#L19)).
-- [ ] If no eligible track exists or proposal is rejected, pause playback at track end with `NO_COMPATIBLE_TRACK`.
+### [x] TASK-016: Outro Trigger, Segue Proposal & Stale Guard
+- [x] Trigger segue evaluation $10\text{ seconds}$ before track completion ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L33)).
+- [x] Generate segue proposal including match reason, tempo delta, and text transition banter.
+- [x] Enforce timeout deadline ($2.3\text{ s}$): fall back to deterministic template on model failure or timeout (`generationMode: "template"`).
+- [x] Implement stale proposal check: re-verify expected revision, current track ID, and acoustic eligibility before Host commit ([ARCHITECTURE.md](ARCHITECTURE.md#L65)).
+- [x] Require explicit Host approval: `POST /api/v1/lounges/:id/ai/segue/:proposalId/decision` ([ADR-013](DECISIONS.md#L19)).
+- [x] If no eligible track exists or proposal is rejected, pause playback at track end; an empty eligible set reports `NO_COMPATIBLE_TRACK`, rejection reports `rejected`.
 
-**Phase 3 Exit Gate:** $100\%$ of approved segues strictly satisfy BPM and Camelot rules, Q&A cites authored IDs only, and transitions generate within $<3\text{ s}$ (with fallback rate logged).
+Implementation checked off 26 October 2026; real-model and legal-audio acceptance remains open. See [as-built behavior and evidence](PHASE_THREE_IMPLEMENTATION.md). Approval reserves next; explicit Advance starts it. Rejection pauses at end; only an empty eligible set reports NO_COMPATIBLE_TRACK.
+
+**Phase 3 Exit Gate (not yet certified with a real model/legal chain):** $100\%$ of approved segues strictly satisfy BPM and Camelot rules, Q&A cites authored IDs only, and transitions generate within $<3\text{ s}$ (with fallback rate logged).
 
 ---
 

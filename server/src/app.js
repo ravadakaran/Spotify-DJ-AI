@@ -63,6 +63,19 @@ export function createApplication({
     const prior = lastFanout.get(state.loungeId),
       notifications = [];
     if (
+      state.segueProposal &&
+      prior?.segueProposal?.proposalId !== state.segueProposal.proposalId
+    )
+      notifications.push([
+        "lounge.ai.dj_announcement",
+        {
+          text: state.segueProposal.transitionScript,
+          relatedTrackId: state.segueProposal.selectedTrackId,
+          sourceEvents: state.segueProposal.sourceEvents,
+          generationMode: state.segueProposal.generationMode,
+        },
+      ]);
+    if (
       !prior ||
       JSON.stringify(prior.nextUp) !== JSON.stringify(state.nextUp) ||
       JSON.stringify(prior.nowPlaying) !== JSON.stringify(state.nowPlaying) ||
@@ -266,12 +279,16 @@ export function createApplication({
     ["patch", "/lounges/:id/members/:userId", "member.update"],
     ["post", "/lounges/:id/host-transfer", "host.transfer"],
     ["post", "/lounges/:id/leave", "member.leave"],
+    ["post", "/lounges/:id/ai/segue", "ai.segue"],
+    ["post", "/lounges/:id/ai/segue/:proposalId/decision", "ai.decision"],
+    ["post", "/lounges/:id/ai/questions", "ai.question"],
   ])
     api[method](route, async (req, res) => {
       const payload = {
         ...req.body,
         ...(req.params.entryId ? { entryId: req.params.entryId } : {}),
         ...(req.params.userId ? { userId: req.params.userId } : {}),
+        ...(req.params.proposalId ? { proposalId: req.params.proposalId } : {}),
       };
       const result = await rooms.command(
         req.params.id,

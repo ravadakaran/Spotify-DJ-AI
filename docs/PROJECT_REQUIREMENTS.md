@@ -1,5 +1,7 @@
 # Project requirements and source analysis
 
+26 October 2026 scope: user authorized Phase 3 (TASK-014–016). REQ-011/012 matching and REQ-014 grounded API/UI are implemented with explicit template fallback and an opt-in local adapter. Legal playable-chain and real-model quality/latency acceptance remain open. [As-built behavior](PHASE_THREE_IMPLEMENTATION.md) documents the compatible server-owned request contract and explicit approval/Advance semantics; it does not close Phase 0 gates.
+
 Analysis date: 18 October 2026. Primary source: `Document/Project Document.docx`, PRD v1.0, September 2026, §§1–15. All body paragraphs and tables, the text-based architecture diagram, header/footer, and footnote/endnote/comment parts were inspected through OOXML. The package has no embedded image assets; note/comment parts contain no substantive text. No separate appendices were present. Page layout was not rendered; citations use section numbers, not inferred pages.
 
 The initial pasted request required planning first; that package was delivered. On 18 October 2026 the user authorized implementation after making documentation changes. Current progress and explicit uncompleted gates are recorded in [implementation status](IMPLEMENTATION_STATUS.md). PRD title/branding does not establish external sponsorship.

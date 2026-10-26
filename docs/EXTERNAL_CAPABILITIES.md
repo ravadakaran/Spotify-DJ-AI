@@ -1,5 +1,7 @@
 # External capabilities and verification record
 
+26 October 2026 Phase 3 verification: re-read official [Ollama generate API](https://docs.ollama.com/api/generate) and [structured outputs](https://docs.ollama.com/capabilities/structured-outputs). The opt-in loopback adapter uses `stream:false`, a JSON schema `format`, `options.temperature=0` and bounded output. Documentation confirms those request capabilities; it does not certify any model artifact/license, local availability, factual entailment or latency. No runtime/model was installed or benchmarked. The default remains labeled templates, with no external metadata transmission.
+
 Checked against official sources on 18 October 2026. This file exists to resolve the request's Spotify/API validation requirement without injecting a prohibited integration into the PRD. No account credentials, app-specific endpoint probes or model benchmarks were available; documentation-level capability is not proof of access for a particular account.
 
 ## Spotify scope and policy

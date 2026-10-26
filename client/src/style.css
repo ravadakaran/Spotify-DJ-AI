@@ -834,6 +834,8 @@ button:disabled {
 .connection-quality {
   color: #a0b2a3;
 }
+.citations { overflow-wrap: anywhere; margin: 12px 0; }
+.citations details { border-left: 2px solid #d4ad64; padding: 6px 12px; }
 @media (max-width: 700px) {
   .queue-row {
     flex-wrap: wrap;

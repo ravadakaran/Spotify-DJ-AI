@@ -1,5 +1,9 @@
 # API specification
 
+## Phase 3 implemented contract
+
+POST `ai/segue`, `ai/segue/:proposalId/decision` and `ai/questions` under `/lounges/:id` are implemented, as are socket commands `ai.segue`, `ai.decision`, `ai.question`. Host/Co-DJ may propose/decide; members may ask about current/five recent tracks. All return revision acknowledgements. Propose accepts only `{expectedRevision}` and returns `{...ack,proposal}`. Decide accepts `{expectedRevision,decision:"approve"|"reject"}` (socket also includes proposalId). Questions accept `{trackId,question}` and return answer/citations/mode fields with the ack. Approval reserves next; explicit Advance checks compatibility again. The original source examples below are preserved; their client-supplied time/candidate/sentiment assertions are superseded by server-owned context and unknown fields now return 422. This avoids trusting client context or adding redundant assertion fields. Full payloads, errors, retries and bounds: [Phase 3](PHASE_THREE_IMPLEMENTATION.md). New runnable examples: [phase-three.http](../examples/phase-three.http).
+
 ## Phase 2 implemented contract
 
 Queue enqueue/remove/vote/promote, playback control, settings, invite rotation, membership patch, host-transfer and leave now use one room authority over both HTTP and `lounge.command`. Every command accepts UUID `X-Command-Id` (socket `commandId`); clients should preserve it on retry. The latest 256 live-room receipts are retained. Structural commands require `expectedRevision`; votes and leave do not. Success returns `{ok:true,epoch,revision,durableRevision}` with `entryId` on enqueue, or `inviteCode,expiresAt` on rotation. Enqueue/rotation use 201; other implemented commands, including leave, use 200. This supersedes the planned snapshot/204 responses in the original table: the user's Phase 2 request explicitly requires revision acknowledgements. Fetch `GET /lounges/:id` or apply the socket snapshot for state.
