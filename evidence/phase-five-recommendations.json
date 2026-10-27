@@ -1,0 +1,19 @@
+{
+  "label": "Authored synthetic preference clusters; metadata only; not normal-use or independent acceptance data",
+  "datasetSha256": "c512383d5d1dd918d6a0be153e1be053b3c2f8ee7598b0fe2372d87594257aa8",
+  "metrics": {
+    "content": 1,
+    "collaborative": 0.44999999999999996,
+    "hybrid": 1
+  },
+  "population": 12,
+  "eligibleUsers": 12,
+  "excludedUsers": [],
+  "coverage": 1,
+  "trainCount": 24,
+  "testCount": 60,
+  "dataHash": "d83563055483ffa77f50ade65e2e9d0afc0cdce084c1450ce85ec57cc779d1b4",
+  "cutoff": "2026-01-15",
+  "runtime": "v24.13.0",
+  "acceptanceQualified": true
+}

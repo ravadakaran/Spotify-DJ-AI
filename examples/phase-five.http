@@ -1,0 +1,43 @@
+# Authenticated requests; use local disposable session IDs and environment-held tokens.
+@base = http://127.0.0.1:3000/api/v1
+
+GET {{base}}/users/me/dashboard
+Authorization: Bearer {{accessToken}}
+
+###
+GET {{base}}/users/me/recommendations?limit=5
+Authorization: Bearer {{accessToken}}
+
+### Heartbeat requires a subscribed room socket; identity/time come from server.
+PUT {{base}}/lounges/{{loungeId}}/playbacks/{{playbackId}}/interaction
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+X-CSRF-Protection: 1
+X-Command-Id: {{commandId}}
+
+{"listenedThroughSeconds":10}
+
+### Host end barrier
+POST {{base}}/lounges/{{loungeId}}/end
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+X-CSRF-Protection: 1
+X-Command-Id: {{commandId}}
+
+{"expectedRevision":{{revision}}}
+
+###
+GET {{base}}/lounges/{{loungeId}}/analytics
+Authorization: Bearer {{accessToken}}
+
+### Administrator fit
+POST {{base}}/admin/recommendation-jobs
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+X-CSRF-Protection: 1
+
+{}
+
+###
+GET {{base}}/admin/recommendation-jobs/{{jobId}}
+Authorization: Bearer {{accessToken}}

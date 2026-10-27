@@ -1,3 +1,4 @@
+import { summarize } from "./session-analytics.js";
 import { position } from "./queue-reducer.js";
 // One bounded process-wide buffer; transactions include the checkpoint watermark.
 export class EventWriter {
@@ -61,6 +62,56 @@ export class EventWriter {
               { $setOnInsert: event },
               { upsert: true, session },
             );
+            if (event.type === "interaction.record")
+              await this.models.Interaction.updateOne(
+                {
+                  loungeId,
+                  userId: event.actorId,
+                  playbackId: event.payload.interaction.playbackId,
+                },
+                { $set: event.payload.interaction },
+                { upsert: true, session },
+              );
+            if (event.type === "room.end") {
+              const events = await this.models.QueueEvent.find({ loungeId })
+                .sort({ occurredAt: 1, revision: 1 })
+                .session(session)
+                .lean();
+              await this.models.SessionSummary.updateOne(
+                { loungeId },
+                { $set: { summary: summarize(events), revision } },
+                { upsert: true, session },
+              );
+            }
+            const message =
+              event.type === "chat.message"
+                ? event.payload.message
+                : event.type === "battle.resolved"
+                  ? event.payload.announcement
+                  : null;
+            if (message)
+              await this.models.ChatMessage.updateOne(
+                { messageId: message.messageId },
+                {
+                  $setOnInsert: {
+                    ...message,
+                    createdAt: new Date(message.createdAt),
+                    loungeId,
+                    revision,
+                  },
+                },
+                { upsert: true, session },
+              );
+            if (event.type === "chat.reaction") {
+              const p = event.payload;
+              await this.models.ChatMessage.updateOne(
+                { loungeId, messageId: p.messageId },
+                {
+                  $set: { reactions: p.reactions },
+                },
+                { session },
+              );
+            }
           }
           const latest = new Map(
             batch.map((item) => [item.event.loungeId, item]),

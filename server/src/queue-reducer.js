@@ -1,4 +1,5 @@
 import { HttpError } from "./validation.js";
+import { reduceSocial } from "./room-social.js";
 
 export const REDUCER_VERSION = 1;
 export const queueOrder = (a, b) =>
@@ -58,7 +59,43 @@ export function reduceRoom(previous, event) {
       );
     return value;
   };
+  const at = new Date(event.occurredAt).getTime();
+  const meters = (state.listeningMeters ??= {});
+  if (
+    state.nowPlaying &&
+    !state.nowPlaying.paused &&
+    state.status !== "ended"
+  ) {
+    const delta = Math.max(
+      0,
+      position(state.nowPlaying, at) -
+        position(state.nowPlaying, state.meterAt ?? at),
+    );
+    for (const userId of state.presentUserIds || []) {
+      const m = (meters[userId] ??= { available: 0, credited: 0, lastAt: at });
+      m.available += delta;
+    }
+  }
+  state.meterAt = at;
   switch (event.type) {
+    case "interaction.record":
+      state.listeningMeters[event.actorId] = p.meter;
+      break;
+    case "room.end":
+      state.status = "ended";
+      state.summaryStatus = "pending";
+      state.endedAt = at;
+      state.segueProposal = null;
+      if (
+        state.battle &&
+        ["open", "draft", "tied"].includes(state.battle.status)
+      )
+        state.battle.status = "cancelled";
+      if (state.nowPlaying) {
+        state.nowPlaying.offsetSeconds = position(state.nowPlaying, at);
+        state.nowPlaying.paused = true;
+      }
+      break;
     case "ai.segue":
       state.segueProposal = p.proposal;
       break;
@@ -88,6 +125,8 @@ export function reduceRoom(previous, event) {
       entry();
       state.nextUp = state.nextUp.filter((e) => e.entryId !== p.entryId);
       if (state.reservedEntryId === p.entryId) state.reservedEntryId = null;
+      if (state.battleReservedEntryId === p.entryId)
+        state.battleReservedEntryId = null;
       break;
     case "queue.vote": {
       const e = entry();
@@ -101,6 +140,8 @@ export function reduceRoom(previous, event) {
       state.reservedEntryId = p.entryId;
       break;
     case "playback.start":
+      state.listeningMeters = {};
+      state.meterAt = at;
       state.recentTrackIds = [
         ...(state.recentTrackIds || []),
         ...(state.nowPlaying ? [state.nowPlaying.trackId] : []),
@@ -118,6 +159,7 @@ export function reduceRoom(previous, event) {
       if (p.entryId)
         state.nextUp = state.nextUp.filter((e) => e.entryId !== p.entryId);
       state.reservedEntryId = null;
+      state.battleReservedEntryId = null;
       break;
     case "playback.pause":
       if (state.nowPlaying) {
@@ -142,6 +184,15 @@ export function reduceRoom(previous, event) {
       if (p.vibeProfile !== undefined) state.vibeProfile = p.vibeProfile;
       break;
     case "presence.set":
+      for (const [userId, m] of Object.entries(state.listeningMeters || {})) {
+        if (
+          !p.userIds.includes(userId) ||
+          !(state.presentUserIds || []).includes(userId)
+        ) {
+          m.available = m.credited;
+          m.lastAt = at;
+        }
+      }
       state.presentUserIds = p.userIds;
       state.hostConnected = p.hostConnected;
       state.mutationFrozen = !p.hostConnected;
@@ -153,7 +204,8 @@ export function reduceRoom(previous, event) {
     case "room.invite":
       break;
     default:
-      throw new Error(`Unknown reducer event: ${event.type}`);
+      if (!reduceSocial(state, event))
+        throw new Error(`Unknown reducer event: ${event.type}`);
   }
   state.nextUp.sort(queueOrder);
   state.revision = event.revision;

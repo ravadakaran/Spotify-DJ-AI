@@ -1,3 +1,4 @@
+import { personalRouter } from "./personal.js";
 import express from "express";
 import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
@@ -56,12 +57,32 @@ export function createApplication({
     ts: rooms.now(),
     payload: state,
   });
+  rooms.notify = (loungeId, name, payload) =>
+    namespace.to(`lounge:${loungeId}`).emit(name, { loungeId, payload });
   const pendingSnapshots = new Map(),
     lastFanout = new Map();
   let fanoutScheduled = false;
   const fanout = (state) => {
     const prior = lastFanout.get(state.loungeId),
       notifications = [];
+    for (const message of state.chat || [])
+      if (!prior?.chat?.some((m) => m.messageId === message.messageId))
+        notifications.push(["lounge.chat.message", message]);
+    if (JSON.stringify(prior?.sentiment) !== JSON.stringify(state.sentiment))
+      notifications.push(["lounge.sentiment.score", state.sentiment]);
+    if (
+      state.battle &&
+      JSON.stringify(prior?.battle) !== JSON.stringify(state.battle)
+    ) {
+      notifications.push(["lounge.soundclash.update", state.battle]);
+      if (state.battle.status === "open" && prior?.battle?.status !== "open")
+        notifications.push(["lounge.soundclash.open", state.battle]);
+      if (
+        state.battle.status === "resolved" &&
+        prior?.battle?.status !== "resolved"
+      )
+        notifications.push(["lounge.soundclash.resolved", state.battle]);
+    }
     if (
       state.segueProposal &&
       prior?.segueProposal?.proposalId !== state.segueProposal.proposalId
@@ -223,28 +244,7 @@ export function createApplication({
   api.get("/users/me", (req, res) =>
     res.json({ user: publicUser(req.auth.user) }),
   );
-  api.get("/users/me/lounges", async (req, res) => {
-    const memberships = await models.Membership.find({
-      userId: req.auth.user._id,
-      removed: false,
-    })
-      .sort({ createdAt: -1 })
-      .limit(50)
-      .lean();
-    const rows = await models.Lounge.find({
-      _id: { $in: memberships.map((m) => m.loungeId) },
-    })
-      .sort({ createdAt: -1 })
-      .lean();
-    res.json({
-      items: rows.map((l) => ({
-        loungeId: l._id,
-        vibeProfile: l.vibeProfile,
-        status: l.status,
-      })),
-      nextCursor: null,
-    });
-  });
+  api.use(personalRouter(models, rooms));
   api.use(catalogRouter(models, auth, config));
   api.post("/lounges", async (req, res) =>
     res
@@ -269,6 +269,13 @@ export function createApplication({
     );
   });
   for (const [method, route, type] of [
+    ["post", "/lounges/:id/chat", "chat.message"],
+    ["put", "/lounges/:id/chat/:messageId/reactions", "chat.reaction"],
+    ["post", "/lounges/:id/battles/candidates", "battle.candidate"],
+    ["post", "/lounges/:id/battles/:battleId/open", "battle.open"],
+    ["put", "/lounges/:id/battles/:battleId/vote", "battle.vote"],
+    ["post", "/lounges/:id/battles/:battleId/resolve", "battle.resolve"],
+    ["post", "/lounges/:id/battles/:battleId/cancel", "battle.cancel"],
     ["post", "/lounges/:id/queue", "queue.enqueue"],
     ["delete", "/lounges/:id/queue/:entryId", "queue.remove"],
     ["put", "/lounges/:id/queue/:entryId/vote", "queue.vote"],
@@ -278,6 +285,7 @@ export function createApplication({
     ["post", "/lounges/:id/invites/rotate", "room.invite"],
     ["patch", "/lounges/:id/members/:userId", "member.update"],
     ["post", "/lounges/:id/host-transfer", "host.transfer"],
+    ["post", "/lounges/:id/end", "room.end"],
     ["post", "/lounges/:id/leave", "member.leave"],
     ["post", "/lounges/:id/ai/segue", "ai.segue"],
     ["post", "/lounges/:id/ai/segue/:proposalId/decision", "ai.decision"],
@@ -286,6 +294,8 @@ export function createApplication({
     api[method](route, async (req, res) => {
       const payload = {
         ...req.body,
+        ...(req.params.messageId ? { messageId: req.params.messageId } : {}),
+        ...(req.params.battleId ? { battleId: req.params.battleId } : {}),
         ...(req.params.entryId ? { entryId: req.params.entryId } : {}),
         ...(req.params.userId ? { userId: req.params.userId } : {}),
         ...(req.params.proposalId ? { proposalId: req.params.proposalId } : {}),
@@ -298,9 +308,27 @@ export function createApplication({
         req.headers["x-command-id"],
       );
       res
-        .status(type === "queue.enqueue" || type === "room.invite" ? 201 : 200)
+        .status(
+          [
+            "queue.enqueue",
+            "room.invite",
+            "chat.message",
+            "battle.candidate",
+          ].includes(type)
+            ? 201
+            : 200,
+        )
         .json(result);
     });
+  api.get("/lounges/:id/chat", async (req, res) =>
+    res.json(
+      await rooms.chatHistory(
+        req.params.id,
+        req.auth.user._id,
+        req.query.cursor,
+      ),
+    ),
+  );
   app.use("/api/v1", api);
   app.use("/api", (_req, _res, next) =>
     next(new HttpError(404, "NOT_FOUND", "Endpoint not implemented.")),
@@ -443,6 +471,30 @@ export function createApplication({
     socket.on("lounge.subscribe", scheduleSubscription);
     socket.on("lounge.resync", scheduleSubscription);
     const commandAllowed = createThrottle({ limit: 240, maxKeys: 1 });
+    socket.on("lounge.chat.typing", async (input, ack) => {
+      try {
+        if (!commandAllowed("socket") || !socket.data.loungeId)
+          throw new HttpError(403, "FORBIDDEN", "Subscribe first.");
+        const current = await auth.verify(socket.handshake.auth.accessToken);
+        const result = await rooms.setTyping(
+          socket.data.loungeId,
+          current.user._id,
+          input,
+        );
+        if (typeof ack === "function") ack(result);
+      } catch (error) {
+        if (typeof ack === "function")
+          ack({
+            ok: false,
+            error: {
+              code:
+                error instanceof ZodError
+                  ? "VALIDATION_FAILED"
+                  : error.code || "INTERNAL_ERROR",
+            },
+          });
+      }
+    });
     socket.on("lounge.command", async (input, ack) => {
       if (typeof ack !== "function") return;
       if (!commandAllowed("socket"))

@@ -180,7 +180,67 @@ export function createModels(connection) {
     },
     [[{ loungeId: 1 }, { unique: true }]],
   );
+  const ChatMessage = model(
+    "chat_messages",
+    {
+      loungeId: ref("lounges"),
+      messageId: { type: String, required: true },
+      userId: String,
+      displayName: String,
+      body: { type: String, required: true, maxlength: 1000 },
+      msgType: {
+        type: String,
+        enum: ["chat", "dj_announcement"],
+        required: true,
+      },
+      sentimentScore: Number,
+      sentimentBucket: String,
+      algorithmVersion: String,
+      generationMode: String,
+      tsSeconds: Number,
+      revision: Number,
+      reactions: { type: Schema.Types.Mixed, default: {} },
+    },
+    [
+      [{ messageId: 1 }, { unique: true }],
+      [{ loungeId: 1, revision: -1 }, {}],
+    ],
+  );
+  const Interaction = model(
+    "interactions",
+    {
+      loungeId: ref("lounges"),
+      userId: ref("users"),
+      playbackId: String,
+      trackId: ref("tracks"),
+      playedSeconds: { type: Number, min: 0 },
+      completed: Boolean,
+      liked: Boolean,
+      acoustic: Schema.Types.Mixed,
+      observedAt: Date,
+      revision: Number,
+    },
+    [
+      [{ loungeId: 1, userId: 1, playbackId: 1 }, { unique: true }],
+      [{ userId: 1, createdAt: -1, _id: -1 }, {}],
+    ],
+  );
+  const SessionSummary = model(
+    "session_summaries",
+    { loungeId: ref("lounges"), summary: Schema.Types.Mixed, revision: Number },
+    [[{ loungeId: 1 }, { unique: true }]],
+  );
+  const RecommendationJob = model("recommendation_jobs", {
+    status: String,
+    modelVersion: String,
+    artifact: Schema.Types.Mixed,
+    failureReason: String,
+  });
   return {
+    Interaction,
+    SessionSummary,
+    RecommendationJob,
+    ChatMessage,
     User,
     Session,
     Asset,

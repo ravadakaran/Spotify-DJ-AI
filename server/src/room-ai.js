@@ -49,6 +49,8 @@ export async function aiCommand(
   async function execute() {
     const captured = await service.serial(loungeId, async () => {
       const state = await service.load(loungeId);
+      if (state.status === "ended")
+        fail("ROOM_ENDED", "This session has ended.");
       service.roomMember(
         state,
         userId,
@@ -143,6 +145,8 @@ export async function aiCommand(
     );
     return service.serial(loungeId, async () => {
       const state = await service.load(loungeId);
+      if (state.status === "ended")
+        fail("ROOM_ENDED", "This session has ended.");
       service.roomMember(
         state,
         userId,

@@ -6,6 +6,8 @@ import { randomUUID } from "node:crypto";
 import { createModels as initialModels } from "../migrations/001-foundation-models.js";
 import { up as phaseOne } from "../migrations/002-phase-one.js";
 import { up as liveRooms } from "../migrations/003-live-rooms.js";
+import { up as personal } from "../migrations/005-personal.js";
+import { up as social } from "../migrations/004-social.js";
 export async function connect(uri) {
   const connection = await mongoose
     .createConnection(uri, {
@@ -53,7 +55,17 @@ export async function migrate(connection, models) {
         file: "../migrations/003-live-rooms.js",
         up: () => liveRooms(connection, models),
       },
+      {
+        id: "004-social",
+        file: "../migrations/004-social.js",
+        up: () => social(connection, models),
+      },
     ];
+    migrations.push({
+      id: "005-personal",
+      file: "../migrations/005-personal.js",
+      up: () => personal(connection, models),
+    });
     for (const migration of migrations) {
       const source = await readFile(new URL(migration.file, import.meta.url));
       const checksum = createHash("sha256").update(source).digest("hex");

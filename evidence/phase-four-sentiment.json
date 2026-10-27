@@ -1,0 +1,38 @@
+{
+  "algorithmVersion": "english-lexicon-1",
+  "datasetVersion": "phase4-authored-1",
+  "datasetSha256": "062a4907ee24c6f68912e59661a5ef5cf05d0fac806da01358ca2c3e73910af9",
+  "scorerSha256": "2620924e7017f8a66032ca6ccb2ddc1e50094c92fedf9361ae27665882535db9",
+  "provenance": "150 original English examples authored with intended labels before the first evaluation; no scorer-generated labels. Synthetic development audit, not independently collected human chat or an independent annotator benchmark. Do not retune against this file.",
+  "count": 150,
+  "correct": 149,
+  "accuracy": 0.9933333333333333,
+  "confusionRowsExpectedColumnsPredicted": {
+    "positive": {
+      "positive": 49,
+      "neutral": 1,
+      "negative": 0
+    },
+    "neutral": {
+      "positive": 0,
+      "neutral": 50,
+      "negative": 0
+    },
+    "negative": {
+      "positive": 0,
+      "neutral": 0,
+      "negative": 50
+    }
+  },
+  "failures": [
+    {
+      "text": "I was tired, but this is amazing.",
+      "expected": "positive",
+      "actual": "neutral"
+    }
+  ],
+  "node": "v24.13.0",
+  "cpu": "Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz",
+  "memoryGiB": 32,
+  "evaluatedAt": "2026-10-26T12:13:50.229Z"
+}

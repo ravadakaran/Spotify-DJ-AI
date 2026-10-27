@@ -7,6 +7,7 @@ import { EventWriter } from "./event-writer.js";
 import { aiCommand } from "./room-ai.js";
 import { ollamaAdapter } from "./grounding.js";
 import { createThrottle } from "./throttle.js";
+import { socialCommands, prepareSocial, socialTick } from "./room-social.js";
 import {
   compatible,
   position,
@@ -17,6 +18,15 @@ import {
 const revision = z.number().int().nonnegative();
 const id = z.string().uuid();
 const commands = {
+  ...socialCommands,
+  "room.end": z.object({ expectedRevision: revision }).strict(),
+  "interaction.record": z
+    .object({
+      playbackId: id,
+      listenedThroughSeconds: z.number().finite().nonnegative(),
+      liked: z.boolean().optional(),
+    })
+    .strict(),
   "ai.decision": z
     .object({
       proposalId: id,
@@ -100,7 +110,29 @@ export class RoomService extends FoundationRooms {
     });
     const wall = Date.now(),
       mono = performance.now();
-    this.now = options.now || (() => wall + performance.now() - mono);
+    this.now = options.now
+      ? () => Math.floor(options.now())
+      : () => Math.floor(wall + performance.now() - mono);
+    this.chatAllowed = createThrottle({
+      limit: 5,
+      windowMs: 10000,
+      maxKeys: 2500,
+      now: () => this.now(),
+    });
+    this.reactionAllowed = createThrottle({
+      limit: 20,
+      windowMs: 10000,
+      maxKeys: 2500,
+      now: () => this.now(),
+    });
+    this.typingAllowed = createThrottle({
+      limit: 1,
+      windowMs: 1000,
+      maxKeys: 2500,
+      now: () => this.now(),
+    });
+    this.typing = new Map();
+    this.notify = () => {};
     this.graceMs = options.graceMs ?? 10000;
     this.closing = false;
     this.degradedAt = null;
@@ -198,6 +230,8 @@ export class RoomService extends FoundationRooms {
       hostConnected: false,
       mutationFrozen: true,
       segueProposal: null,
+      listeningMeters: {},
+      meterAt: this.now(),
     };
     if (checkpoint) {
       state.recovery = {
@@ -228,7 +262,10 @@ export class RoomService extends FoundationRooms {
   }
   view(state) {
     const copy = structuredClone(state);
+    delete copy.listeningMeters;
+    delete copy.meterAt;
     delete copy.recentCommands;
+    delete copy.sentimentSamples;
     copy.durableRevision = this.durable.get(state.loungeId) || 0;
     copy.degraded = this.writer.failed || this.degradedAt !== null;
     copy.mutationFrozen ||= copy.degraded;
@@ -311,6 +348,13 @@ export class RoomService extends FoundationRooms {
     this.writer.append(event, next);
     this.states.set(state.loungeId, next);
     this.broadcast(next);
+    if (type === "chat.reaction")
+      this.notify(state.loungeId, "lounge.chat.reaction", {
+        ...payload,
+        count: payload.reactions[payload.emoji].length,
+        epoch: next.epoch,
+        revision: next.revision,
+      });
     return next;
   }
   async beforeMembershipChange(id) {
@@ -373,7 +417,10 @@ export class RoomService extends FoundationRooms {
         body.expectedRevision !== state.revision
       )
         bad("STALE_REVISION", "Room changed. Refresh and try again.");
+      if (state.status === "ended")
+        bad("ROOM_ENDED", "This session has ended.");
       const hostOnly = [
+        "room.end",
         "room.settings",
         "room.invite",
         "member.update",
@@ -410,6 +457,91 @@ export class RoomService extends FoundationRooms {
         payload = { ...body },
         result = {};
       delete payload.expectedRevision;
+      if (
+        state.battleReservedEntryId &&
+        state.reservedEntryId === state.battleReservedEntryId &&
+        (type === "queue.promote" ||
+          (type === "ai.decision" && body.decision === "approve"))
+      )
+        bad(
+          "BATTLE_RESERVED",
+          "Advance or remove the reserved battle winner first.",
+        );
+      if (type === "room.end") {
+        await this.writer.flush();
+        payload = {};
+      }
+      if (type === "interaction.record") {
+        const p = state.nowPlaying,
+          now = this.now();
+        if (
+          !p ||
+          p.playbackId !== body.playbackId ||
+          !this.hasSockets(loungeId, userId)
+        )
+          bad("PLAYBACK_UNAVAILABLE", "Join the current playback first.");
+        const previous = state.listeningMeters?.[userId]?.hydrated
+          ? null
+          : await this.models.Interaction.findOne({
+              loungeId,
+              userId,
+              playbackId: p.playbackId,
+            }).lean();
+        const m = structuredClone(
+          state.listeningMeters?.[userId] || {
+            available: 0,
+            credited: 0,
+            liked: false,
+            lastAt: now,
+          },
+        );
+        if (!m.hydrated && previous) {
+          m.available += previous.playedSeconds;
+          m.credited = previous.playedSeconds;
+          m.liked = previous.liked;
+        }
+        const delta = p.paused
+          ? 0
+          : Math.max(0, position(p, now) - position(p, state.meterAt ?? now));
+        const credit = Math.min(
+          15,
+          Math.max(0, (now - m.lastAt) / 1000),
+          Math.max(0, m.available + delta - m.credited),
+          body.listenedThroughSeconds,
+        );
+        const playedSeconds = Math.min(p.durationSeconds, m.credited + credit);
+        payload = {
+          interaction: {
+            loungeId,
+            userId,
+            playbackId: p.playbackId,
+            trackId: p.trackId,
+            playedSeconds,
+            observedAt: new Date(now).toISOString(),
+            completed: playedSeconds >= 0.8 * p.durationSeconds,
+            liked: body.liked ?? m.liked ?? false,
+            acoustic: p.acoustic,
+            revision: state.revision + 1,
+          },
+          meter: {
+            hydrated: true,
+            available:
+              body.listenedThroughSeconds === 0
+                ? m.available + delta
+                : playedSeconds,
+            credited: playedSeconds,
+            liked: body.liked ?? m.liked ?? false,
+            lastAt: body.listenedThroughSeconds === 0 ? m.lastAt : now,
+          },
+        };
+        result = { interaction: payload.interaction };
+      }
+      if (socialCommands[type]) {
+        const social = await prepareSocial(this, state, userId, type, body);
+        eventType = social.type || type;
+        payload = social.payload;
+        result = social.result || {};
+      }
       if (type === "ai.decision") {
         const p = state.segueProposal;
         if (!p || p.proposalId !== body.proposalId || p.status !== "pending")
@@ -575,6 +707,10 @@ export class RoomService extends FoundationRooms {
       });
       if (type === "host.transfer" || type === "member.leave" || body.removed)
         state = await this.updatePresence(loungeId);
+      if (type === "room.end") {
+        await this.writer.flush();
+        result.summaryStatus = "complete";
+      }
       return this.ack(state, result);
     });
   }
@@ -586,6 +722,64 @@ export class RoomService extends FoundationRooms {
       durableRevision: this.durable.get(state.loungeId) || 0,
       ...result,
     };
+  }
+  async setTyping(loungeId, userId, input) {
+    const body = z.object({ active: z.boolean() }).strict().parse(input);
+    return this.serial(loungeId, async () => {
+      const state = await this.load(loungeId);
+      this.unmutedMember(state, userId);
+      const key = `${loungeId}:${userId}`;
+      if (!this.typingAllowed(key)) return this.ack(state);
+      if (body.active)
+        this.typing.set(key, {
+          loungeId,
+          userId,
+          expiresAt: this.now() + 3000,
+        });
+      else this.typing.delete(key);
+      this.notify(loungeId, "lounge.chat.typing", {
+        userId,
+        active: body.active,
+        expiresAt: this.now() + 3000,
+      });
+      return this.ack(state);
+    });
+  }
+  async chatHistory(loungeId, userId, cursor) {
+    return this.serial(loungeId, async () => {
+      const state = await this.load(loungeId);
+      this.roomMember(state, userId);
+      let before = Infinity;
+      if (cursor) {
+        requireId(cursor);
+        const anchor = await this.models.ChatMessage.findOne({
+          loungeId,
+          messageId: cursor,
+        }).lean();
+        if (!anchor)
+          bad("INVALID_CURSOR", "History cursor is unavailable.", 422);
+        before = anchor.revision;
+      }
+      const rows = await this.models.ChatMessage.find({
+        loungeId,
+        ...(Number.isFinite(before) ? { revision: { $lt: before } } : {}),
+      })
+        .sort({ revision: -1 })
+        .limit(51)
+        .lean();
+      for (const row of rows)
+        for (const { event } of this.writer.buffer)
+          if (
+            event.loungeId === loungeId &&
+            event.type === "chat.reaction" &&
+            event.payload.messageId === row.messageId
+          )
+            row.reactions = event.payload.reactions;
+      return {
+        items: rows.slice(0, 50).reverse(),
+        nextCursor: rows.length > 50 ? rows[49].messageId : null,
+      };
+    });
   }
   async track(id) {
     const t = await this.models.Track.findById(id).lean();
@@ -681,6 +875,23 @@ export class RoomService extends FoundationRooms {
   }
   async tick() {
     if (this.closing) return;
+    for (const [key, value] of this.typing) {
+      const member = this.states
+        .get(value.loungeId)
+        ?.members.find((m) => m.userId === value.userId);
+      if (
+        value.expiresAt <= this.now() ||
+        !member ||
+        member.muted ||
+        !this.hasSockets(value.loungeId, value.userId)
+      ) {
+        this.typing.delete(key);
+        this.notify(value.loungeId, "lounge.chat.typing", {
+          userId: value.userId,
+          active: false,
+        });
+      }
+    }
     if (
       !this.writer.failed &&
       this.writer.buffer.length === 0 &&
@@ -712,7 +923,8 @@ export class RoomService extends FoundationRooms {
     }
     for (const id of this.states.keys())
       await this.serial(id, async () => {
-        const s = this.states.get(id);
+        if (this.states.get(id).status === "ended") return;
+        const s = await socialTick(this, this.states.get(id));
         if (
           this.healthy &&
           !s.mutationFrozen &&

@@ -23,13 +23,13 @@ Phases 1–3 have software implementations; Phase 3 real-model/legal-chain accep
 | [x] | TASK-014 | P0 / P3 | BPM/Camelot filter and weighted ranking, REQ-011,012 | TASK-007, TASK-009 | ≥20 decisions 100% valid, TEST-005 | [AI](AI_MUSIC_ENGINE.md) |
 | [x] | TASK-015 | P1 / P3 | Retrieval/generation/Q&A and citations, REQ-014 | TASK-003, TASK-014 | Unsupported queries declined; audited facts, TEST-006 | [AI](AI_MUSIC_ENGINE.md) |
 | [x] | TASK-016 | P1 / P3 | Outro proposals/approve/reject/stale checks, REQ-012,014 | TASK-013, TASK-015 | One full chain and bounded fallback, TEST-005/006/009 | [API](API_SPECIFICATION.md) |
-| [ ] | TASK-017 | P1 / P4 | Chat/history/typing/reactions UI+API, REQ-007 | TASK-010, TASK-012 | Persisted chat restored; ephemeral typing expires, TEST-007/011 | [API](API_SPECIFICATION.md) |
+| [x] | TASK-017 | P1 / P4 | Chat/history/typing/reactions UI+API, REQ-007 | TASK-010, TASK-012 | Persisted chat restored; ephemeral typing expires, TEST-007/011 | [API](API_SPECIFICATION.md) |
 | [ ] | TASK-018 | P1 / P4 | Sentiment pipeline/evaluation, REQ-013 | TASK-017, TASK-014 | ≥85% locked-set accuracy, window shift, TEST-007 | [AI](AI_MUSIC_ENGINE.md) |
-| [ ] | TASK-019 | P1 / P4 | Battle lifecycle/tie/defer/announcement, REQ-009 | TASK-012, TASK-016 | One winner effect; no incompatible splice, TEST-008 | [Architecture](ARCHITECTURE.md) |
+| [x] | TASK-019 | P1 / P4 | Battle lifecycle/tie/defer/announcement, REQ-009 | TASK-012, TASK-016 | One winner effect; no incompatible splice, TEST-008 | [Architecture](ARCHITECTURE.md) |
 | [ ] | TASK-020 | P1 / P5 | Interaction collection and fit dataset, REQ-015 | TASK-002, TASK-013 | Server-bounded listening; no split leakage, TEST-013 | [AI](AI_MUSIC_ENGINE.md) |
 | [ ] | TASK-021 | P1 / P5 | Hybrid model worker/version swap, REQ-015 | TASK-020 | Precision@5 ≥0.6 with coverage; refresh no deploy, TEST-013 | [AI](AI_MUSIC_ENGINE.md) |
-| [ ] | TASK-022 | P1 / P5 | Session end/summary/taste/history, REQ-016,017 | TASK-018, TASK-019, TASK-020 | Exact manual/log reconciliation, TEST-014 | [Schema](DATABASE_SCHEMA.md) |
-| [ ] | TASK-023 | P1 / P5 | Dashboard/admin forms/recommendation rail, REQ-010,016 | TASK-007, TASK-021, TASK-022 | Real backend data and validation, TEST-015 | [API](API_SPECIFICATION.md) |
+| [x] | TASK-022 | P1 / P5 | Session end/summary/taste/history, REQ-016,017 | TASK-018, TASK-019, TASK-020 | Exact manual/log reconciliation, TEST-014 | [Schema](DATABASE_SCHEMA.md) |
+| [x] | TASK-023 | P1 / P5 | Dashboard/admin forms/recommendation rail, REQ-010,016 | TASK-007, TASK-021, TASK-022 | Real backend data and validation, TEST-015 | [API](API_SPECIFICATION.md) |
 | [ ] | TASK-024 | P0 / P6 | Performance/multi-room/failure evidence, REQ-019,020 | TASK-016, TASK-019, TASK-023 | Declared workloads and raw latency/recovery results, TEST-009/010/012 | [Tests](TESTING_STRATEGY.md) |
 | [ ] | TASK-025 | P0 / P6 | Security/privacy/accessibility review, REQ-021 | TASK-023 | No critical unresolved auth/data issue, TEST-001/011/015 | [Security](SECURITY.md) |
 | [ ] | TASK-026 | P0 / P6 | Deployment/restore rehearsal, REQ-020,022 | TASK-024, TASK-025 | Fresh install and backup restore work, TEST-010/015 | [Setup](ENVIRONMENT_SETUP.md) |
@@ -45,3 +45,7 @@ No subagents or parallel staffing are assumed. Work that can be interleaved: fix
 REQ-001–022 each appears in at least one task and one test. Storage covers profiles/timeline, membership, queue/battles/votes through snapshot/events, chat/reactions, interactions/model versions and final summaries. APIs route each mutation through the same room authority. Requirements spanning phases are not considered met until all linked behaviors pass. Track scope changes in [decisions](DECISIONS.md), then update this backlog, API/schema and tests together.
 
 Phase 2 completion (21 October 2026): TASK-009–013 are implemented and verified with 27 tests, the two-context browser journey and measured local sync/join timing. [Current evidence and limitations](IMPLEMENTATION_STATUS.md) distinguish this slice from future chat/battles/AI and Phase 6 performance acceptance.
+
+Phase 4 software is implemented. TASK-018 remains unchecked pending an independently authored held-out sentiment evaluation; the synthetic 150-example audit scored 149/150. See PHASE_FOUR_IMPLEMENTATION.md for actual bounds and tests.
+
+Phase 5 software for TASK-020/021 is implemented; their normal-use held-out dataset/Precision@5 acceptance remains open. TASK-022/023 software and browser checks are recorded in [Phase 5 implementation](PHASE_FIVE_IMPLEMENTATION.md).

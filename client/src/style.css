@@ -757,6 +757,65 @@ footer {
   margin-top: 25px;
 }
 /* Live room console */
+.social-console {
+  margin-top: 24px;
+  align-items: start;
+}
+.chat-stream {
+  max-height: 440px;
+  overflow: auto;
+  scrollbar-color: #a0b2a3 #152015;
+}
+.chat-message {
+  padding: 14px 0;
+  border-bottom: 1px solid #303a31;
+  overflow-wrap: anywhere;
+}
+.chat-message p {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.chat-message small,
+.battle-candidate span {
+  color: #a0b2a3;
+}
+.typing-status {
+  min-height: 24px;
+  color: #a0b2a3;
+}
+.social-console textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  color: #eff9ed;
+  background: #101812;
+  border: 1px solid #435145;
+  border-radius: 8px;
+  padding: 12px;
+  font: inherit;
+}
+.social-console :focus-visible {
+  outline: 2px solid #b6ef79;
+  outline-offset: 3px;
+}
+.social-console button[aria-pressed="true"] {
+  background: #b6ef79;
+  color: #152015;
+}
+.battle-candidate {
+  padding: 16px 0;
+  border-bottom: 1px solid #303a31;
+  overflow-wrap: anywhere;
+}
+.battle-candidate span {
+  display: block;
+  margin-top: 6px;
+}
+.battle-candidate meter {
+  display: block;
+  width: 100%;
+  margin-top: 10px;
+}
 .player progress {
   width: 100%;
   accent-color: #b6ef79;
@@ -834,8 +893,14 @@ button:disabled {
 .connection-quality {
   color: #a0b2a3;
 }
-.citations { overflow-wrap: anywhere; margin: 12px 0; }
-.citations details { border-left: 2px solid #d4ad64; padding: 6px 12px; }
+.citations {
+  overflow-wrap: anywhere;
+  margin: 12px 0;
+}
+.citations details {
+  border-left: 2px solid #d4ad64;
+  padding: 6px 12px;
+}
 @media (max-width: 700px) {
   .queue-row {
     flex-wrap: wrap;

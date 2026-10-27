@@ -1,5 +1,11 @@
 # Project requirements and source analysis
 
+27 October 2026: Phase 5 software implements REQ-015–017 interactions, recommendation worker/rail, dashboard and end summaries. Normal-use held-out Precision@5 acceptance remains open; authored synthetic evaluation is software evidence only. [Contracts and limits](PHASE_FIVE_IMPLEMENTATION.md).
+
+
+26 October 2026 Phase 4 scope: user authorized TASK-017–019. REQ-007/009 chat and Soundclash software and REQ-013 local sentiment pipeline are implemented. The 150-example synthetic audit passed 149/150; independently annotated held-out evaluation remains open. Legal media/model gates remain unchanged. [Behavior, evidence and rollout](PHASE_FOUR_IMPLEMENTATION.md).
+
+
 26 October 2026 scope: user authorized Phase 3 (TASK-014–016). REQ-011/012 matching and REQ-014 grounded API/UI are implemented with explicit template fallback and an opt-in local adapter. Legal playable-chain and real-model quality/latency acceptance remain open. [As-built behavior](PHASE_THREE_IMPLEMENTATION.md) documents the compatible server-owned request contract and explicit approval/Advance semantics; it does not close Phase 0 gates.
 
 Analysis date: 18 October 2026. Primary source: `Document/Project Document.docx`, PRD v1.0, September 2026, §§1–15. All body paragraphs and tables, the text-based architecture diagram, header/footer, and footnote/endnote/comment parts were inspected through OOXML. The package has no embedded image assets; note/comment parts contain no substantive text. No separate appendices were present. Page layout was not rendered; citations use section numbers, not inferred pages.

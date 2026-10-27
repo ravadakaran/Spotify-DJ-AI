@@ -158,71 +158,76 @@ Implementation checked off 26 October 2026; real-model and legal-audio acceptanc
 
 **Objective:** Sentiment-aware curation driven by real-time chat, emoji reactions, and crowd-driven Soundclash battles.
 
-### [ ] TASK-017: Real-Time Chat, Reactions & Typing Indicators
-- [ ] Implement `POST /api/v1/lounges/:id/chat` with message validation ($\le 1{,}000$ characters, rate-limited to 5 msgs / 10 s per user) ([API_SPECIFICATION.md](API_SPECIFICATION.md#L54)).
-- [ ] Broadcast chat messages via `lounge.chat.message` and append to batch event buffer.
-- [ ] Build `PUT /api/v1/lounges/:id/chat/:mid/reactions` supporting allowlisted emojis and atomic user reaction toggling.
-- [ ] Implement ephemeral typing notifications: emit `lounge.chat.typing`, throttle to 1/s, expire after 3 seconds, omit from persistence.
-- [ ] Build Chat Console UI: message stream, reaction counters, typing status, and cursor-based history pagination ([TEST-007](TESTING_STRATEGY.md#L13)).
+### [x] TASK-017: Real-Time Chat, Reactions & Typing Indicators
+- [x] Implement `POST /api/v1/lounges/:id/chat` with message validation ($\le 1{,}000$ characters, rate-limited to 5 msgs / 10 s per user) ([API_SPECIFICATION.md](API_SPECIFICATION.md#L54)).
+- [x] Broadcast chat messages via `lounge.chat.message` and append to batch event buffer.
+- [x] Build `PUT /api/v1/lounges/:id/chat/:mid/reactions` supporting allowlisted emojis and atomic user reaction toggling.
+- [x] Implement ephemeral typing notifications: emit `lounge.chat.typing`, throttle to 1/s, expire after 3 seconds, omit from persistence.
+- [x] Build Chat Console UI: message stream, reaction counters, typing status, and cursor-based history pagination ([TEST-007](TESTING_STRATEGY.md#L13)).
 
 ### [ ] TASK-018: Rolling Sentiment Pipeline & Accuracy Evaluation
-- [ ] Implement lexicon-based sentiment scorer with negation, intensifiers, and neutral band mapping scores to $[-1, 1]$ ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L19)).
-- [ ] Compute 30-second rolling sentiment window re-evaluated every 1 second; cap spam contribution per user per tick ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L21)).
-- [ ] Broadcast sentiment updates via `lounge.sentiment.score` and integrate with segue target energy ($E$).
+- [x] Implement lexicon-based sentiment scorer with negation, intensifiers, and neutral band mapping scores to $[-1, 1]$ ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L19)).
+- [x] Compute 30-second rolling sentiment window re-evaluated every 1 second; cap spam contribution per user per tick ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L21)).
+- [x] Broadcast sentiment updates via `lounge.sentiment.score` and integrate with segue target energy ($E$).
 - [ ] Assemble locked test split ($\ge 150$ labeled messages); verify $\ge 85\%$ classification accuracy and output confusion matrix ([REQ-013](PROJECT_REQUIREMENTS.md#L25)).
-- [ ] Verify that a sudden positive/negative chat burst shifts the lounge sentiment score within one 30-second window ([TEST-007](TESTING_STRATEGY.md#L13)).
+- [x] Verify that a sudden positive/negative chat burst shifts the lounge sentiment score within one 30-second window ([TEST-007](TESTING_STRATEGY.md#L13)).
 
-### [ ] TASK-019: Soundclash Battle Lifecycle & Immediate Splice Gate
-- [ ] Implement candidate submission: `POST /api/v1/lounges/:id/battles/candidates` (2--4 distinct tracks) ([REQ-009](PROJECT_REQUIREMENTS.md#L21)).
-- [ ] Implement battle opening: Host/Co-DJ via REST/socket or autonomously triggered by internal AI DJ actor when enabled (`soundclashEnabled=true`) with server deadline ($10\text{--}120\text{ seconds}$).
-- [ ] Implement battle voting: `PUT /api/v1/lounges/:id/battles/:bid/vote` (1 changeable vote per user).
-- [ ] Resolve battle at deadline:
+### [x] TASK-019: Soundclash Battle Lifecycle & Immediate Splice Gate
+- [x] Implement candidate submission: `POST /api/v1/lounges/:id/battles/candidates` (2--4 distinct tracks) ([REQ-009](PROJECT_REQUIREMENTS.md#L21)).
+- [x] Implement battle opening: Host/Co-DJ via REST/socket or autonomously triggered by internal AI DJ actor when enabled (`soundclashEnabled=true`) with server deadline ($10\text{--}120\text{ seconds}$).
+- [x] Implement battle voting: `PUT /api/v1/lounges/:id/battles/:bid/vote` (1 changeable vote per user).
+- [x] Resolve battle at deadline:
   - If single winner is acoustically compatible with Now Playing $\to$ reserve immediate next.
   - If single winner is incompatible $\to$ mark `deferred`, leave in Next Up, announce deferral ([ADR-010](DECISIONS.md#L16)).
   - If tie or zero votes $\to$ transition to `awaiting_tie`, require Host or Co-DJ resolution ([OQ-05](PROJECT_REQUIREMENTS.md#L70)).
-- [ ] Prevent opening a second battle while one is active.
-- [ ] Build Soundclash Stage UI: candidate cards, live vote bars, countdown timer, and winner announcement banner ([TEST-008](TESTING_STRATEGY.md#L14)).
+- [x] Prevent opening a second battle while one is active.
+- [x] Build Soundclash Stage UI: candidate cards, live vote bars, countdown timer, and winner announcement banner ([TEST-008](TESTING_STRATEGY.md#L14)).
 
 **Phase 4 Exit Gate:** Chat sentiment changes curation within 30 seconds with $\ge 85\%$ test accuracy, battles resolve idempotently across all clients, and incompatible winners are never forced into playback.
 
 ---
+
+Software verification: 41 tests and the two-browser journey pass. The 150-example authored synthetic audit scored 149/150, but independent held-out annotation remains open; the Phase 4 exit gate is therefore qualified. See [as-built details](PHASE_FOUR_IMPLEMENTATION.md).
 
 ## Phase 5: Recommendations, Personal Dashboard & Session Analytics
 
 **Objective:** Offline hybrid recommendations, personalized user dashboard, and mathematically reconciled session analytics.
 
 ### [ ] TASK-020: Server-Derived Interaction Tracking & Evaluation Dataset
-- [ ] Record listen interactions in `interactions` collection: derive played seconds from server playback intervals plus client heartbeat, capped by track duration ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L37)).
-- [ ] Mark track completed if listened $\ge 80\%$ duration; capture explicit likes.
-- [ ] Infer co-listening from shared lounge attendance rather than unbounded user pairs.
-- [ ] Build chronological evaluation split with zero target leakage (train on early sessions, evaluate on held-out sessions) ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L41)).
+- [x] Record listen interactions in `interactions` collection: derive played seconds from server playback intervals plus client heartbeat, capped by track duration ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L37)).
+- [x] Mark track completed if listened $\ge 80\%$ duration; capture explicit likes.
+- [x] Infer co-listening from shared lounge attendance rather than unbounded user pairs.
+- [x] Build chronological evaluation split with zero target leakage (train on early sessions, evaluate on held-out sessions) ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L41)).
 
 ### [ ] TASK-021: Offline Hybrid Recommendation Worker & Atomic Artifact Swap
-- [ ] Implement worker thread in `server/src/recommendations/` to avoid blocking main Node.js event loop ([ARCHITECTURE.md](ARCHITECTURE.md#L81)).
-- [ ] Compute item-item collaborative cosine similarity from co-listening/completion matrices.
-- [ ] Compute acoustic feature similarity (BPM, key, energy, valence).
-- [ ] Blend hybrid scores: $60\%$ content + $40\%$ collaborative for active users; fall back to vibe/catalog popularity for cold starts ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L39)).
-- [ ] Implement atomic artifact swap without server restart; record `modelVersion`, cutoff date, and data hash.
+- [x] Implement worker thread in `server/src/recommendations/` to avoid blocking main Node.js event loop ([ARCHITECTURE.md](ARCHITECTURE.md#L81)).
+- [x] Compute item-item collaborative cosine similarity from co-listening/completion matrices.
+- [x] Compute acoustic feature similarity (BPM, key, energy, valence).
+- [x] Blend hybrid scores: $60\%$ content + $40\%$ collaborative for active users; fall back to vibe/catalog popularity for cold starts ([AI_MUSIC_ENGINE.md](AI_MUSIC_ENGINE.md#L39)).
+- [x] Implement atomic artifact swap without server restart; record `modelVersion`, cutoff date, and data hash.
 - [ ] Validate $\text{Precision@5} \ge 0.6$ on the held-out evaluation dataset ([REQ-015](PROJECT_REQUIREMENTS.md#L27), [TEST-013](TESTING_STRATEGY.md#L19)).
 
-### [ ] TASK-022: Session Finalization, Event Replay & Analytics Reconciliation
-- [ ] Implement `POST /api/v1/lounges/:id/end`: flush all buffered events before marking session ended ([API_SPECIFICATION.md](API_SPECIFICATION.md#L43)).
-- [ ] Generate `session_summaries` record:
+### [x] TASK-022: Session Finalization, Event Replay & Analytics Reconciliation
+- [x] Implement `POST /api/v1/lounges/:id/end`: flush all buffered events before marking session ended ([API_SPECIFICATION.md](API_SPECIFICATION.md#L43)).
+- [x] Generate `session_summaries` record:
   - Exact duration (start to end events)
   - Peak participants (reconstructed from unique join/leave events)
   - Total battles opened and Q&A questions asked
   - Persisted sentiment timeline array
-- [ ] Implement verification test comparing final summary against raw event log replay and manual session audit ([TEST-014](TESTING_STRATEGY.md#L20)).
+- [x] Implement verification test comparing final summary against raw event log replay and manual session audit ([TEST-014](TESTING_STRATEGY.md#L20)).
 
-### [ ] TASK-023: User Dashboard, Admin Job Manager & Recommendation Rail UI
-- [ ] Build `GET /api/v1/users/me/dashboard`: listening history, personal taste profile (listening-weighted BPM/energy), active lounges ([API_SPECIFICATION.md](API_SPECIFICATION.md#L60)).
-- [ ] Build `GET /api/v1/users/me/recommendations`: recommended track rail with explanation badges and fallback reason.
-- [ ] Build Admin controls: `POST /api/v1/admin/recommendation-jobs` to trigger refits and monitor training status ([API_SPECIFICATION.md](API_SPECIFICATION.md#L64)).
-- [ ] Build Session Analytics modal: timeline graph, battle count, participant peak, and track history.
+### [x] TASK-023: User Dashboard, Admin Job Manager & Recommendation Rail UI
+- [x] Build `GET /api/v1/users/me/dashboard`: listening history, personal taste profile (listening-weighted BPM/energy), active lounges ([API_SPECIFICATION.md](API_SPECIFICATION.md#L60)).
+- [x] Build `GET /api/v1/users/me/recommendations`: recommended track rail with explanation badges and fallback reason.
+- [x] Build Admin controls: `POST /api/v1/admin/recommendation-jobs` to trigger refits and monitor training status ([API_SPECIFICATION.md](API_SPECIFICATION.md#L64)).
+- [x] Build Session Analytics modal: timeline graph, battle count, participant peak, and track history.
 
 **Phase 5 Exit Gate:** Hybrid recommendation model achieves $\text{Precision@5} \ge 0.6$, recommendations refresh dynamically after training, and session analytics reconcile exactly with event logs.
 
 ---
+
+
+Software implemented; TASK-020/021 acceptance remains open for normal-use held-out data. Authored synthetic evaluation is qualified evidence. [As-built contracts](PHASE_FIVE_IMPLEMENTATION.md).
 
 ## Phase 6: Hardening, Performance Evidence & Private Deployment
 

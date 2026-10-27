@@ -1,5 +1,8 @@
 # AI and music engine
 
+Phase 4 implementation: local english-lexicon-1 uses a small authored lexicon, negation/intensifiers and a ±0.15 neutral band. Every second, average the latest chat score per member within 30 seconds, excluding reactions/system/Q&A. Persist versioned scores and tick outputs for deterministic replay. The existing targetEnergy calculation consumes rollingScore. The fixed 150-example authored audit scored 149/150 without retuning; independent held-out annotation, sarcasm and multilingual quality remain limitations. [Full pipeline and evidence](PHASE_FOUR_IMPLEMENTATION.md).
+
+
 Implements REQ-010–017 with local authorized media and authored metadata. No Spotify audio, metadata, user profiles or playlists enter any model. The model writes explanations; deterministic code decides eligibility and changes state. Real waveform analysis, beat alignment and audible crossfade are out of scope.
 
 ## Acoustic matching and selection

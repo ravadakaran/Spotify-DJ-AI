@@ -1,4 +1,49 @@
-# Implementation status — 26 October 2026
+# Implementation status — 27 October 2026
+
+## Phase 5 software implemented — 27 October 2026
+
+TASK-020–023 now have server-derived listening/likes, worker-thread hybrid recommendations and versioned artifact replacement, Host-only session end with a durable flush barrier, log-derived summaries, own history/taste/dashboard, recommendation rail and admin fit/status UI. Existing quick-rejoin membership refresh was fixed. [As-built contracts, limits and migration/rollback review](PHASE_FIVE_IMPLEMENTATION.md).
+
+Actual verification on Windows, Node v24.13.0:
+
+| Check | Actual result |
+| --- | --- |
+| `npm run lint` | Passed |
+| `npm test` | 45 passed across 10 suites, including existing concurrency and crash/replay suites |
+| `npm test -- --testPathPatterns=phase-five` | Four Phase 5 tests passed again after final heartbeat/like preservation changes |
+| `npm run build` | Passed |
+| `npm run test:e2e` | Two Chromium contexts passed existing journey plus like, session end, analytics, dashboard, admin worker fit/status and mobile overflow |
+| Recommendation evaluator | Authored synthetic 28-profile/12-user fixture: content 1.0, collaborative 0.45, hybrid 1.0 Precision@5; coverage 12/12; 24 train/60 held-out signals |
+| Visual review | 390px dashboard/admin screenshots inspected; controls fit without horizontal overflow |
+
+Evidence: [recommendation report](../evidence/phase-five-recommendations.json), [analytics](../evidence/phase-five-analytics.png), [dashboard mobile](../evidence/phase-five-dashboard-mobile.png), [admin mobile](../evidence/phase-five-admin-mobile.png). The first browser attempt exposed stale Overview memberships and was fixed; another attempt was interrupted by development hot reload, followed by passing reruns. Disposable silence/identities only; these are not music-quality benchmarks.
+
+**Phase 5 software is implemented; full acceptance remains qualified.** TASK-020/021 remain open for a normal-use/manual chronological held-out dataset and recommendation acceptance. Synthetic clusters prove the evaluation pipeline only. Phase 0 legal-media/model and independent sentiment gates remain open. Summary aggregation currently reads the entire room log at session end; production-scale long sessions need paged projections. Dashboard/taste and fit capacities are explicitly bounded. Migration 005 has only run on disposable test databases; no private local database migration, reset, deployment or credentials changed.
+
+Earlier records below are historical checkpoints.
+
+
+## Phase 4 software implemented — TASK-017 through TASK-019
+
+Chat/history/reactions/typing, one-second local sentiment updates, Soundclash submissions/voting/ties/cancellation, compatible winner reservation and incompatible deferral are implemented in the server and React console. Durable chat projections and winner announcements share the existing bounded event transactions. [As-built behavior, defaults and migration/rollback review](PHASE_FOUR_IMPLEMENTATION.md).
+
+Actual verification on Windows, Node v24.13.0, Intel Core i7-10875H, 32 GiB RAM:
+
+| Check | Actual result |
+| --- | --- |
+| `npm run lint` | Passed |
+| `npm test` | 41 tests passed across eight suites, including isolated MongoDB replica sets |
+| `npm run build` | Passed |
+| `npm run test:e2e` | Passed: two Chromium sessions, chat, typing, reactions, timed battle/winner reservation, existing playback/Q&A, reconnect, mobile overflow and logout |
+| Sentiment audit | 149/150 (99.33%) on the locked authored synthetic set; independent held-out annotation gate remains open |
+| Visual inspection | 390px mobile screenshot inspected; chat and battle controls fit without clipping/overflow |
+| Queue timing smoke | 20 measured sequential votes after two warmups; P50 10.52 ms, P95 14.30 ms, max 14.49 ms; not the Phase 6 workload |
+
+Evidence: [sentiment matrix and hashes](../evidence/phase-four-sentiment.json), [browser timing](../evidence/phase-four-browser-latency.json), [console](../evidence/phase-four-lounge.png), [mobile](../evidence/phase-four-mobile.png). Browser fixtures use test-only silence and disposable identities. An initial browser startup was blocked by occupied port 3000; the harness now uses dynamically allocated ports and the rerun passed without stopping the existing app. The UI detector reported only the incumbent Inter font warning.
+
+**Phase 4 software is complete; full acceptance remains qualified.** TASK-018 stays open for an independently authored, held-out sentiment evaluation. The authored audit is not evidence of real-world multilingual/sarcasm quality. Phase 0 legal-audio and Phase 3 real-model gates remain open. Migration 004 was tested only on disposable databases; it has not been applied to the user's local library. Before local rollout, use the documented backup/compatibility review and migration procedure. No deployment or credentials were changed.
+
+Next software slice is Phase 5, TASK-020–023 (interactions, hybrid recommendations and analytics), subject to its dataset dependencies. Earlier phase records below are historical checkpoints.
 
 ## Phase 3 software implemented — TASK-014 through TASK-016
 
@@ -90,4 +135,4 @@ Soundclash, chat/reactions/sentiment, hybrid recommendations and analytics remai
 
 ## Next implementation slice
 
-Next is Phase 4, TASK-017–019: chat/reactions/typing, sentiment and Soundclash. Phase 3 real-model and legal playable-chain acceptance remains open alongside Phase 0 gates.
+Phase 5 software is implemented as recorded at the top. Next is Phase 6 hardening/performance, alongside the still-open normal-use recommendation, independent sentiment, real-model and licensed-chain acceptance gates.

@@ -1,5 +1,11 @@
 # Architecture decisions
 
+27 October 2026 — ADR-020: user requested Phase 5. Implement explicit admin refits, binary completion/like item cosine with 60/40 acoustic/collaborative blend; bounded identity heartbeat evidence, durable interaction projections and Host-only synchronous end barrier. Preserve legal/model/independent-evaluation gates. Authored synthetic metrics do not establish normal-use recommendation acceptance. [Definitions, bounds and migration compatibility](PHASE_FIVE_IMPLEMENTATION.md).
+
+
+26 October 2026 — ADR-019: user requested Phase 4. Implement TASK-017–019 using the visible proposed defaults: English local lexicon, 30-second latest-per-participant window/one-second ticks, one changeable battle vote, two to four distinct submissions, Host/Co-DJ tie selection and incompatible-winner deferral. Internal DJ opens an existing draft at outro for 30 seconds. Use embedded reaction arrays in the batch-written chat projection. Synthetic sentiment audit is separate from independent held-out acceptance. Migration 004 is additive; rollback needs a matching backup because old code cannot replay new event types. [As-built contracts and limits](PHASE_FOUR_IMPLEMENTATION.md).
+
+
 26 October 2026 — ADR-018: user requested Phase 3. Implement TASK-014–016 with constrained source-ID selection, default labeled templates, explicit Host/Co-DJ reservation approval and existing explicit Advance. Generation runs outside room serialization and revalidates on publish/approval. All new requests use server-owned context. Model/license/legal media gates remain open; see [Phase 3 implementation](PHASE_THREE_IMPLEMENTATION.md) for bounds, compatibility and rollout/rollback consequences.
 
 Status: foundation implementation started on user instruction, 18 October 2026. Track A/Option B is the implemented baseline; unimplemented behavior choices remain provisional. Source requirements outrank these recommendations. Record future changes with date, owner, affected REQ IDs and migration/test consequences.

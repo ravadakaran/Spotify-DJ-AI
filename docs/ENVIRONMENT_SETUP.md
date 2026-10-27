@@ -100,3 +100,7 @@ Rollback: freeze traffic and preserve failed-state logs; redeploy prior artifact
 | API/queue latency high | Check event-loop CPU work, worker isolation, DB batch lag and slow client buffers; measure before adding infrastructure |
 
 Maintain setup notes with actual runtime/package/model versions and commands after implementation. This document is a plan, not an installation test report.
+
+## Phase 4 upgrade
+
+Migration 004 adds chat projections and indexes. Before applying it to an existing library, stop writers and take/verify a private backup. Run the existing migration command only against the intended database; see [Phase 4 rollout and rollback compatibility](PHASE_FOUR_IMPLEMENTATION.md#persistence-and-rollout). This implementation task migrated only disposable test databases. The browser harness now allocates its own API/Vite ports, so it can run alongside a local app.

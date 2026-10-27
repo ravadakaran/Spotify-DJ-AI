@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { io } from "socket.io-client";
 import "./style.css";
+import Dashboard from "./Dashboard.jsx";
 import Catalog from "./Catalog.jsx";
 import LoungeConsole from "./LoungeConsole.jsx";
 import { createRoomSync } from "./room-sync.js";
@@ -102,7 +103,7 @@ function App() {
         setHistory(lounges.items);
       })
       .catch((e) => setError(e.message));
-  }, [session?.user.id]);
+  }, [session?.user.id, room?.loungeId]);
   useEffect(() => {
     if (!session || !room?.loungeId) return;
     const socket = io("/lounges", {
@@ -486,6 +487,7 @@ function App() {
               </div>
             )}
             <LoungeConsole
+              socketRef={socketRef}
               room={room}
               tracks={tracks}
               session={session}
@@ -609,6 +611,12 @@ function App() {
                 </div>
               )}
             </section>
+            <Dashboard
+              api={api}
+              run={run}
+              tracks={tracks}
+              isAdmin={session.user.isAdmin}
+            />
             <Catalog
               tracks={tracks}
               token={session.accessToken}

@@ -1,0 +1,11 @@
+import { readFile, writeFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import { evaluate } from "../server/src/recommendations/model.js";
+const file = process.argv[2];
+if (!file) throw new Error("Usage: node scripts/evaluate-recommendations.js dataset.json [report.json]");
+const raw = await readFile(file);
+const dataset = JSON.parse(raw);
+if (!dataset.cutoff || !Array.isArray(dataset.tracks) || !Array.isArray(dataset.interactions)) throw new Error("Expected cutoff, tracks and interactions");
+const report = { label: dataset.label || "Unspecified provenance", datasetSha256: createHash("sha256").update(raw).digest("hex"), ...evaluate(dataset), runtime: process.version, acceptanceQualified: dataset.provenance !== "normal-use-heldout" };
+if (process.argv[3]) await writeFile(process.argv[3], JSON.stringify(report,null,2));
+console.log(JSON.stringify(report,null,2));

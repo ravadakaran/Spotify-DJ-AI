@@ -25,6 +25,7 @@
     "dev:local": "node scripts/local.js",
     "test:e2e": "playwright test",
     "library:import": "node scripts/library.js",
+    "recommendations:evaluate": "node scripts/evaluate-recommendations.js",
     "password:calibrate": "node scripts/calibrate-passwords.js",
     "admin:create:local": "node --env-file-if-exists=.env server/src/cli.js admin --local"
   },

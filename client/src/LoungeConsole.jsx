@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import AiConsole from "./AiConsole.jsx";
+import { SessionAnalytics } from "./Dashboard.jsx";
+import SocialConsole from "./SocialConsole.jsx";
 
 function elapsed(p, now) {
   return p
@@ -13,7 +15,7 @@ function elapsed(p, now) {
 const time = (value) =>
   `${Math.floor(value / 60)}:${String(Math.floor(value % 60)).padStart(2, "0")}`;
 
-function Player({ room, token, clock, connected }) {
+function Player({ room, token, clock, connected, api }) {
   const audio = useRef(null),
     context = useRef(null),
     source = useRef(null);
@@ -24,6 +26,37 @@ function Player({ room, token, clock, connected }) {
   const latest = useRef(room);
   latest.current = room;
   const playback = room.nowPlaying;
+  const [liked, setLiked] = useState(false);
+  const apiRef = useRef(api),
+    likedRef = useRef(false);
+  apiRef.current = api;
+  useEffect(() => {
+    likedRef.current = false;
+    setLiked(false);
+    const heartbeat = () => {
+      const p = latest.current.nowPlaying,
+        element = audio.current;
+      if (
+        p &&
+        element &&
+        !element.paused &&
+        !p.paused &&
+        element.readyState >= 2
+      )
+        apiRef
+          .current(
+            `/lounges/${latest.current.loungeId}/playbacks/${p.playbackId}/interaction`,
+            {
+              method: "PUT",
+              body: { listenedThroughSeconds: 10 },
+            },
+          )
+          .catch(() => {});
+    };
+    heartbeat();
+    const timer = setInterval(heartbeat, 10000);
+    return () => clearInterval(timer);
+  }, [playback?.playbackId]);
   useEffect(() => {
     const tick = setInterval(
       () =>
@@ -168,6 +201,27 @@ function Player({ room, token, clock, connected }) {
       <button className="secondary" onClick={unlock}>
         {unlocked ? "Enable audio again" : "Enable audio"}
       </button>
+      {playback && (
+        <button
+          className="secondary"
+          aria-pressed={liked}
+          onClick={async () => {
+            const liked = !likedRef.current;
+            try {
+              await api(
+                `/lounges/${room.loungeId}/playbacks/${playback.playbackId}/interaction`,
+                { method: "PUT", body: { listenedThroughSeconds: 0, liked } },
+              );
+              likedRef.current = liked;
+              setLiked(liked);
+            } catch (e) {
+              setError(e.message);
+            }
+          }}
+        >
+          Like / unlike current track
+        </button>
+      )}
       {!unlocked && (
         <p className="form-footnote">
           Enable audio on each device to hear the shared playback.
@@ -188,11 +242,15 @@ export default function LoungeConsole({
   setRoom,
   clock,
   connection,
+  socketRef,
 }) {
   const member = room.members.find((m) => m.userId === session.user.id),
     host = member?.role === "host",
     dj = host || member?.role === "co_dj";
-  const disabled = room.mutationFrozen || connection !== "Connected";
+  const disabled =
+    room.status === "ended" ||
+    room.mutationFrozen ||
+    connection !== "Connected";
   const [busy, setBusy] = useState(false);
   const positions = useRef(new Map()),
     list = useRef(null);
@@ -248,8 +306,24 @@ export default function LoungeConsole({
           Unflushed changes may have been lost. The Host must resume.
         </div>
       )}
+      <SessionAnalytics api={api} loungeId={room.loungeId} />
+      {host && room.status !== "ended" && (
+        <button
+          className="secondary"
+          disabled={busy}
+          onClick={() => command("/end")}
+        >
+          End session
+        </button>
+      )}
+      {room.status === "ended" && (
+        <p role="status">
+          Session ended. Your listening history and analytics are ready.
+        </p>
+      )}
       <div className="console-grid">
         <Player
+          api={api}
           room={room}
           token={session.accessToken}
           clock={clock}
@@ -472,6 +546,17 @@ export default function LoungeConsole({
         api={api}
         run={run}
         command={command}
+      />
+      <SocialConsole
+        key={room.loungeId}
+        room={room}
+        session={session}
+        tracks={tracks}
+        api={api}
+        socketRef={socketRef}
+        clock={clock}
+        connected={connection === "Connected"}
+        dj={dj}
       />
     </>
   );

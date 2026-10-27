@@ -1,0 +1,25 @@
+{
+  "version": "phase4-authored-1",
+  "provenance": "150 original English examples authored with intended labels before the first evaluation; no scorer-generated labels. Synthetic development audit, not independently collected human chat or an independent annotator benchmark. Do not retune against this file.",
+  "positive": [
+    "I love the opening track.", "That bass is amazing.", "What an awesome chorus!", "This transition sounds excellent.", "The room feels fantastic tonight.", "Great selection, DJ.", "Such a good groove.", "Nice percussion on this one.", "The melody is beautiful.", "Brilliant timing on that switch.",
+    "A perfect track for this hour.", "Wonderful atmosphere in here.", "This makes me happy.", "I am excited for the next song.", "The set feels energetic.", "That chorus is uplifting.", "Such a catchy hook.", "This rhythm is groovy.", "The blend sounds smooth.", "I am having fun.",
+    "That drop is fire.", "An absolute banger.", "This is my favorite song here.", "The best part of my evening.", "Superb bass line.", "I adore these chords.", "An incredible performance.", "Gorgeous piano sound.", "A delightful surprise.", "Solid choice for the closer.",
+    "Impressive drums on this track.", "Cool, keep this playing.", "Really enjoying this, I love it.", "I enjoyed that selection.", "I liked the previous transition.", "We are loving the set.", "Not bad at all.", "This is not boring.", "Never a dull moment here.", "The new song is not awful.",
+    "I really love that synth.", "An extremely good ending.", "Absolutely brilliant selection.", "So happy to hear this.", "The track is very nice.", "I was tired, but this is amazing.", "Good melody and great rhythm.", "Beautiful, smooth, and catchy.", "That was wonderful, thank you.", "Yay, our track won!"
+  ],
+  "negative": [
+    "I hate this opening track.", "That bass sounds awful.", "A terrible chorus.", "This transition is bad.", "The set is boring tonight.", "I am bored with the repeats.", "A dull selection for this room.", "The percussion is annoying.", "I am annoyed by this loop.", "Horrible timing on that switch.",
+    "The worst track for this hour.", "A disappointing choice.", "I feel disappointed with the result.", "The atmosphere is unpleasant.", "Those high notes are harsh.", "This is painful to listen to.", "The song makes me sad.", "I am tired of this beat.", "This is making me sleepy.", "A weak ending to the set.",
+    "The mix sounds messy.", "Dreadful bass line.", "An irritating rhythm.", "That selection is rubbish.", "This drop is trash.", "The new song sucks.", "I dislike these chords.", "A miserable listening experience.", "The mood feels depressing.", "Please skip this one.",
+    "I hated the previous song.", "I disliked that last transition.", "I am hating this loop.", "Really awful choice.", "Extremely boring drums.", "Absolutely terrible timing.", "So annoying to hear it again.", "Very bad sound.", "Not good for this room.", "This is not great.",
+    "I do not like the selection.", "I don't love this beat.", "That chorus is not beautiful.", "The ending is never smooth.", "This does not feel uplifting.", "Good opening, but an awful and boring ending.", "Bad melody and harsh drums.", "Tired, bored, and disappointed.", "That was horrible, please change it.", "No fun in this set."
+  ],
+  "neutral": [
+    "What is the name of this track?", "Who produced the recording?", "How long is the song?", "Is the host online?", "I joined a minute ago.", "The clock shows two minutes.", "There are three tracks in the queue.", "My vote is on the second candidate.", "When does voting end?", "Can someone share the invite?",
+    "I am using headphones.", "The track has a piano.", "The drums start after the intro.", "This was recorded in a studio.", "The catalog lists the artist.", "I changed my vote.", "The next song is in 9A.", "Its tempo is 124 BPM.", "The player is paused.", "I will return in ten minutes.",
+    "Hello everyone.", "See you later.", "The host changed the room settings.", "I submitted a candidate.", "There are four people online.", "Could you repeat the title?", "My browser reconnected.", "The timer reached zero.", "I can see the chat now.", "The profile has no energy value.",
+    "Is this the album version?", "I have heard this track before.", "The singer enters at the bridge.", "Please turn the volume to fifty percent.", "That is the third track today.", "One vote per person, right?", "The battle ended in a tie.", "I am reading the source notes.", "Does this recording have a sample credit?", "The queue moved after the vote.",
+    "Nothing to add yet.", "I have no opinion on this track.", "It is neither good nor bad.", "Good drums, bad melody.", "I love the intro and hate the ending.", "Nice rhythm, awful vocals.", "Great chorus, terrible bridge.", "Happy and sad at the same time.", "The song ended at three minutes.", "Can we check the metadata?"
+  ]
+}
