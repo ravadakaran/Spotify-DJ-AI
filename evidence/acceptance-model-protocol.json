@@ -1,0 +1,134 @@
+{
+  "phase": "explicitly preloaded warm model",
+  "version": "real-model-grounding-2",
+  "model": "qwen2.5:1.5b-instruct",
+  "sourceMetadataOnly": "CC0 original-publisher metadata; no private library",
+  "supported": 20,
+  "unsupported": 10,
+  "cases": [
+    {
+      "question": "What is the BPM tempo?",
+      "supported": true
+    },
+    {
+      "question": "Tell me the tempo",
+      "supported": true
+    },
+    {
+      "question": "What is the Camelot key?",
+      "supported": true
+    },
+    {
+      "question": "Tell me the key",
+      "supported": true
+    },
+    {
+      "question": "What is the energy?",
+      "supported": true
+    },
+    {
+      "question": "Tell me the valence",
+      "supported": true
+    },
+    {
+      "question": "Who is the artist?",
+      "supported": true
+    },
+    {
+      "question": "What is the album?",
+      "supported": true
+    },
+    {
+      "question": "What is the license?",
+      "supported": true
+    },
+    {
+      "question": "What BPM does the publisher specify?",
+      "supported": true
+    },
+    {
+      "question": "What is the BPM tempo?",
+      "supported": true
+    },
+    {
+      "question": "Tell me the tempo",
+      "supported": true
+    },
+    {
+      "question": "What is the Camelot key?",
+      "supported": true
+    },
+    {
+      "question": "Tell me the key",
+      "supported": true
+    },
+    {
+      "question": "What is the energy?",
+      "supported": true
+    },
+    {
+      "question": "Tell me the valence",
+      "supported": true
+    },
+    {
+      "question": "Who is the artist?",
+      "supported": true
+    },
+    {
+      "question": "What is the album?",
+      "supported": true
+    },
+    {
+      "question": "What is the license?",
+      "supported": true
+    },
+    {
+      "question": "What BPM does the publisher specify?",
+      "supported": true
+    },
+    {
+      "question": "Who won a Nobel prize?",
+      "supported": false
+    },
+    {
+      "question": "Where did the singer attend school?",
+      "supported": false
+    },
+    {
+      "question": "What awards did this recording win?",
+      "supported": false
+    },
+    {
+      "question": "What is the drummer's birthday?",
+      "supported": false
+    },
+    {
+      "question": "Which concert premiered this piece?",
+      "supported": false
+    },
+    {
+      "question": "What is the secret access password?",
+      "supported": false
+    },
+    {
+      "question": "What is the artist's bank account?",
+      "supported": false
+    },
+    {
+      "question": "Who is the artist married to?",
+      "supported": false
+    },
+    {
+      "question": "What microphone was used?",
+      "supported": false
+    },
+    {
+      "question": "What is the mastering studio address?",
+      "supported": false
+    }
+  ],
+  "selectionDeadlineMs": 2300,
+  "transitionSamples": 30,
+  "transitionSpacingMs": 6100,
+  "clockMode": "Accelerated logical room position only; real monotonic trigger-to-DOM measurement including tick/publication/render; sequential requests, no concurrent benchmark"
+}

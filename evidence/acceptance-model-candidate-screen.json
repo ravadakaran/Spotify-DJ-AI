@@ -1,0 +1,613 @@
+{
+  "date": "2026-10-28T13:05:48.937Z",
+  "model": "qwen2.5:1.5b-instruct",
+  "kind": "Candidate Q&A screen; not a trigger-to-render benchmark",
+  "audit": [
+    {
+      "question": "What is the BPM tempo?",
+      "supported": true,
+      "answer": "BPM tempo: 130. Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:bpm",
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 2
+        },
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 4185.3432999999995,
+      "correct": true
+    },
+    {
+      "question": "Tell me the tempo",
+      "supported": true,
+      "answer": "BPM tempo: 130.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:bpm"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1901.9201000000003,
+      "correct": true
+    },
+    {
+      "question": "What is the Camelot key?",
+      "supported": true,
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 2
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1475.2171000000008,
+      "correct": true
+    },
+    {
+      "question": "Tell me the key",
+      "supported": true,
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1842.9228000000003,
+      "correct": true
+    },
+    {
+      "question": "What is the energy?",
+      "supported": true,
+      "answer": "Energy: 0.5.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:energy"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:energy",
+          "text": "Energy: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Energy",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1576.9619000000002,
+      "correct": true
+    },
+    {
+      "question": "Tell me the valence",
+      "supported": true,
+      "answer": "Valence: 0.5.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:valence"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:valence",
+          "text": "Valence: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Valence",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1211.451000000001,
+      "correct": true
+    },
+    {
+      "question": "Who is the artist?",
+      "supported": true,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 1813.4567000000006,
+      "correct": false
+    },
+    {
+      "question": "What is the album?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1943.937,
+      "correct": true
+    },
+    {
+      "question": "What is the license?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1722.2276000000002,
+      "correct": true
+    },
+    {
+      "question": "What BPM does the publisher specify?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 2
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 2194.4507000000012,
+      "correct": true
+    },
+    {
+      "question": "What is the BPM tempo?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 788.1767999999975,
+      "correct": true
+    },
+    {
+      "question": "Tell me the tempo",
+      "supported": true,
+      "answer": "BPM tempo: 130.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:bpm"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1168.6691000000028,
+      "correct": true
+    },
+    {
+      "question": "What is the Camelot key?",
+      "supported": true,
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 2
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 981.2960999999996,
+      "correct": true
+    },
+    {
+      "question": "Tell me the key",
+      "supported": true,
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1146.5750999999982,
+      "correct": true
+    },
+    {
+      "question": "What is the energy?",
+      "supported": true,
+      "answer": "Energy: 0.5.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:energy"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:energy",
+          "text": "Energy: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Energy",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 933.2239999999983,
+      "correct": true
+    },
+    {
+      "question": "Tell me the valence",
+      "supported": true,
+      "answer": "Valence: 0.5.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:valence"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:valence",
+          "text": "Valence: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Valence",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 1172.0182999999997,
+      "correct": true
+    },
+    {
+      "question": "Who is the artist?",
+      "supported": true,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 1658.1627000000008,
+      "correct": false
+    },
+    {
+      "question": "What is the album?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 779.9338000000025,
+      "correct": true
+    },
+    {
+      "question": "What is the license?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 812.2622999999985,
+      "correct": true
+    },
+    {
+      "question": "What BPM does the publisher specify?",
+      "supported": true,
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "candidate-audit-caesium:v1:publisher"
+      ],
+      "citations": [
+        {
+          "id": "candidate-audit-caesium:v1:publisher",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "candidate-audit-caesium",
+          "relevance": 2
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 904.2337000000007,
+      "correct": true
+    },
+    {
+      "question": "Who won a Nobel prize?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0023999999975785613,
+      "correct": true
+    },
+    {
+      "question": "Where did the singer attend school?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0017000000007101335,
+      "correct": true
+    },
+    {
+      "question": "What awards did this recording win?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0019000000029336661,
+      "correct": true
+    },
+    {
+      "question": "What is the drummer's birthday?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0021999999989930075,
+      "correct": true
+    },
+    {
+      "question": "Which concert premiered this piece?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0021999999989930075,
+      "correct": true
+    },
+    {
+      "question": "What is the secret access password?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.002799999998387648,
+      "correct": true
+    },
+    {
+      "question": "What is the artist's bank account?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 1467.111399999998,
+      "correct": true
+    },
+    {
+      "question": "Who is the artist married to?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 1417.0414999999994,
+      "correct": true
+    },
+    {
+      "question": "What microphone was used?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0017000000007101335,
+      "correct": true
+    },
+    {
+      "question": "What is the mastering studio address?",
+      "supported": false,
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0015999999959603883,
+      "correct": true
+    }
+  ],
+  "pass": false
+}

@@ -14,6 +14,8 @@ import { createAuth, publicUser } from "./auth.js";
 import { catalogRouter } from "./catalog.js";
 import { RoomService } from "./live-rooms.js";
 import { HttpError } from "./validation.js";
+import { requireId } from "./validation.js";
+import { explainCompatibility } from "./compatibility.js";
 import { root } from "./config.js";
 import { createThrottle } from "./throttle.js";
 
@@ -242,12 +244,26 @@ export function createApplication({
   app.post("/api/v1/auth/refresh", loginLimit, auth.origin, auth.refresh);
   app.post("/api/v1/auth/logout", auth.origin, auth.logout);
   const api = express.Router();
-  api.use(auth.middleware, generalLimit);
+  api.use(auth.middleware);
+  // Passive compatibility refreshes must not exhaust the command/catalog quota.
+  const compatibilityLimit = rateLimit({
+    windowMs: 60000,
+    limit: 30,
+    keyGenerator: (req) => req.auth.user._id,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    message: throttleError,
+  });
+  api.use((req, res, next) =>
+    req.method === "GET" && /^\/lounges\/[^/]+\/compatibility$/.test(req.path)
+      ? compatibilityLimit(req, res, next)
+      : generalLimit(req, res, next),
+  );
   api.get("/users/me", (req, res) =>
     res.json({ user: publicUser(req.auth.user) }),
   );
   api.use(personalRouter(models, rooms));
-  api.use(catalogRouter(models, auth, config));
+  api.use(catalogRouter(models, auth, config, rooms));
   api.post("/lounges", async (req, res) =>
     res
       .status(201)
@@ -269,6 +285,50 @@ export function createApplication({
         return rooms.snapshot(req.params.id);
       }),
     );
+  });
+  api.get("/lounges/:id/compatibility", async (req, res) => {
+    const loungeId = requireId(req.params.id);
+    if (typeof req.query.trackIds !== "string")
+      throw new HttpError(422, "INVALID_TRACK_IDS", "Choose 1–200 track IDs.");
+    const ids = req.query.trackIds.split(",");
+    if (!ids.length || ids.length > 200 || new Set(ids).size !== ids.length)
+      throw new HttpError(
+        422,
+        "INVALID_TRACK_IDS",
+        "Choose 1–200 distinct track IDs.",
+      );
+    ids.forEach(requireId);
+    const report = await rooms.serial(loungeId, async () => {
+      await rooms.member(loungeId, req.auth.user._id);
+      const state = await rooms.load(loungeId);
+      const currentId = state.nowPlaying?.trackId || state.seedTrackId;
+      const tracks = await models.Track.find({
+        _id: { $in: [...ids, currentId] },
+      }).lean();
+      const byId = new Map(tracks.map((track) => [track._id, track]));
+      const current = byId.get(currentId);
+      return {
+        epoch: state.epoch,
+        revision: state.revision,
+        currentTrackId: currentId,
+        currentProfileVersion: current?.profileVersion ?? null,
+        bpmTolerancePct: state.settings.bpmTolerancePct,
+        items: ids.map((trackId) => {
+          const track = byId.get(trackId);
+          return {
+            trackId,
+            profileVersion: track?.profileVersion ?? null,
+            acoustic: track?.acoustic ?? null,
+            ...explainCompatibility(
+              current,
+              track,
+              state.settings.bpmTolerancePct,
+            ),
+          };
+        }),
+      };
+    });
+    res.set("Cache-Control", "private, no-store").json(report);
   });
   for (const [method, route, type] of [
     ["post", "/lounges/:id/chat", "chat.message"],

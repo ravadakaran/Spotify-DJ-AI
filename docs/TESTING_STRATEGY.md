@@ -1,5 +1,9 @@
 # Testing strategy
 
+28 October 2026 IMP-002 adds catalog-management.integration.test.js for HTTP authentication/admin denial, strict validation, stale writes, replacement duration/timeline, failed-replacement preservation, shared/unshared deletion, concurrent edits/create-delete exclusion and cleanup containment. Isolated catalog-management.spec.js covers mobile edit/replace/preview/cancel/delete. Foundation browser scenarios each start/tear down their own disposable app/database to avoid sharing authentication throttle state. Run lint/build, the full concurrency/replay/RBAC suite and all browser tests. Test audio is generated silence. [Scope and failure limits](CATALOG_MANAGEMENT.md).
+
+28 October 2026 frontend redesign extends TEST-015 with stateful Like/Liked, expandable room management, five mobile sections, persistent chat drafts, a single audio element, fixed mini-player Play/Pause/return and 320/390/760/768/1024px overflow checks. Existing two-user playback/vote/battle/Q&A/reconnect/analytics/admin and rendered contrast/keyboard coverage remain. Browser evidence uses `liquid-glass-*`; historical Phase 6 artifacts remain separate. Run lint, production build, the full concurrency/replay/RBAC suite and the expanded browser journey. [Scope and limits](FRONTEND_REDESIGN.md).
+
 Phase 6 adds `phase-six.integration.test.js` for injection/origin/CSRF/body bounds, HTTP/socket end authorization, slow transport/isolation/readiness, and offline backup/clean restore/replay/validators/assets. `npm run benchmark` executes the default 60-second warmup/600-second two-room 10-client workload; BENCH_USERS supports up to 50. Reports count client failures, compare queue hashes and record per-client application delay/skew, REST, event-loop and memory samples. Browser verification adds recorded synthetic-media demo, rendered solid-color contrast/control names and keyboard checks. `npm run security:scan` scans current sources and reachable history signatures; full and production dependency audits are separate. [Exact methodology and limits](PHASE_SIX_IMPLEMENTATION.md).
 
 Phase 5 adds TEST-013/014 software checks: chronological split/baselines/coverage, bounded heartbeat and duplicate effects, paused playback, own-history isolation, HTTP/socket Host-only end, manual duration/presence audit against canonical events, and live worker swap/cold start. TEST-015 extends through like/end/analytics/dashboard/admin fitting and mobile overflow. The authored synthetic evaluator remains separate from normal-use held-out acceptance. [Phase 5 details](PHASE_FIVE_IMPLEMENTATION.md).
@@ -51,3 +55,15 @@ For grounding, manually audit a proposed ≥30 questions, including ≥10 unsupp
 ## CI and evidence
 
 Pull requests: lint, schema/unit/API tests and relevant persistence/socket integration suites. Release: full E2E, real-model evaluation, security scans, performance and restore rehearsal. Keep test reports under a future `evidence/` directory with no real passwords, emails or copyrighted media. Capture multi-session queue changes, one complete battle, valid segue plus grounded Q&A, sentiment shift, server-side RBAC denial, recommendation update and analytics reconciliation. The final retrospective must describe unmet targets and scope changes; no target is marked passed in this planning package.
+
+28 October 2026 enhancement: IMP-001 browser checks cover title filtering, no matches and selection retention alongside the existing create/queue/battle, keyboard and mobile journey. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: TEST-003/005/010: concurrent natural-end ticks consume one entry, current-profile/audio failures pause without dropping entries, reservation takes precedence, pause/freeze remain effective, and replay preserves advanced track paused. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+Natural-end browser coverage advances the authoritative test clock and observes queued-track playback without a skip command; the existing two-context journey remains separate. See AUTOMATIC_QUEUE_CONTINUATION.md for exact commands/results.
+
+28 October 2026 listening-flow enhancement: Add all-key/tempo explanation parity, room membership/bounds/current-profile read checks, >100-track title/artist cursor coverage, canonical/capped battle outcomes, and a browser journey for full-library paging, retained selection/search retry, stale-action resync, guide dismissal/reopen, mobile audio retry/browser block and object-URL cleanup. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: legal-audio and warm real-model evidence, failed independent sentiment quality, pending independent reader and ongoing final queue performance verification are documented in [acceptance closure](ACCEPTANCE_CLOSURE.md).
+
+Final 28 October 2026 acceptance regression: 63 tests / 15 suites, build and whitespace check passed. See [acceptance closure](ACCEPTANCE_CLOSURE.md) for browser, real-model, legal-media, sentiment and performance details.

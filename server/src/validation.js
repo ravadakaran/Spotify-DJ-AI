@@ -65,6 +65,19 @@ export const schemas = {
       timeline,
     })
     .strict(),
+  editTrack: z
+    .object({
+      expectedProfileVersion: z.number().int().positive(),
+      title: str(160),
+      artist: str(160),
+      assetId: z.uuid().nullable(),
+      acoustic,
+      timeline,
+    })
+    .strict(),
+  deleteTrack: z
+    .object({ expectedProfileVersion: z.number().int().positive() })
+    .strict(),
 };
 export function parse(schema, body) {
   return schema.parse(body);

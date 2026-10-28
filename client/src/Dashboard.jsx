@@ -1,54 +1,152 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 export function SessionAnalytics({ api, loungeId }) {
   const [summary, setSummary] = useState(null),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [loading, setLoading] = useState(false);
+  const current = useRef(loungeId),
+    request = useRef(0);
+  current.current = loungeId;
+  useEffect(() => {
+    setSummary(null);
+    setError("");
+  }, [loungeId]);
+  async function load() {
+    const requestId = ++request.current;
+    setLoading(true);
+    setError("");
+    try {
+      const result = await api(`/lounges/${loungeId}/analytics`);
+      if (current.current === loungeId && request.current === requestId)
+        setSummary(result);
+    } catch (e) {
+      if (current.current === loungeId && request.current === requestId)
+        setError(e.message);
+    } finally {
+      if (current.current === loungeId && request.current === requestId)
+        setLoading(false);
+    }
+  }
   return (
     <details
       className="panel"
-      onToggle={(e) => {
-        if (e.currentTarget.open)
-          api(`/lounges/${loungeId}/analytics`)
-            .then(setSummary)
-            .catch((e) => setError(e.message));
+      onToggle={(event) => {
+        if (event.currentTarget.open) load();
       }}
     >
       <summary>Session analytics</summary>
-      {error && <p role="alert">{error}</p>}
+      {loading && <p role="status">Loading session recap…</p>}
+      {error && (
+        <p role="alert">
+          {error}{" "}
+          <button type="button" onClick={load}>
+            Retry session recap
+          </button>
+        </p>
+      )}
       {summary?.summaryStatus === "complete" ? (
         <>
-          <p>
-            {summary.durationSeconds.toFixed(1)} seconds · Peak{" "}
-            {summary.peakParticipants} listeners · {summary.battleCount} battles
-            · {summary.questionCount} questions
+          <h3>Your session recap</h3>
+          <dl className="session-recap">
+            <div>
+              <dt>Session duration</dt>
+              <dd>
+                {Math.floor(summary.durationSeconds / 60)}m{" "}
+                {Math.floor(summary.durationSeconds % 60)}s
+              </dd>
+            </div>
+            <div>
+              <dt>Peak listeners</dt>
+              <dd>{summary.peakParticipants}</dd>
+            </div>
+            <div>
+              <dt>Battles opened</dt>
+              <dd>{summary.battleCount}</dd>
+            </div>
+            <div>
+              <dt>Questions asked</dt>
+              <dd>{summary.questionCount}</dd>
+            </div>
+          </dl>
+          <p className="subtle">
+            Duration includes pauses from first playback to session end. Track
+            history lists each playback in order.
           </p>
+          <h3>Track history</h3>
+          {summary.trackHistory.length ? (
+            <ol className="recap-scroll">
+              {summary.trackHistory.map((track) => (
+                <li key={track.playbackId}>
+                  <strong>{track.title}</strong> — {track.artist}
+                  <br />
+                  <small>
+                    Started{" "}
+                    <time dateTime={track.startedAt}>
+                      {new Date(track.startedAt).toLocaleTimeString()}
+                    </time>
+                  </small>
+                </li>
+              ))}
+            </ol>
+          ) : (
+            <p>No tracks were started during this session.</p>
+          )}
+          <h3>Soundclash results</h3>
+          {!Array.isArray(summary.battleOutcomes) ? (
+            <p>Battle results are unavailable in this older recap.</p>
+          ) : (
+            <>
+              <p>
+                {summary.resolvedBattleCount} battles resolved
+                {summary.battleOutcomesTruncated
+                  ? "; showing the latest 100 results"
+                  : ""}
+                .
+              </p>
+              <ol className="recap-scroll">
+                {summary.battleOutcomes.map((battle, index) => (
+                  <li key={`${battle.at}-${index}`}>
+                    <strong>{battle.title}</strong> —{" "}
+                    {battle.applicationStatus === "reserved"
+                      ? "Reserved next"
+                      : "Queued for later"}
+                    <br />
+                    <small>{battle.reason}</small>
+                  </li>
+                ))}
+              </ol>
+            </>
+          )}
           <h3>Sentiment timeline</h3>
-          <div style={{ maxHeight: 220, overflow: "auto" }}>
-            {summary.sentimentTimeline.map((s, i) => (
-              <p key={i}>
-                <time>{s.at}</time>{" "}
+          <div className="recap-scroll">
+            {summary.sentimentTimeline.map((sample, index) => (
+              <p key={index}>
+                <time dateTime={sample.at}>
+                  {new Date(sample.at).toLocaleTimeString()}
+                </time>{" "}
                 <meter
                   min="-1"
                   max="1"
-                  value={s.rollingScore}
-                  aria-label={`Sentiment ${s.rollingScore}`}
+                  value={sample.rollingScore}
+                  aria-label={`Sentiment ${sample.rollingScore}`}
                 />{" "}
-                {s.rollingScore}
+                {sample.rollingScore}
               </p>
             ))}
           </div>
-          <h3>Track history</h3>
-          <ol>
-            {summary.trackHistory.map((t) => (
-              <li key={t.playbackId}>
-                {t.title} — {t.artist}
-              </li>
-            ))}
-          </ol>
+          {!summary.sentimentTimeline.length && (
+            <p>No sentiment samples were recorded.</p>
+          )}
         </>
       ) : (
-        <p className="subtle">
-          The summary becomes available after the Host ends the session.
-        </p>
+        !loading &&
+        !error && (
+          <p className="subtle">
+            The summary becomes available after the Host ends the session.{" "}
+            <button type="button" onClick={load}>
+              Refresh session recap
+            </button>
+          </p>
+        )
       )}
     </details>
   );

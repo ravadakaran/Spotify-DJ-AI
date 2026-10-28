@@ -1,5 +1,9 @@
 # Ordered implementation backlog
 
+28 October 2026 IMP-002: admin catalog title/artist/acoustic editing, audio replacement and confirmed deletion implemented with server RBAC, optimistic versions, idle-room exclusion and contained/shared-file cleanup. TEST-001/002/010/011/015 coverage and actual validation are in [catalog management](CATALOG_MANAGEMENT.md) and [status](IMPLEMENTATION_STATUS.md). Release gates remain open.
+
+28 October 2026 additional user scope: implement the frontend review and liquid-glass redesign without changing backend requirements. Layout, player, mobile sections, room management and theme are described in [frontend redesign](FRONTEND_REDESIGN.md); verification results are in [implementation status](IMPLEMENTATION_STATUS.md). Existing release-gate tasks retain their statuses.
+
 Phase 6 implementation update (28 October 2026): TASK-024–027 now have software, automated evidence tooling, a synthetic browser recording and operating/retrospective documents. Parent tasks remain unchecked where their full acceptance includes unmeasured real-model AI latency, comprehensive accessibility, actual target-host TLS deployment or upstream data/license gates. Checked software sub-items and current evidence are in [the phase checklist](PHASE_TODO_LIST.md) and [Phase 6 details](PHASE_SIX_IMPLEMENTATION.md).
 
 Phases 1–3 have software implementations; Phase 3 real-model/legal-chain acceptance remains open (see PHASE_THREE_IMPLEMENTATION.md); unchecked tasks may contain completed sub-items in [the phase checklist](PHASE_TODO_LIST.md). Phase 0 media/model gates and later release gates remain open. See [implementation status](IMPLEMENTATION_STATUS.md) for evidence and scope gaps. P0 means release-critical prerequisite, P1 means required MVP, P2 means optional later work. Phase order is in [implementation plan](IMPLEMENTATION_PLAN.md); TEST IDs refer to [testing](TESTING_STRATEGY.md). Dependencies are task IDs, not calendar dates. Every task's DoD includes reviewed code, relevant passing checks and updated documentation.
@@ -51,3 +55,11 @@ Phase 2 completion (21 October 2026): TASK-009–013 are implemented and verifie
 Phase 4 software is implemented. TASK-018 remains unchecked pending an independently authored held-out sentiment evaluation; the synthetic 150-example audit scored 149/150. See PHASE_FOUR_IMPLEMENTATION.md for actual bounds and tests.
 
 Phase 5 software for TASK-020/021 is implemented; their normal-use held-out dataset/Precision@5 acceptance remains open. TASK-022/023 software and browser checks are recorded in [Phase 5 implementation](PHASE_FIVE_IMPLEMENTATION.md).
+
+28 October 2026 enhancement: IMP-001 loaded-catalog picker is implemented; full-catalog pagination/loading/retry remains pending. IMP-002–008 and all existing release gates retain their open status. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: User-requested natural-end continuation extends TASK-013/016; blocked/empty queues pause, with no release-gate closure. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 listening-flow enhancement: Implemented an incremental slice across IMP-001/002/003/004/006/009/010: paginated full-library picker, compatibility labels, recovery/resync, guides, reservation notice and canonical recap. IMP-005 broader assistive-technology review and original release gates remain open. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: legal-audio and warm real-model evidence, failed independent sentiment quality, pending independent reader and ongoing final queue performance verification are documented in [acceptance closure](ACCEPTANCE_CLOSURE.md).

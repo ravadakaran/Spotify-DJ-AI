@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-28T12:35:50.361Z",
+  "error": "locator.waitFor: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('Connected', { exact: true }) to be visible\u001b[22m\n",
+  "samples": [
+    {
+      "track": "Hydrogen",
+      "clients": [
+        {
+          "title": "Hydrogen",
+          "at": "2026-10-28T12:35:17.875Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.09218910667784139
+          },
+          "currentTime": 0.698667,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        },
+        {
+          "title": "Hydrogen",
+          "at": "2026-10-28T12:35:17.792Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.012837358017773647
+          },
+          "currentTime": 0.650667,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        }
+      ]
+    },
+    {
+      "track": "Rubidium",
+      "clients": [
+        {
+          "title": "Rubidium",
+          "at": "2026-10-28T12:35:19.086Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.2804873345002656
+          },
+          "currentTime": 0.699535,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        },
+        {
+          "title": "Rubidium",
+          "at": "2026-10-28T12:35:19.054Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.275869402356
+          },
+          "currentTime": 0.68,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        }
+      ]
+    },
+    {
+      "track": "Caesium",
+      "clients": [
+        {
+          "title": "Caesium",
+          "at": "2026-10-28T12:35:20.292Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.00246424876214707
+          },
+          "currentTime": 0.701333,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        },
+        {
+          "title": "Caesium",
+          "at": "2026-10-28T12:35:20.279Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.0025482330328956437
+          },
+          "currentTime": 0.698173,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

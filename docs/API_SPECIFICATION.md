@@ -1,5 +1,9 @@
 # API specification
 
+28 October 2026 IMP-002 adds admin `PUT /tracks/:id` (complete title/artist/acoustic/timeline/asset edit with expectedProfileVersion) and `DELETE /tracks/:id` (expectedProfileVersion). Both require all lounges ended; replacement uses existing POST /assets, derives duration and clears the prior timeline. Responses include assetCleanup. Existing examples and socket events remain supported. [Payloads, errors and cleanup](CATALOG_MANAGEMENT.md).
+
+28 October 2026 frontend redesign changes no endpoint, request payload, mandatory example or socket event name. Play/Pause and Like/Liked use existing commands. [Frontend compatibility](FRONTEND_REDESIGN.md).
+
 Phase 6 preserves all HTTP examples and socket event names. Health routes are `/api/v1/health/live` and `/api/v1/health/ready`. `TRUST_LOOPBACK_PROXY=true` enables loopback-only forwarded HTTP client addresses. Socket transport handshake allowance is bounded at 120/minute per peer; slow transports exceeding 20 queued packets are disconnected and must resync. No operational backup API is exposed. [Contracts and limitations](PHASE_SIX_IMPLEMENTATION.md).
 
 Phase 5 implements interaction PUT, dashboard/recommendations, paginated own lounges, own-session analytics and admin job POST/GET. Socket commands add interaction.record and Host-only room.end. End returns synchronous 200 with acknowledgement and summaryStatus:complete after the flush barrier, replacing the planned 202. Analytics returns 202 while unavailable. Dashboard/recommendation reads declare durability/cutoff and bounded scope. [Exact definitions and limitations](PHASE_FIVE_IMPLEMENTATION.md).
@@ -146,3 +150,11 @@ Envelope extends PRD shape: `{event,loungeId,payload,ts,epoch,revision,eventSeq:
 | lounge.sync.ping / lounge.sync.pong | Client→server / server→client | `{clientSentAt,serverReceivedAt,serverSentAt}` for RTT/clock offset |
 
 Publish one snapshot as the atomic room-state update; specialized events drive notifications/history and must not independently mutate queue order. All events from one command share its revision; each event carries a 0-indexed `eventSeq` within that revision (persisted under unique `(loungeId,epoch,revision,eventSeq)`), deduplicated by `(epoch,revision,eventSeq)`, while queue snapshot replacement ignores revisions ≤ current. Event gaps trigger resync. Slow clients receive disconnect/resync rather than unbounded outbound buffers. Chat pagination plus snapshot restores history after dropped delivery. Closed/removed membership immediately detaches its sockets. All these behaviors require tests; delivery is not presumed exactly once.
+
+28 October 2026 enhancement: Track-picker enhancement retains existing GET /tracks, create, queue and battle contracts and socket names. Search is over the already loaded catalog page. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: Natural completion automatically advances reserved entry or queue head when playable and compatible. Existing playback actions and snapshot/socket contracts are unchanged. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 listening-flow enhancement: Add GET /lounges/:id/compatibility?trackIds=<1–200 distinct comma-separated UUIDs> for current members, limited to 30 reads/minute per identity. Response includes epoch/revision/current track/profile version/tolerance and per-track profileVersion/acoustic/eligible/reasons. GET /tracks q now matches literal title OR artist with existing cursor semantics. Analytics adds optional bounded battle-result fields; socket names and mutation payloads remain unchanged. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: the Ollama adapter selects bounded aliases then maps them to captured versioned citations; actual real-model warm evaluation and failures are recorded in [acceptance closure](ACCEPTANCE_CLOSURE.md). Source selection remains constrained and does not change socket/API contracts.

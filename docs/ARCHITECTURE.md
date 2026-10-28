@@ -1,5 +1,9 @@
 # Architecture
 
+28 October 2026 IMP-002: a bounded RoomService catalog FIFO serializes room creation, track creation, whole-track edits and deletion; the idle-lounge check is inside the lock. Existing profile-version compare-and-set prevents stale writes. Post-mutation cleanup preserves shared assets and enforces real-path containment. No queue/reducer/socket change. [Authority and failure boundaries](CATALOG_MANAGEMENT.md).
+
+28 October 2026 frontend redesign preserves the deployed architecture, room FIFO and snapshot protocol. Mobile section selection is local presentation state; the sole Player and social components remain mounted across section changes. [Frontend layout and integrity boundaries](FRONTEND_REDESIGN.md).
+
 Phase 6 retains one process/one database pool and unchanged room FIFO/reducer. It adds an offline streaming logical backup, bounded client-application timing harness, loopback HTTP proxy trust and deployment templates. Snapshot buffers still disconnect slow transports. [As-built protocol and limits](PHASE_SIX_IMPLEMENTATION.md).
 
 Phase 5 adds an in-process personal API module and bounded worker-thread recommendation fitting with durable-before-swap artifacts. Interaction events and end summaries share room batching/transactions; no additional service or database client. [As-built limits and end barrier](PHASE_FIVE_IMPLEMENTATION.md).
@@ -98,3 +102,11 @@ On graceful shutdown stop new commands, flush, save recovery snapshot, close soc
 Sentiment ticks and battle deadlines use timers; CPU-heavy recommendation fitting uses a worker thread. Retrieval is a small in-process lexical index over authored metadata; no vector DB. Room event buffers and short-lived metadata cache are bounded. Versioned catalog updates invalidate cache and pending proposals. No Redis/change streams needed because every mutation already passes through the gateway. Multiple rooms share the process with isolated state and per-room queues.
 
 Deploy one app instance and persistent MongoDB/asset volumes on a private host. Additional instances would need distributed ownership/fencing and shared fan-out; explicitly excluded from this implementation. Record active-room count, batch lag, buffer length, reconnects, event latency, generation latency/fallback, and authorization failures. `/health/live` measures process liveness; `/health/ready` requires DB access, writable asset volume and functioning writer. LLM failure degrades generation, not core availability. [Environment setup](ENVIRONMENT_SETUP.md) defines operational rollout and rollback.
+
+28 October 2026 enhancement: A shared client TrackPicker filters the loaded catalog for create/queue/battle forms. Server room authority and eligibility remain unchanged. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: Server tick performs natural-end continuation inside the room FIFO through existing playback.start events and current-profile checks. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 listening-flow enhancement: TrackPicker uses one bounded result page; compatibility is read within room authority and refreshed on relevant changes/30-second intervals. Full/mobile players share device state; server clock and queue authority are unchanged. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: snapshots omit private fields before deep cloning; reducer shares append-only receipt history while mutable state and writer checkpoints remain isolated. Event formats and recovery semantics are unchanged. See [acceptance closure](ACCEPTANCE_CLOSURE.md).

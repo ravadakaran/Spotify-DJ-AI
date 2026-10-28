@@ -307,62 +307,79 @@ test("host transfer, moderation, removal, leave, lock and invite rotation enforc
 });
 
 test("writer transaction failure degrades readiness, stops mutations and retries without duplicate events", async () => {
-  const { room } = await roomFor();
-  await app.rooms.writer.flush();
-  await command(room, users[0], "queue.enqueue", {
-    trackId: seedProfiles[1]._id,
-  });
-  const connection = app.rooms.writer.connection;
-  app.rooms.writer.connection = {
-    transaction: async (callback) =>
-      connection.transaction(async (session) => {
-        await callback(session);
-        throw new Error("Injected unavailable database");
-      }),
-  };
+  const writer = app.rooms.writer;
+  const originalConnection = writer.connection;
+  // Fault injection is deterministic; automatic cadence is verified separately.
+  writer.stop();
   try {
-    await expect(app.rooms.writer.flush()).rejects.toThrow("Injected");
-    await request(app.app).get("/api/v1/health/ready").expect(503);
+    const { room } = await roomFor();
+    await app.rooms.writer.flush();
+    await command(room, users[0], "queue.enqueue", {
+      trackId: seedProfiles[1]._id,
+    });
+    const connection = app.rooms.writer.connection;
+    app.rooms.writer.connection = {
+      transaction: async (callback) =>
+        connection.transaction(async (session) => {
+          await callback(session);
+          throw new Error("Injected unavailable database");
+        }),
+    };
+    try {
+      await expect(app.rooms.writer.flush()).rejects.toThrow("Injected");
+      await request(app.app).get("/api/v1/health/ready").expect(503);
+      expect(
+        await db.models.QueueEvent.countDocuments({
+          loungeId: room.loungeId,
+          type: "queue.enqueue",
+        }),
+      ).toBe(0);
+      const buffered = app.rooms.writer.buffer.length;
+      for (let i = 0; i < 10; i++)
+        await expect(
+          command(room, users[0], "queue.enqueue", {
+            trackId: seedProfiles[2]._id,
+          }),
+        ).rejects.toMatchObject({ status: 503 });
+      expect(app.rooms.writer.buffer.length).toBe(buffered);
+    } finally {
+      app.rooms.writer.connection = connection;
+    }
+    await app.rooms.writer.flush();
+    await app.rooms.tick();
+    await app.rooms.writer.flush();
+    await request(app.app).get("/api/v1/health/ready").expect(200);
     expect(
       await db.models.QueueEvent.countDocuments({
         loungeId: room.loungeId,
         type: "queue.enqueue",
       }),
-    ).toBe(0);
-    const buffered = app.rooms.writer.buffer.length;
-    for (let i = 0; i < 10; i++)
-      await expect(
-        command(room, users[0], "queue.enqueue", {
-          trackId: seedProfiles[2]._id,
+    ).toBe(1);
+    await command(room, users[0], "queue.enqueue", {
+      trackId: seedProfiles[2]._id,
+    });
+    app.rooms.writer.connection = {
+      transaction: async (callback) => {
+        await connection.transaction(callback);
+        throw new Error("Injected lost commit response");
+      },
+    };
+    try {
+      await expect(app.rooms.writer.flush()).rejects.toThrow(
+        "lost commit response",
+      );
+      expect(
+        await db.models.QueueEvent.countDocuments({
+          loungeId: room.loungeId,
+          type: "queue.enqueue",
         }),
-      ).rejects.toMatchObject({ status: 503 });
-    expect(app.rooms.writer.buffer.length).toBe(buffered);
-  } finally {
-    app.rooms.writer.connection = connection;
-  }
-  await app.rooms.writer.flush();
-  await app.rooms.tick();
-  await app.rooms.writer.flush();
-  await request(app.app).get("/api/v1/health/ready").expect(200);
-  expect(
-    await db.models.QueueEvent.countDocuments({
-      loungeId: room.loungeId,
-      type: "queue.enqueue",
-    }),
-  ).toBe(1);
-  await command(room, users[0], "queue.enqueue", {
-    trackId: seedProfiles[2]._id,
-  });
-  app.rooms.writer.connection = {
-    transaction: async (callback) => {
-      await connection.transaction(callback);
-      throw new Error("Injected lost commit response");
-    },
-  };
-  try {
-    await expect(app.rooms.writer.flush()).rejects.toThrow(
-      "lost commit response",
-    );
+      ).toBe(2);
+    } finally {
+      app.rooms.writer.connection = connection;
+    }
+    await app.rooms.writer.flush();
+    await app.rooms.tick();
+    await app.rooms.writer.flush();
     expect(
       await db.models.QueueEvent.countDocuments({
         loungeId: room.loungeId,
@@ -370,17 +387,12 @@ test("writer transaction failure degrades readiness, stops mutations and retries
       }),
     ).toBe(2);
   } finally {
-    app.rooms.writer.connection = connection;
+    writer.connection = originalConnection;
+    await writer.flush();
+    await app.rooms.tick();
+    writer.timer = setInterval(() => writer.flush().catch(() => {}), 1000);
+    writer.timer.unref();
   }
-  await app.rooms.writer.flush();
-  await app.rooms.tick();
-  await app.rooms.writer.flush();
-  expect(
-    await db.models.QueueEvent.countDocuments({
-      loungeId: room.loungeId,
-      type: "queue.enqueue",
-    }),
-  ).toBe(2);
 });
 
 test("one-second flush cadence persists a small batch without a manual flush", async () => {

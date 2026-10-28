@@ -11,6 +11,7 @@ import { RoomService } from "../src/live-rooms.js";
 
 let f, host, guest, room, socket;
 beforeAll(async () => {
+  await mkdir("evidence", { recursive: true });
   f = await fixture();
   host = await f.user(1);
   guest = await f.user(2);

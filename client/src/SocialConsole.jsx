@@ -1,3 +1,4 @@
+import TrackPicker from "./TrackPicker.jsx";
 import React, { useEffect, useRef, useState } from "react";
 const emojis = ["👍", "❤️", "🔥", "🎵"];
 export default function SocialConsole({
@@ -69,7 +70,16 @@ export default function SocialConsole({
         },
       });
     } catch (e) {
-      setError(e.message);
+      if (
+        ["STALE_REVISION", "STALE_PROPOSAL", "STALE_GENERATION"].includes(
+          e.code,
+        )
+      ) {
+        socketRef.current?.emit("lounge.resync", { loungeId: room.loungeId });
+        setError(
+          "The lounge changed. Refreshing now; your draft and selection are kept. Review the current state, then submit again.",
+        );
+      } else setError(e.message);
       throw e;
     } finally {
       setBusy(false);
@@ -99,7 +109,11 @@ export default function SocialConsole({
     ) || [];
   return (
     <div className="console-grid social-console">
-      <section className="panel" aria-labelledby="chat-heading">
+      <section
+        className="panel chat-panel"
+        id="room-chat"
+        aria-labelledby="chat-heading"
+      >
         <h2 id="chat-heading">Room chat</h2>
         <p className="subtle" data-testid="sentiment">
           Room mood:{" "}
@@ -210,6 +224,7 @@ export default function SocialConsole({
           <label>
             Message
             <textarea
+              aria-label="Message"
               value={body}
               maxLength={1000}
               required
@@ -238,7 +253,11 @@ export default function SocialConsole({
           )}
         </form>
       </section>
-      <section className="panel" aria-labelledby="battle-heading">
+      <section
+        className="panel battle-panel"
+        id="room-battle"
+        aria-labelledby="battle-heading"
+      >
         <h2 id="battle-heading">Soundclash</h2>
         <p className="subtle">
           Submit a track, then vote for the next selection. Incompatible winners
@@ -259,16 +278,12 @@ export default function SocialConsole({
                 }).catch(() => {});
               }}
             >
-              <label>
-                Battle track
-                <select name="trackId" required>
-                  {tracks.map((t) => (
-                    <option value={t.trackId} key={t.trackId}>
-                      {t.title}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <TrackPicker
+                room={room}
+                api={api}
+                tracks={tracks}
+                label="Battle track"
+              />
               <button
                 disabled={
                   busy ||
@@ -300,8 +315,19 @@ export default function SocialConsole({
                   : `Battle ${battle.status}`}
             </p>
             {battle.candidates.map((c, i) => (
-              <div className="battle-candidate" key={c.candidateId}>
+              <div
+                className={`battle-candidate${battle.winnerCandidateId === c.candidateId ? " is-winner" : ""}`}
+                key={c.candidateId}
+              >
                 <strong>{c.track.title}</strong>
+                {battle.winnerCandidateId === c.candidateId && (
+                  <span className="winner-label">
+                    Winner ·{" "}
+                    {battle.applicationStatus === "reserved"
+                      ? "Reserved next"
+                      : "Queued for later"}
+                  </span>
+                )}
                 <span>{counts[i]} votes</span>
                 <meter
                   aria-label={`Votes for ${c.track.title}`}

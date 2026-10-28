@@ -69,3 +69,19 @@ test("listening accrual stops at track end and preserves replay determinism", ()
   expect(reduceRoom(state, event)).toEqual(next);
   expect(state.listeningMeters.u.available).toBe(0);
 });
+
+import { summarize } from "../src/session-analytics.js";
+test("recap battle outcomes use canonical resolution facts and cap detail without losing total", () => {
+  const events = Array.from({length:105}, (_, index) => ({
+    type:"battle.resolved", occurredAt:new Date(1000 * index), payload:{
+      winningTrackId:`track-${index}`, track:{title:`Winner ${index}`,artist:"Original fixture"},
+      applicationStatus:index%2 ? "reserved":"deferred", announcement:{body:`Canonical reason ${index}`},
+    },
+  }));
+  const summary=summarize(events);
+  expect(summary.resolvedBattleCount).toBe(105);
+  expect(summary.battleOutcomes).toHaveLength(100);
+  expect(summary.battleOutcomesTruncated).toBe(true);
+  expect(summary.battleOutcomes[0]).toMatchObject({trackId:"track-5",reason:"Canonical reason 5",applicationStatus:"reserved"});
+  expect(summarize([]).battleOutcomes).toEqual([]);
+});

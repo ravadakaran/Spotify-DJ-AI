@@ -1,7 +1,14 @@
 import { Router } from "express";
 import multer from "multer";
 import path from "node:path";
-import { mkdir, writeFile, unlink, stat, realpath } from "node:fs/promises";
+import {
+  mkdir,
+  writeFile,
+  unlink,
+  stat,
+  realpath,
+  readFile,
+} from "node:fs/promises";
 import { createReadStream } from "node:fs";
 import { randomUUID } from "node:crypto";
 import { inspectAudio } from "./audio.js";
@@ -32,8 +39,44 @@ export function parseRange(header, size) {
     throw new HttpError(416, "INVALID_RANGE", "Unsatisfiable byte range.");
   return { start, end: Math.min(end, size - 1) };
 }
-export function catalogRouter(models, auth, config) {
+export function catalogRouter(models, auth, config, rooms) {
   const router = Router();
+  const serial = (action) => rooms.serial("catalog", action);
+  async function requireIdle() {
+    if (await models.Lounge.exists({ status: { $ne: "ended" } }))
+      throw new HttpError(
+        409,
+        "CATALOG_IN_USE",
+        "End all lounges before editing, replacing or deleting tracks.",
+      );
+  }
+  async function assetPath(asset) {
+    const root = await realpath(config.assetRoot);
+    const target = await realpath(path.join(root, asset.storageKey));
+    const relative = path.relative(root, target);
+    if (relative.startsWith("..") || path.isAbsolute(relative))
+      throw new HttpError(403, "INVALID_PATH", "Asset path is invalid.");
+    return target;
+  }
+  // DB and filesystem cannot commit atomically. A failed cleanup retains the
+  // asset record for operator recovery; it never rolls back a saved track.
+  async function cleanupAsset(id) {
+    if (!id) return "none";
+    try {
+      if (await models.Track.exists({ assetId: id })) return "shared";
+      const asset = await models.Asset.findById(id);
+      if (!asset) return "none";
+      try {
+        await unlink(await assetPath(asset));
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+      }
+      await models.Asset.deleteOne({ _id: id });
+      return "removed";
+    } catch {
+      return "retained";
+    }
+  }
   const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 25 * 1024 * 1024, files: 1, fields: 2 },
@@ -162,11 +205,13 @@ export function catalogRouter(models, auth, config) {
         "Invalid pagination or search.",
       );
     const filter = {};
-    if (req.query.q)
-      filter.title = {
+    if (req.query.q) {
+      const search = {
         $regex: req.query.q.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
         $options: "i",
       };
+      filter.$and = [{ $or: [{ title: search }, { artist: search }] }];
+    }
     if (req.query.cursor) {
       let cursor;
       try {
@@ -202,17 +247,119 @@ export function catalogRouter(models, auth, config) {
           : null,
     });
   });
-  router.post("/tracks", auth.admin, async (req, res) => {
-    const body = parse(schemas.track, req.body);
-    validateTimeline(body.timeline, body.durationSeconds);
-    if (!(await models.Asset.exists({ _id: body.assetId })))
-      throw new HttpError(
-        422,
-        "INVALID_ASSET",
-        "Upload a licensed local asset first.",
+  router.post("/tracks", auth.admin, async (req, res) =>
+    serial(async () => {
+      const body = parse(schemas.track, req.body);
+      validateTimeline(body.timeline, body.durationSeconds);
+      if (!(await models.Asset.exists({ _id: body.assetId })))
+        throw new HttpError(
+          422,
+          "INVALID_ASSET",
+          "Upload a licensed local asset first.",
+        );
+      res.status(201).json(profile(await models.Track.create(body)));
+    }),
+  );
+  router.put("/tracks/:id", auth.admin, async (req, res) =>
+    serial(async () => {
+      const id = requireId(req.params.id);
+      const body = parse(schemas.editTrack, req.body);
+      await requireIdle();
+      const original = await models.Track.findById(id);
+      if (!original) throw new HttpError(404, "NOT_FOUND", "Track not found.");
+      if (original.profileVersion !== body.expectedProfileVersion)
+        throw new HttpError(
+          409,
+          "STALE_PROFILE",
+          "Reload the track before editing.",
+        );
+      const replacing = body.assetId !== original.assetId;
+      let durationSeconds = original.durationSeconds;
+      if (replacing) {
+        if (!body.assetId)
+          throw new HttpError(
+            422,
+            "INVALID_ASSET",
+            "Choose replacement audio or delete the track.",
+          );
+        const asset = await models.Asset.findById(body.assetId);
+        if (!asset)
+          throw new HttpError(
+            422,
+            "INVALID_ASSET",
+            "Upload a licensed local asset first.",
+          );
+        try {
+          const target = await assetPath(asset);
+          if ((await stat(target)).size > 25 * 1024 * 1024)
+            throw new Error("Replacement audio exceeds 25 MiB.");
+          const { metadata } = await inspectAudio(await readFile(target));
+          durationSeconds = metadata.format.duration;
+        } catch (error) {
+          if (error instanceof HttpError) throw error;
+          throw new HttpError(
+            422,
+            "INVALID_AUDIO",
+            "Replacement audio is unavailable or invalid. Upload a valid file up to 25 MiB.",
+          );
+        }
+        if (body.timeline.length)
+          throw new HttpError(
+            422,
+            "INVALID_TIMELINE",
+            "Replacement audio requires clearing the previous timeline.",
+          );
+      }
+      validateTimeline(body.timeline, durationSeconds);
+      const { expectedProfileVersion, ...values } = body;
+      const track = await models.Track.findOneAndUpdate(
+        { _id: id, profileVersion: expectedProfileVersion },
+        {
+          $set: {
+            ...values,
+            durationSeconds,
+            profileStatus: "ready",
+            demoMetadataOnly: !body.assetId,
+          },
+          $inc: { profileVersion: 1 },
+        },
+        { new: true, runValidators: true },
       );
-    res.status(201).json(profile(await models.Track.create(body)));
-  });
+      if (!track)
+        throw new HttpError(
+          409,
+          "STALE_PROFILE",
+          "Reload the track before editing.",
+        );
+      const assetCleanup = replacing
+        ? await cleanupAsset(original.assetId)
+        : "none";
+      res.json({ ...profile(track), assetCleanup });
+    }),
+  );
+  router.delete("/tracks/:id", auth.admin, async (req, res) =>
+    serial(async () => {
+      const id = requireId(req.params.id);
+      const body = parse(schemas.deleteTrack, req.body);
+      await requireIdle();
+      const original = await models.Track.findById(id);
+      if (!original) throw new HttpError(404, "NOT_FOUND", "Track not found.");
+      const result = await models.Track.deleteOne({
+        _id: id,
+        profileVersion: body.expectedProfileVersion,
+      });
+      if (!result.deletedCount)
+        throw new HttpError(
+          409,
+          "STALE_PROFILE",
+          "Reload the track before deleting.",
+        );
+      res.json({
+        trackId: id,
+        assetCleanup: await cleanupAsset(original.assetId),
+      });
+    }),
+  );
   router.get("/tracks/:id/acoustic-profile", async (req, res) => {
     const track = await models.Track.findById(requireId(req.params.id));
     if (!track) throw new HttpError(404, "NOT_FOUND", "Track not found.");

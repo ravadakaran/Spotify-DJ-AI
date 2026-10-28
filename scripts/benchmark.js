@@ -1,7 +1,8 @@
 import { monitorEventLoopDelay } from "node:perf_hooks";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile, readdir } from "node:fs/promises";
+import path from "node:path";
 import os from "node:os";
 import { fixture, emit } from "./phase-six-fixture.js";
 import { seedProfiles } from "../server/src/persistence.js";
@@ -9,8 +10,34 @@ import { seedProfiles } from "../server/src/persistence.js";
 const participants = Number(process.env.BENCH_USERS || 10);
 const seconds = Number(process.env.BENCH_SECONDS || 600);
 const warmup = Number(process.env.BENCH_WARMUP || 60);
-const lockfile = JSON.parse(await readFile('package-lock.json', 'utf8'));
-const datasetHash = createHash('sha256').update(JSON.stringify(seedProfiles)).digest('hex');
+const output =
+  process.env.BENCH_OUTPUT || `evidence/phase-six-load-${participants}.json`;
+const sourceFiles = (await readdir("server/src", { recursive: true }))
+  .filter((name) => name.endsWith(".js"))
+  .map((name) => path.join("server/src", name))
+  .concat([
+    "scripts/benchmark.js",
+    "scripts/phase-six-fixture.js",
+    "package-lock.json",
+  ])
+  .sort();
+const sourceHashes = Object.fromEntries(
+  await Promise.all(
+    sourceFiles.map(async (file) => [
+      file.replaceAll("\\", "/"),
+      createHash("sha256")
+        .update(await readFile(file))
+        .digest("hex"),
+    ]),
+  ),
+);
+const sourceSha256 = createHash("sha256")
+  .update(JSON.stringify(sourceHashes))
+  .digest("hex");
+const lockfile = JSON.parse(await readFile("package-lock.json", "utf8"));
+const datasetHash = createHash("sha256")
+  .update(JSON.stringify(seedProfiles))
+  .digest("hex");
 if (
   ![participants, seconds, warmup].every(Number.isInteger) ||
   participants < 5 ||
@@ -188,8 +215,19 @@ try {
       encoding: "utf8",
     }).trim(),
     node: process.version,
+    workingTreeDirty: Boolean(
+      execFileSync("git", ["status", "--porcelain"], {
+        encoding: "utf8",
+      }).trim(),
+    ),
+    sourceSha256,
+    sourceHashes,
     datasetHash,
-    dependencies: Object.fromEntries(['express','socket.io','mongoose','multer','body-parser'].map(name=>[name,lockfile.packages[`node_modules/${name}`]?.version])),
+    dependencies: Object.fromEntries(
+      ["express", "socket.io", "mongoose", "multer", "body-parser"].map(
+        (name) => [name, lockfile.packages[`node_modules/${name}`]?.version],
+      ),
+    ),
     hardware: {
       cpu: os.cpus()[0].model,
       logicalCpus: os.cpus().length,
@@ -220,16 +258,22 @@ try {
     traces,
   };
   report.acceptance = {
-    queue: report.queueMs.samples > 0 && report.queueMs.max < 100 && failures.length === 0,
-    fanout: report.fanoutMs.samples > 0 && report.fanoutMs.max < 500 && failures.length === 0,
-    rest: report.restMs.samples > 0 && report.restMs.p95 < 200 && failures.length === 0,
+    queue:
+      report.queueMs.samples > 0 &&
+      report.queueMs.max < 100 &&
+      failures.length === 0,
+    fanout:
+      report.fanoutMs.samples > 0 &&
+      report.fanoutMs.max < 500 &&
+      failures.length === 0,
+    rest:
+      report.restMs.samples > 0 &&
+      report.restMs.p95 < 200 &&
+      failures.length === 0,
     ai: "unmeasured; real model gate open",
   };
-  await mkdir("evidence", { recursive: true });
-  await writeFile(
-    `evidence/phase-six-load-${participants}.json`,
-    JSON.stringify(report, null, 2) + "\n",
-  );
+  await mkdir(path.dirname(output), { recursive: true });
+  await writeFile(output, JSON.stringify(report, null, 2) + "\n");
   console.log(
     JSON.stringify({
       workload: report.workload,
@@ -240,9 +284,14 @@ try {
       acceptance: report.acceptance,
     }),
   );
-  if (failures.length || !report.acceptance.queue || !report.acceptance.fanout || !report.acceptance.rest) process.exitCode = 1;
+  if (
+    failures.length ||
+    !report.acceptance.queue ||
+    !report.acceptance.fanout ||
+    !report.acceptance.rest
+  )
+    process.exitCode = 1;
 } finally {
   lag.disable();
   await f.close();
 }
-

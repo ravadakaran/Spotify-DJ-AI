@@ -261,11 +261,14 @@ export class RoomService extends FoundationRooms {
     return state;
   }
   view(state) {
-    const copy = structuredClone(state);
-    delete copy.listeningMeters;
-    delete copy.meterAt;
-    delete copy.recentCommands;
-    delete copy.sentimentSamples;
+    // Strip server-only data before the expensive deep copy. In particular,
+    // actor-bound receipts can contain large answers that never go to the room.
+    const publicState = { ...state };
+    delete publicState.listeningMeters;
+    delete publicState.meterAt;
+    delete publicState.recentCommands;
+    delete publicState.sentimentSamples;
+    const copy = structuredClone(publicState);
     copy.durableRevision = this.durable.get(state.loungeId) || 0;
     copy.degraded = this.writer.failed || this.degradedAt !== null;
     copy.mutationFrozen ||= copy.degraded;
@@ -798,6 +801,7 @@ export class RoomService extends FoundationRooms {
         "INCOMPATIBLE_TRACK",
         "Verified BPM and Camelot profiles must both be compatible.",
       );
+    return b;
   }
   hasSockets(id, userId) {
     return (this.presence.get(id)?.get(userId)?.size || 0) > 0;
@@ -927,6 +931,7 @@ export class RoomService extends FoundationRooms {
         const s = await socialTick(this, this.states.get(id));
         if (
           this.healthy &&
+          this.degradedAt === null &&
           !s.mutationFrozen &&
           s.nowPlaying &&
           !s.nowPlaying.paused &&
@@ -942,12 +947,39 @@ export class RoomService extends FoundationRooms {
         }
         if (
           this.healthy &&
+          this.degradedAt === null &&
           !s.mutationFrozen &&
           s.nowPlaying &&
           !s.nowPlaying.paused &&
           position(s.nowPlaying, this.now()) >= s.nowPlaying.durationSeconds
-        )
+        ) {
+          // Stay inside the room FIFO: simultaneous ticks cannot consume two entries.
+          const entry =
+            s.nextUp.find((entry) => entry.entryId === s.reservedEntryId) ||
+            s.nextUp[0];
+          if (entry) {
+            try {
+              const track = await this.eligible(s, entry.trackId);
+              if (track.assetId) {
+                this.commit(s, "playback.start", {
+                  now: this.now(),
+                  track,
+                  entryId: entry.entryId,
+                  playbackId: randomUUID(),
+                });
+                return;
+              }
+            } catch (error) {
+              if (
+                !(error instanceof HttpError) ||
+                !["INCOMPATIBLE_TRACK", "INVALID_TRACK"].includes(error.code)
+              )
+                throw error;
+            }
+          }
+          // Keep a blocked head/reservation in place; never silently skip it.
           this.commit(s, "playback.pause", { now: this.now() });
+        }
       });
   }
   async close({ flush = true } = {}) {

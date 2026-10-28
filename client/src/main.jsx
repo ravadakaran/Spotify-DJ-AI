@@ -1,3 +1,6 @@
+import TrackPicker from "./TrackPicker.jsx";
+import FirstSteps from "./FirstSteps.jsx";
+import { Icon } from "./StudioVisuals.jsx";
 import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { io } from "socket.io-client";
@@ -74,8 +77,11 @@ function App() {
     }
     if (response.status === 204) return null;
     const result = await response.json();
-    if (!response.ok)
-      throw new Error(result.error?.message || "Request failed.");
+    if (!response.ok) {
+      const error = new Error(result.error?.message || "Request failed.");
+      error.code = result.error?.code;
+      throw error;
+    }
     return result;
   }
   async function run(action) {
@@ -85,7 +91,10 @@ function App() {
     try {
       await action();
     } catch (e) {
-      setError(e.message);
+      if (room && ["STALE_REVISION", "STALE_PROPOSAL", "STALE_GENERATION"].includes(e.code)) {
+        socketRef.current?.emit("lounge.resync", { loungeId: room.loungeId });
+        setError("The lounge changed. Refreshing now; review the latest state and try the action again.");
+      } else setError(e.message);
     } finally {
       setBusy(false);
     }
@@ -282,13 +291,16 @@ function App() {
     });
   };
   return (
-    <div className="app-shell">
+    <div className={`app-shell${room ? " in-lounge" : ""}`}>
       <aside className="sidebar">
         <a className="brand" href="/" aria-label="DJ Studio home">
-          <span className="brand-icon">◒</span> DJ STUDIO
-          <span className="version">01</span>
+          <span className="brand-icon">
+            <Icon name="disc" size={28} />
+          </span>{" "}
+          DJ STUDIO
+          <span className="version">LOCAL</span>
         </a>
-        <div className="workspace-label">YOUR WORKSPACE</div>
+        <div className="workspace-label">Your studio</div>
         <button
           className={!room ? "nav active" : "nav"}
           onClick={() => {
@@ -296,10 +308,12 @@ function App() {
             setError("");
           }}
         >
-          ◫ <span>Overview</span>
+          <Icon name="grid" />
+          <span>Overview</span>
         </button>
         <div className={room ? "nav active" : "nav muted"}>
-          ◉ <span>Lounge console</span>
+          <Icon name="disc" />
+          <span>Lounge console</span>
         </div>
         <div className="sidebar-bottom">
           <span className="status-dot" /> PRIVATE ENVIRONMENT
@@ -325,6 +339,7 @@ function App() {
                     tokenRef.current = null;
                     setSession(null);
                     setRoom(null);
+                    setRegister(false);
                   })
                 }
               >
@@ -348,7 +363,6 @@ function App() {
         ) : !session ? (
           <section className="welcome-grid">
             <div className="welcome-copy">
-              <div className="eyebrow">COLLABORATIVE LISTENING, REIMAGINED</div>
               <h1>
                 Set the mood.
                 <br />
@@ -377,7 +391,6 @@ function App() {
               </div>
             </div>
             <form className="panel auth-panel" onSubmit={login}>
-              <div className="eyebrow">WELCOME TO THE STUDIO</div>
               <h2>
                 {register ? "Make yourself at home." : "Good to have you back."}
               </h2>
@@ -448,9 +461,8 @@ function App() {
           <>
             <section className="page-title">
               <div>
-                <div className="eyebrow">YOUR LISTENING ROOM</div>
                 <h1>{room.vibeProfile}</h1>
-                <p>Bring everyone onto the same page before the first track.</p>
+                <p>Your people. Your queue. One shared listening room.</p>
               </div>
               <span className="pill live">
                 <span className="status-dot" />
@@ -470,7 +482,7 @@ function App() {
             {invite && (
               <div className="invite-banner">
                 <div>
-                  <span className="eyebrow">INVITE YOUR PEOPLE</span>
+                  <span className="invite-label">Invite your people</span>
                   <code>{invite}</code>
                 </div>
                 <button
@@ -503,7 +515,6 @@ function App() {
           <>
             <section className="page-title">
               <div>
-                <div className="eyebrow">MAKE SPACE FOR GOOD MUSIC</div>
                 <h1>
                   Your next session
                   <br />
@@ -514,12 +525,17 @@ function App() {
                   waiting.
                 </p>
               </div>
-              <span className="pill">PRIVATE BETA · FOUNDATION</span>
+              <span className="pill">
+                <Icon name="disc" size={16} /> Your private listening space
+              </span>
             </section>
             <div className="action-grid">
               <form className="panel" onSubmit={create}>
-                <div className="tile-icon">＋</div>
+                <div className="tile-icon">
+                  <Icon name="plus" />
+                </div>
                 <h2>Start a new lounge</h2>
+                <FirstSteps />
                 <p className="subtle">Choose the vibe and a starting track.</p>
                 <label>
                   Lounge vibe
@@ -530,22 +546,7 @@ function App() {
                     maxLength={80}
                   />
                 </label>
-                <label>
-                  Starting track
-                  <select name="seedTrackId" required defaultValue="">
-                    <option disabled value="">
-                      Choose from your catalog
-                    </option>
-                    {tracks.map((track) => (
-                      <option key={track.trackId} value={track.trackId}>
-                        {track.title} ·{" "}
-                        {track.acoustic
-                          ? `${track.acoustic.bpm} BPM`
-                          : "Profile needed"}
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <TrackPicker api={api} tracks={tracks} name="seedTrackId" label="Starting track" starting />
                 <button className="primary" disabled={busy || !tracks.length}>
                   Create lounge →
                 </button>
@@ -557,7 +558,9 @@ function App() {
                 )}
               </form>
               <form className="panel join-panel" onSubmit={join}>
-                <div className="tile-icon">↗</div>
+                <div className="tile-icon">
+                  <Icon name="arrow" />
+                </div>
                 <h2>Find your people</h2>
                 <p className="subtle">
                   Have an invite? There’s a place for you.
@@ -576,7 +579,7 @@ function App() {
                   Join lounge ↗
                 </button>
                 <div className="join-note">
-                  <span>01</span>
+                  <Icon name="room" size={32} />
                   <p>
                     One room. One shared state.
                     <br />A session that starts with you.
@@ -690,7 +693,7 @@ function App() {
         <footer>
           <span>AI DJ STUDIO</span>
           <span>LOCAL MUSIC. SHARED MOMENTS.</span>
-          <span>FOUNDATION / 0.1</span>
+          <span>PRIVATE STUDIO / 0.1</span>
         </footer>
       </main>
     </div>

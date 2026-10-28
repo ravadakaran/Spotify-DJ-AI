@@ -1,0 +1,12 @@
+{
+  "version": "goemotions-heldout-v1",
+  "declaredAt": "2026-10-28T12:23:36.4968712Z",
+  "upstreamCommit": "2adf640a14f11025ae5a9d0ec493b78530d276d3",
+  "source": "Google Research GoEmotions official test.tsv",
+  "sourceUrl": "https://raw.githubusercontent.com/google-research/google-research/2adf640a14f11025ae5a9d0ec493b78530d276d3/goemotions/data/test.tsv",
+  "policy": "Evaluate every held-out row whose labels all map to exactly one positive/negative/neutral group. Exclude ambiguous-only, mixed-valence and neutral-plus-emotion rows. Use official sentiment_dict.json, with neutral label explicitly neutral. No text-based selection or test-set tuning.",
+  "threshold": 0.85,
+  "report": "accuracy, balanced accuracy, per-class support, confusion matrix, exclusions, hashes",
+  "scope": "Independent human-labelled Reddit comments; not live lounge chat, not a new annotation by this agent.",
+  "scorerSha256": "2620924e7017f8a66032ca6ccb2ddc1e50094c92fedf9361ae27665882535db9"
+}

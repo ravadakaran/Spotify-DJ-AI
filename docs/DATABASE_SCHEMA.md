@@ -1,5 +1,9 @@
 # Database schema
 
+28 October 2026 IMP-002 uses existing tracks/audio_assets fields and profileVersion; no schema migration. Replacement keeps track ID and updates assetId/duration/profile with an incremented version. Deletion removes the track, then unreferenced media; historical room/event/interaction/summary records remain. MongoDB/filesystem cleanup is not atomic and may leave recoverable orphans. [Compatibility and recovery](CATALOG_MANAGEMENT.md).
+
+28 October 2026 frontend redesign adds no schema, migration, seed or persistence changes. Mobile navigation and expanded diagnostics are client-local presentation state. [Scope](FRONTEND_REDESIGN.md).
+
 Phase 6 adds no migration or collection changes. Offline backups preserve Extended JSON BSON types, collection validators/options, indexes including text weights, migration ledger and hashed referenced assets. Restore refuses nonempty targets; ordinary recovery creates a new epoch and pauses playback. [Backup and compatibility limits](PHASE_SIX_IMPLEMENTATION.md).
 
 Migration 005-personal adds interactions (unique loungeId/userId/playbackId; userId/createdAt/ID history index), session_summaries (unique loungeId) and recommendation_jobs (private bounded artifact). Interactions store server-bounded playedSeconds, completion/like, profile snapshot, observedAt and revision. The summary stores canonical-log counts/timeline/history and final revision. [Compatibility and backup review](PHASE_FIVE_IMPLEMENTATION.md#migration-and-rollback).
@@ -78,3 +82,11 @@ For Option A or C only, PostgreSQL would normalize users/refresh_sessions/tracks
 Use ordered `server/migrations/NNNN-description.js` files with checksums and a migrations ledger, one migration runner at a time. Create validators/indexes before seed insertion. Seed idempotently using stable demo IDs; do not overwrite user edits. Bootstrap admin through an operator-only command, never public registration. A single-node MongoDB replica set enables transactions; a standalone server is insufficient ([MongoDB transactions](https://www.mongodb.com/docs/manual/core/transactions/)).
 
 For changes: backup first, add optional fields/indexes, backfill in bounded batches, validate, switch reads, then remove obsolete fields in a later release. Take a pre-migration snapshot; restore to a new volume to test recovery. Prefer forward repair over destructive down migrations. Profile updates increment version and invalidate caches/proposals. Archive tracks referenced by history; prohibit deleting referenced audio without an explicit archival policy. Proposed 30-day demo retention must preserve linked events/projections together; do not TTL queue_events independently of summaries and evaluations. Export/anonymize user-linked test data and document backup retention before broader use.
+
+28 October 2026 enhancement: Track-picker enhancement has no storage, index or migration changes; it displays existing catalog projections only. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: Automatic continuation reuses playback.start events with internal null actor and fresh playback ID. No schema/index/migration change; restart remains paused. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 listening-flow enhancement: SessionSummary.summary adds optional resolvedBattleCount, last-100 battleOutcomes and battleOutcomesTruncated from canonical resolution events. Existing Mixed storage accepts these without migration/index changes; old summaries remain readable, with no backfill. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: the runtime Mongoose timeline now explicitly declares the embedded object schema already enforced by MongoDB validators. No collection shape, validator, migration or historical migration checksum changes; create/read/edit regression covers existing object compatibility. See [acceptance closure](ACCEPTANCE_CLOSURE.md).

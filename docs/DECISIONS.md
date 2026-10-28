@@ -1,5 +1,9 @@
 # Architecture decisions
 
+28 October 2026 IMP-002 decision: implement user-requested catalog editing/replacement/deletion with an idle-lounge barrier serialized against room creation in the single application instance. Preserve the legacy acoustic endpoint. Use existing profileVersion instead of a new migration. Keep shared audio and historical session evidence; report cleanup failures without pretending MongoDB/file deletion is atomic. Per-track live mutation and orphan collection remain outside this slice. [Contracts and tradeoffs](CATALOG_MANAGEMENT.md).
+
+28 October 2026 — frontend presentation decision: implement the user's requested Tidal Glass navy/cyan redesign within existing React JavaScript. Keep a single mounted player, server-owned commands and all three epics; mobile sections hide without unmounting. No dependency, API or schema changes. [Design and compatibility](FRONTEND_REDESIGN.md), [visual system](../client/DESIGN.md).
+
 28 October 2026 — ADR-021: implement the requested Phase 6 with a same-process scripted Socket.IO load harness, offline BSON-preserving logical backup/restore into empty targets, loopback-only proxy trust, Caddy/systemd templates and targeted security/rendered accessibility checks. No migration or external integration. Increase bounded transport handshake allowance to 120/minute per peer for two-room connection bursts; proxy peers share this allowance. Keep all model/legal/data/live-TLS gates explicit. [Measurement boundaries and backup/rollback consequences](PHASE_SIX_IMPLEMENTATION.md).
 
 27 October 2026 — ADR-020: user requested Phase 5. Implement explicit admin refits, binary completion/like item cosine with 60/40 acoustic/collaborative blend; bounded identity heartbeat evidence, durable interaction projections and Host-only synchronous end barrier. Preserve legal/model/independent-evaluation gates. Authored synthetic metrics do not establish normal-use recommendation acceptance. [Definitions, bounds and migration compatibility](PHASE_FIVE_IMPLEMENTATION.md).
@@ -50,3 +54,11 @@ OQ-03 selects exact Node/package versions, model/license/runtime and hardware. P
 Add Redis/distributed room ownership only when a measured single-instance limitation requires it. Add embeddings only if lexical retrieval demonstrably misses authored facts. Add automatic audio analysis only for authorized local files and when manual profiles become a proven bottleneck. Revisit database/stack only through an explicit source deviation, not incidental implementation convenience. Real Spotify integration is a separate scope/policy assessment, not a future checkbox automatically inherited from this plan.
 
 No provisional choice is a claim of user approval. Phase 0 makes critical choices concrete; other defaults should remain visible in configuration, docs and tests until confirmed.
+
+28 October 2026 enhancement: User authorized starting the improvement roadmap. First scope is loaded-catalog IMP-001 search with native selection; no new phase acceptance or third-party assumption is inferred. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: User explicitly supersedes the end-pause default: automatically advance reserved entry or queue head at natural completion. AI proposals still need approval to reserve their candidate. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 listening-flow enhancement: Use bounded paginated title/artist search, read-only server compatibility reports with a separate per-identity quota, shared device audio state, explicit retry after resync, and additive capped canonical battle recap details. No auto-replay of rejected mutations. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: legal-audio and warm real-model evidence, failed independent sentiment quality, pending independent reader and ongoing final queue performance verification are documented in [acceptance closure](ACCEPTANCE_CLOSURE.md).

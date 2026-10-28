@@ -47,8 +47,12 @@ export function position(playback, now) {
 export function reduceRoom(previous, event) {
   if (event.reducerVersion !== REDUCER_VERSION)
     throw new Error("Unsupported reducer version");
-  const state = structuredClone(previous),
+  // Receipts are append-only: commit/replay replace their array, never mutate
+  // its entries. Share that private history while cloning mutable room state.
+  const { recentCommands, ...mutableState } = previous;
+  const state = structuredClone(mutableState),
     p = event.payload;
+  if (recentCommands !== undefined) state.recentCommands = recentCommands;
   const entry = () => {
     const value = state.nextUp.find((e) => e.entryId === p.entryId);
     if (!value)

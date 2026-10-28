@@ -1,0 +1,16 @@
+{
+  "status": "pending",
+  "readerAlias": "",
+  "previouslyWorkedOnProject": null,
+  "usedImplementationHelp": null,
+  "startedAt": "",
+  "finishedAt": "",
+  "environment": { "os": "", "node": "", "npm": "", "browser": "" },
+  "sourceRevisionOrHash": "",
+  "steps": [],
+  "unclearInstructions": [],
+  "failuresAndWorkarounds": [],
+  "heardAllThreeTracks": null,
+  "bothClientsAgreedAfterReconnect": null,
+  "completedUnaided": null
+}

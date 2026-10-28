@@ -1,0 +1,1702 @@
+{
+  "date": "2026-10-28T13:14:41.927Z",
+  "model": "qwen2.5:1.5b-instruct",
+  "modelDigest": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+  "modelDetails": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "qwen2",
+    "families": [
+      "qwen2"
+    ],
+    "parameter_size": "1.5B",
+    "quantization_level": "Q4_K_M",
+    "context_length": 32768,
+    "embedding_length": 1536,
+    "runner": "ggml"
+  },
+  "runtime": {
+    "version": "0.40.12"
+  },
+  "runtimeLoaded": {
+    "models": [
+      {
+        "name": "qwen2.5:1.5b-instruct",
+        "model": "qwen2.5:1.5b-instruct",
+        "size": 1169382440,
+        "digest": "65ec06548149b04c096a120e4a6da9d4017ea809c91734ea5631e89f96ddc57b",
+        "details": {
+          "parent_model": "",
+          "format": "gguf",
+          "family": "qwen2",
+          "families": [
+            "qwen2"
+          ],
+          "parameter_size": "1.5B",
+          "quantization_level": "Q4_K_M"
+        },
+        "expires_at": "2026-10-28T18:54:41.0323973+05:30",
+        "size_vram": 1169382440,
+        "context_length": 4096,
+        "runner": "llamacpp"
+      }
+    ]
+  },
+  "protocol": {
+    "phase": "explicitly preloaded warm model",
+    "version": "real-model-grounding-2",
+    "model": "qwen2.5:1.5b-instruct",
+    "sourceMetadataOnly": "CC0 original-publisher metadata; no private library",
+    "supported": 20,
+    "unsupported": 10,
+    "cases": [
+      {
+        "question": "What is the BPM tempo?",
+        "supported": true
+      },
+      {
+        "question": "Tell me the tempo",
+        "supported": true
+      },
+      {
+        "question": "What is the Camelot key?",
+        "supported": true
+      },
+      {
+        "question": "Tell me the key",
+        "supported": true
+      },
+      {
+        "question": "What is the energy?",
+        "supported": true
+      },
+      {
+        "question": "Tell me the valence",
+        "supported": true
+      },
+      {
+        "question": "Who is the artist?",
+        "supported": true
+      },
+      {
+        "question": "What is the album?",
+        "supported": true
+      },
+      {
+        "question": "What is the license?",
+        "supported": true
+      },
+      {
+        "question": "What BPM does the publisher specify?",
+        "supported": true
+      },
+      {
+        "question": "What is the BPM tempo?",
+        "supported": true
+      },
+      {
+        "question": "Tell me the tempo",
+        "supported": true
+      },
+      {
+        "question": "What is the Camelot key?",
+        "supported": true
+      },
+      {
+        "question": "Tell me the key",
+        "supported": true
+      },
+      {
+        "question": "What is the energy?",
+        "supported": true
+      },
+      {
+        "question": "Tell me the valence",
+        "supported": true
+      },
+      {
+        "question": "Who is the artist?",
+        "supported": true
+      },
+      {
+        "question": "What is the album?",
+        "supported": true
+      },
+      {
+        "question": "What is the license?",
+        "supported": true
+      },
+      {
+        "question": "What BPM does the publisher specify?",
+        "supported": true
+      },
+      {
+        "question": "Who won a Nobel prize?",
+        "supported": false
+      },
+      {
+        "question": "Where did the singer attend school?",
+        "supported": false
+      },
+      {
+        "question": "What awards did this recording win?",
+        "supported": false
+      },
+      {
+        "question": "What is the drummer's birthday?",
+        "supported": false
+      },
+      {
+        "question": "Which concert premiered this piece?",
+        "supported": false
+      },
+      {
+        "question": "What is the secret access password?",
+        "supported": false
+      },
+      {
+        "question": "What is the artist's bank account?",
+        "supported": false
+      },
+      {
+        "question": "Who is the artist married to?",
+        "supported": false
+      },
+      {
+        "question": "What microphone was used?",
+        "supported": false
+      },
+      {
+        "question": "What is the mastering studio address?",
+        "supported": false
+      }
+    ],
+    "selectionDeadlineMs": 2300,
+    "transitionSamples": 30,
+    "transitionSpacingMs": 6100,
+    "clockMode": "Accelerated logical room position only; real monotonic trigger-to-DOM measurement including tick/publication/render; sequential requests, no concurrent benchmark"
+  },
+  "sourceSha256": "6d8939226997b2d3052b9c96a3ece1cf5dea142ebbd6bc53b98526b34d1e3a79",
+  "audit": [
+    {
+      "index": 0,
+      "question": "What is the BPM tempo?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 650.836400000001,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 1,
+      "question": "Tell me the tempo",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "answer": "BPM tempo: 130.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 271.606600000001,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 2,
+      "question": "What is the Camelot key?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 2
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 233.72040000000015,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 3,
+      "question": "Tell me the key",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 160.69740000000093,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 4,
+      "question": "What is the energy?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:energy"
+      ],
+      "answer": "Energy: 0.5.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:energy"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:energy",
+          "text": "Energy: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Energy",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 199.4408999999996,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 5,
+      "question": "Tell me the valence",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:valence"
+      ],
+      "answer": "Valence: 0.5.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:valence"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:valence",
+          "text": "Valence: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Valence",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 217.94970000000103,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 6,
+      "question": "Who is the artist?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 248.75710000000072,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 7,
+      "question": "What is the album?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 224.65359999999964,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 8,
+      "question": "What is the license?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 182.4377999999997,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 9,
+      "question": "What BPM does the publisher specify?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "answer": "BPM tempo: 130.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 134.07110000000102,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 10,
+      "question": "What is the BPM tempo?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "BPM tempo: 130. Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 2
+        },
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 207.96659999999974,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 11,
+      "question": "Tell me the tempo",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "answer": "BPM tempo: 130.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 203.75900000000001,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 12,
+      "question": "What is the Camelot key?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 2
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 163.40229999999974,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 13,
+      "question": "Tell me the key",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "answer": "Camelot key: 8B.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:camelotKey",
+          "text": "Camelot key: 8B.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Camelot key",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 143.3762000000006,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 14,
+      "question": "What is the energy?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:energy"
+      ],
+      "answer": "Energy: 0.5.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:energy"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:energy",
+          "text": "Energy: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Energy",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 170.374600000001,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 15,
+      "question": "Tell me the valence",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:valence"
+      ],
+      "answer": "Valence: 0.5.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:valence"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:valence",
+          "text": "Valence: 0.5.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "Valence",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 187.52649999999994,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 16,
+      "question": "Who is the artist?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 235.16370000000097,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 17,
+      "question": "What is the album?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 158.08380000000034,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 18,
+      "question": "What is the license?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+          "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 130 BPM in C Major. License: CC0-1.0.",
+          "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+          "ts": 0,
+          "keywords": "trivia",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 149.72479999999996,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 19,
+      "question": "What BPM does the publisher specify?",
+      "supported": true,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d",
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "answer": "BPM tempo: 130.",
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm"
+      ],
+      "citations": [
+        {
+          "id": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:bpm",
+          "text": "BPM tempo: 130.",
+          "sourceLabel": "Authored acoustic profile",
+          "ts": 0,
+          "keywords": "BPM tempo",
+          "profileVersion": 1,
+          "trackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+          "relevance": 1
+        }
+      ],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": false,
+      "generationMs": 126.58380000000034,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 20,
+      "question": "Who won a Nobel prize?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.002599999999802094,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 21,
+      "question": "Where did the singer attend school?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.006799999999202555,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 22,
+      "question": "What awards did this recording win?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.041199999999662396,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 23,
+      "question": "What is the drummer's birthday?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.002300000000104774,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 24,
+      "question": "Which concert premiered this piece?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0020999999997002305,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 25,
+      "question": "What is the secret access password?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0020999999997002305,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 26,
+      "question": "What is the artist's bank account?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 227.1319999999996,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 27,
+      "question": "Who is the artist married to?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "model",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 210.82600000000093,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 28,
+      "question": "What microphone was used?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0020999999997002305,
+      "grounded": true,
+      "correct": true
+    },
+    {
+      "index": 29,
+      "question": "What is the mastering studio address?",
+      "supported": false,
+      "cold": false,
+      "contextIds": [],
+      "answer": "Insufficient authored metadata to answer this question.",
+      "sourceEvents": [],
+      "citations": [],
+      "generationMode": "template",
+      "fallbackReason": null,
+      "insufficientMetadata": true,
+      "generationMs": 0.0023999999993975507,
+      "grounded": true,
+      "correct": true
+    }
+  ],
+  "browserQa": {
+    "ok": true,
+    "epoch": "11fc44a9-7a35-4afb-b6d6-1b21b1e622dd",
+    "revision": 4,
+    "durableRevision": 3,
+    "answer": "BPM tempo: 132. Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 132 BPM in G Major. License: CC0-1.0.",
+    "sourceEvents": [
+      "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:bpm",
+      "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+    ],
+    "citations": [
+      {
+        "id": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:bpm",
+        "text": "BPM tempo: 132.",
+        "sourceLabel": "Authored acoustic profile",
+        "ts": 0,
+        "keywords": "BPM tempo",
+        "profileVersion": 1,
+        "trackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+        "relevance": 2
+      },
+      {
+        "id": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95",
+        "text": "Artist: Software-Entwicklungskit. Album: Everything is Free. Publisher specifies 132 BPM in G Major. License: CC0-1.0.",
+        "sourceLabel": "Original publisher metadata at e1d0d5c0422d2626c211d5d877e6f69c37ce8712",
+        "ts": 0,
+        "keywords": "trivia",
+        "profileVersion": 1,
+        "trackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+        "relevance": 1
+      }
+    ],
+    "generationMode": "model",
+    "fallbackReason": null,
+    "insufficientMetadata": false,
+    "generationMs": 694.7996999999996,
+    "trackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+    "profileVersion": 1
+  },
+  "transitions": [
+    {
+      "index": 0,
+      "triggerAt": 1793193103332.7295,
+      "renderAt": 1793193103594.5,
+      "triggerToRenderMs": 261.7705078125,
+      "generationMs": 229.71699999999691,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 1,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 1,
+      "triggerAt": 1793193109448.093,
+      "renderAt": 1793193109912.6,
+      "triggerToRenderMs": 464.507080078125,
+      "generationMs": 449.3580000000002,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 2,
+      "triggerAt": 1793193115550.506,
+      "renderAt": 1793193116078.5,
+      "triggerToRenderMs": 527.993896484375,
+      "generationMs": 506.7537999999986,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 3,
+      "triggerAt": 1793193121652.543,
+      "renderAt": 1793193122210.1,
+      "triggerToRenderMs": 557.55712890625,
+      "generationMs": 545.3084999999992,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 4,
+      "triggerAt": 1793193127763.7583,
+      "renderAt": 1793193128163.8,
+      "triggerToRenderMs": 400.041748046875,
+      "generationMs": 383.97879999999714,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 5,
+      "triggerAt": 1793193133879.1162,
+      "renderAt": 1793193134328.4001,
+      "triggerToRenderMs": 449.283935546875,
+      "generationMs": 439.046500000004,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 6,
+      "triggerAt": 1793193139990.4639,
+      "renderAt": 1793193140385.4001,
+      "triggerToRenderMs": 394.936279296875,
+      "generationMs": 383.55850000000646,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 7,
+      "triggerAt": 1793193146102.1487,
+      "renderAt": 1793193146588.3,
+      "triggerToRenderMs": 486.1513671875,
+      "generationMs": 474.36189999999624,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 8,
+      "triggerAt": 1793193152206.929,
+      "renderAt": 1793193152692.3,
+      "triggerToRenderMs": 485.37109375,
+      "generationMs": 469.3868999999977,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 9,
+      "triggerAt": 1793193158308.7302,
+      "renderAt": 1793193158810.6,
+      "triggerToRenderMs": 501.869873046875,
+      "generationMs": 493.41359999999986,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 10,
+      "triggerAt": 1793193164428.3157,
+      "renderAt": 1793193164875.8,
+      "triggerToRenderMs": 447.484375,
+      "generationMs": 430.73330000000715,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 11,
+      "triggerAt": 1793193170545.8477,
+      "renderAt": 1793193171138.6,
+      "triggerToRenderMs": 592.75244140625,
+      "generationMs": 572.6928000000044,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 12,
+      "triggerAt": 1793193176648.6357,
+      "renderAt": 1793193177132.8,
+      "triggerToRenderMs": 484.164306640625,
+      "generationMs": 470.48289999998815,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 13,
+      "triggerAt": 1793193182755.884,
+      "renderAt": 1793193183192.9001,
+      "triggerToRenderMs": 437.01611328125,
+      "generationMs": 422.88490000000456,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 14,
+      "triggerAt": 1793193188868.6187,
+      "renderAt": 1793193189381.4001,
+      "triggerToRenderMs": 512.781494140625,
+      "generationMs": 499.87429999999586,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 15,
+      "triggerAt": 1793193194972.2573,
+      "renderAt": 1793193195404.2002,
+      "triggerToRenderMs": 431.94287109375,
+      "generationMs": 419.07709999999497,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 16,
+      "triggerAt": 1793193201082.1665,
+      "renderAt": 1793193201494,
+      "triggerToRenderMs": 411.83349609375,
+      "generationMs": 394.95990000000165,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 17,
+      "triggerAt": 1793193207184.7,
+      "renderAt": 1793193207657.8,
+      "triggerToRenderMs": 473.10009765625,
+      "generationMs": 464.4447000000073,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 18,
+      "triggerAt": 1793193213291.7764,
+      "renderAt": 1793193213720.1,
+      "triggerToRenderMs": 428.32373046875,
+      "generationMs": 418.7908999999927,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 19,
+      "triggerAt": 1793193219403.339,
+      "renderAt": 1793193219904.8,
+      "triggerToRenderMs": 501.4609375,
+      "generationMs": 485.18009999999776,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 20,
+      "triggerAt": 1793193225514.3174,
+      "renderAt": 1793193225942.6,
+      "triggerToRenderMs": 428.28271484375,
+      "generationMs": 418.2270000000135,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 21,
+      "triggerAt": 1793193231618.164,
+      "renderAt": 1793193232177.8,
+      "triggerToRenderMs": 559.635986328125,
+      "generationMs": 544.3745000000054,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 22,
+      "triggerAt": 1793193237726.4443,
+      "renderAt": 1793193238225.4001,
+      "triggerToRenderMs": 498.955810546875,
+      "generationMs": 486.1932000000088,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 23,
+      "triggerAt": 1793193243842.4956,
+      "renderAt": 1793193244380.5,
+      "triggerToRenderMs": 538.00439453125,
+      "generationMs": 522.9242999999842,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 24,
+      "triggerAt": 1793193249950.62,
+      "renderAt": 1793193250558.3,
+      "triggerToRenderMs": 607.679931640625,
+      "generationMs": 586.4931999999972,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 25,
+      "triggerAt": 1793193256054.1443,
+      "renderAt": 1793193256553.4001,
+      "triggerToRenderMs": 499.255859375,
+      "generationMs": 487.7380000000121,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 26,
+      "triggerAt": 1793193262163.0962,
+      "renderAt": 1793193262575.3,
+      "triggerToRenderMs": 412.203857421875,
+      "generationMs": 397.1704000000027,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 27,
+      "triggerAt": 1793193268276.4673,
+      "renderAt": 1793193268773.5,
+      "triggerToRenderMs": 497.03271484375,
+      "generationMs": 478.73809999998775,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 28,
+      "triggerAt": 1793193274378.8345,
+      "renderAt": 1793193274792.9001,
+      "triggerToRenderMs": 414.065673828125,
+      "generationMs": 401.4464999999909,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7:v1:95eaea4c-98e1-409b-85c2-dbabd80e259d"
+      ],
+      "selectedTrackId": "aa9f9b7b-7c54-4f6f-b2b3-68f08be358d7",
+      "matchReason": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    },
+    {
+      "index": 29,
+      "triggerAt": 1793193280496.342,
+      "renderAt": 1793193281047.8,
+      "triggerToRenderMs": 551.4580078125,
+      "generationMs": 536.9375,
+      "mode": "model",
+      "fallbackReason": null,
+      "sourceEvents": [
+        "49cfc28f-cf21-4e6d-b349-cc25d54ad91a:v1:5ff029d3-7b0b-4b18-b34d-0eb56c713e95"
+      ],
+      "selectedTrackId": "49cfc28f-cf21-4e6d-b349-cc25d54ad91a",
+      "matchReason": {
+        "bpmDeltaPct": 1.538461538461533,
+        "multiplier": 1,
+        "camelotRelation": "adjacent",
+        "harmonicFit": 0.7,
+        "energyFit": 1,
+        "recencyFit": 0,
+        "targetEnergy": 0.5
+      }
+    }
+  ],
+  "latency": {
+    "samples": 30,
+    "p50": 484.164306640625,
+    "p95": 592.75244140625,
+    "max": 607.679931640625
+  },
+  "cold": null,
+  "fallbackCount": 0,
+  "failures": [],
+  "acceptance": {
+    "grounding": true,
+    "realModelSupportedCalls": 20,
+    "transitionLatency": true
+  },
+  "node": "v24.13.0",
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz",
+    "ramBytes": 34164142080
+  },
+  "limitations": "Source-selection generation, not unrestricted prose. Unsupported empty retrieval bypasses provider. Logical outro positions are accelerated; latency is actual host monotonic trigger-to-browser-DOM time. No private metadata, synthetic model or invented output."
+}

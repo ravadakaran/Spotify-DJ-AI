@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-28T13:07:33.380Z",
+  "pass": true,
+  "kind": "Author-operated clean-directory automated reproduction; NOT an independent first-time-reader attestation",
+  "directory": "C:\\Users\\ravad\\AppData\\Local\\Temp\\dj-reader-reproduction-11sCoE",
+  "excluded": [
+    "node_modules",
+    "data",
+    ".git",
+    "evidence",
+    "test-results",
+    "playwright-report",
+    "coverage",
+    "dist",
+    ".env and private environment files"
+  ],
+  "records": [
+    {
+      "command": "npm ci",
+      "exitCode": 0,
+      "elapsedMs": 247110.19079999998
+    },
+    {
+      "command": "npm run setup",
+      "exitCode": 0,
+      "elapsedMs": 1600.1201
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "elapsedMs": 4736.680599999992
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "elapsedMs": 5152.205600000016
+    },
+    {
+      "command": "npm test",
+      "exitCode": 0,
+      "elapsedMs": 45424.86050000004
+    }
+  ],
+  "node": "v24.13.0"
+}

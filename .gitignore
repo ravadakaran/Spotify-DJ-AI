@@ -15,3 +15,6 @@ data/import-reports/
 data/local-connection.json
 *.log
 evidence/demo/
+
+# Acceptance downloads and local evaluation artifacts (never credentials or production data).
+data/evaluations/

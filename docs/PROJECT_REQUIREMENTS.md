@@ -1,5 +1,9 @@
 # Project requirements and source analysis
 
+28 October 2026 IMP-002: user requested admin library Edit, Replace audio and Delete controls, extending REQ-001/010/021. Whole-track mutations require all lounges ended, preserve shared files, validate versions and use authorized local media. Replacement requires confirmed acoustic values and clears old timeline notes. This enhancement is not an original PRD requirement. [Scope and limits](CATALOG_MANAGEMENT.md).
+
+28 October 2026 frontend redesign: user authorized a new liquid-glass theme and frontend navigation/layout improvements while preserving all PRD requirements. No acceptance threshold or product scope changed. [Presentation and compatibility details](FRONTEND_REDESIGN.md).
+
 28 October 2026: Phase 6 implements REQ-019/020/021/022 verification tooling and operating templates; measured evidence and qualified release gates are tracked in [implementation status](IMPLEMENTATION_STATUS.md). It changes no source requirement, schema or AI acceptance threshold. A scripted-client application measurement is separate from browser DOM rendering and real-model outro latency.
 
 27 October 2026: Phase 5 software implements REQ-015–017 interactions, recommendation worker/rail, dashboard and end summaries. Normal-use held-out Precision@5 acceptance remains open; authored synthetic evaluation is software evidence only. [Contracts and limits](PHASE_FIVE_IMPLEMENTATION.md).
@@ -90,3 +94,11 @@ One authoritative room mutation at a time. Every published state has an epoch an
 | OQ-11 | Journey mentions voting on energy shifts but defines no separate energy-vote contract | Baseline resolution: chat sentiment dynamically drives target energy fit (`E = 1 - abs(candidate.energy - targetEnergy)`); a separate dedicated up/down energy vote control is deferred until specified |
 
 OQ-01, legal assets, hardware/model feasibility, and agreement on crash/queue semantics are Phase 0 gates. Other defaults may be implemented visibly and revised through decisions. See [tasks](TASKS.md) and [testing](TESTING_STRATEGY.md) for traceability; no requirements are marked complete by these documents.
+
+28 October 2026 enhancement: IMP-001 first slice improves track selection without changing REQ-004/005/009/010 or release acceptance. [Scope and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+28 October 2026 automatic continuation: User requested automatic queued playback at track end (REQ-005/011/018). Reserved entry or queue head is revalidated; blocked/empty queues pause. [Behavior and validation](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 listening-flow enhancement: Authorized listening-flow work improves discovery, eligibility explanation, playback/stale-action recovery, role-aware guidance, queue clarity and persisted recaps without changing hard rules or release thresholds. [Contracts, limits and actual validation](LISTENING_FLOW_IMPROVEMENTS.md).
+
+28 October 2026 acceptance work: legal-audio and warm real-model evidence, failed independent sentiment quality, pending independent reader and ongoing final queue performance verification are documented in [acceptance closure](ACCEPTANCE_CLOSURE.md).

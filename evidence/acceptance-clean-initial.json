@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-28T12:48:49.471Z",
+  "pass": false,
+  "kind": "Author-operated clean-directory automated reproduction; NOT an independent first-time-reader attestation",
+  "directory": "C:\\Users\\ravad\\AppData\\Local\\Temp\\dj-reader-reproduction-FdADUl",
+  "excluded": [
+    "node_modules",
+    "data",
+    ".git",
+    "evidence",
+    "test-results",
+    "playwright-report",
+    "coverage",
+    "dist",
+    ".env and private environment files"
+  ],
+  "records": [
+    {
+      "command": "npm ci",
+      "exitCode": 0,
+      "elapsedMs": 335762.4608
+    },
+    {
+      "command": "npm run setup",
+      "exitCode": 0,
+      "elapsedMs": 1605.1129000000074
+    },
+    {
+      "command": "npm run lint",
+      "exitCode": 0,
+      "elapsedMs": 6341.148399999947
+    },
+    {
+      "command": "npm run build",
+      "exitCode": 0,
+      "elapsedMs": 9650.372400000051
+    },
+    {
+      "command": "npm test",
+      "exitCode": 1,
+      "elapsedMs": 57225.77130000002
+    }
+  ],
+  "error": "Clean reproduction failed: npm test; logs retained in disposable directory",
+  "node": "v24.13.0"
+}

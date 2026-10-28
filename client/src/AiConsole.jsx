@@ -9,7 +9,7 @@ function Citations({ items = [] }) {
             {item.sourceLabel} · v{item.profileVersion}
           </summary>
           <p>{item.text}</p>
-          <small>{item.id}</small>
+          <small className="source-id">Source ID: {item.id}</small>
         </details>
       ))}
     </div>
@@ -19,12 +19,21 @@ export default function AiConsole({ room, dj, disabled, api, run, command }) {
   const [answer, setAnswer] = useState(null),
     [busy, setBusy] = useState(false);
   const p = room.segueProposal;
+  const proposedTrack = room.nextUp.find(
+    (entry) => entry.trackId === p?.selectedTrackId,
+  )?.track;
   useEffect(() => {
     setAnswer(null);
   }, [room.loungeId, room.nowPlaying?.playbackId]);
   return (
-    <section className="panel">
-      <h2>AI DJ · grounded text</h2>
+    <section
+      className="panel ai-panel"
+      id="room-ai"
+      aria-labelledby="ai-heading"
+    >
+      <h2 id="ai-heading">
+        AI DJ <span className="heading-note">Grounded in your music</span>
+      </h2>
       <p className="subtle">
         Suggestions require approval. Template mode uses authored facts; it is
         not a model-generated answer.
@@ -38,7 +47,8 @@ export default function AiConsole({ room, dj, disabled, api, run, command }) {
         </button>
       )}
       {p && (
-        <div role="status">
+        <div role="status" className="ai-answer">
+          {proposedTrack && <h3>Up next: {proposedTrack.title}</h3>}
           <p>{p.transitionScript}</p>
           <small>
             {p.generationMode} · {p.status}
@@ -81,8 +91,8 @@ export default function AiConsole({ room, dj, disabled, api, run, command }) {
           )}
           {p.status === "approved" && (
             <p>
-              Reserved next. Use Skip / Advance to start it after the final
-              compatibility check.
+              Reserved next. Starts automatically when this track ends, after
+              the final compatibility check. Use Skip / Advance to start sooner.
             </p>
           )}
         </div>
@@ -120,7 +130,7 @@ export default function AiConsole({ room, dj, disabled, api, run, command }) {
         </button>
       </form>
       {answer && answer.trackId === room.nowPlaying?.trackId && (
-        <div role="status">
+        <div role="status" className="ai-answer">
           <p>{answer.answer}</p>
           <small>
             {answer.generationMode}

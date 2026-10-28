@@ -1,0 +1,140 @@
+{
+  "date": "2026-10-28T13:16:08.041Z",
+  "pass": true,
+  "mode": "Real unmodified CC0 recordings; authenticated two-browser playback; manual validated Advance between songs; no claim of full-duration natural ends",
+  "sourceManifest": "acceptance-legal-media.json",
+  "samples": [
+    {
+      "track": "Hydrogen",
+      "clients": [
+        {
+          "title": "Hydrogen",
+          "at": "2026-10-28T13:16:03.713Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.05805701814884634
+          },
+          "currentTime": 0.690667,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        },
+        {
+          "title": "Hydrogen",
+          "at": "2026-10-28T13:16:03.704Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.0393397431724073
+          },
+          "currentTime": 0.770667,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        }
+      ]
+    },
+    {
+      "track": "Rubidium",
+      "clients": [
+        {
+          "title": "Rubidium",
+          "at": "2026-10-28T13:16:05.048Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.27683324833121814
+          },
+          "currentTime": 0.701333,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        },
+        {
+          "title": "Rubidium",
+          "at": "2026-10-28T13:16:05.031Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.2288893863178556
+          },
+          "currentTime": 0.69878,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        }
+      ]
+    },
+    {
+      "track": "Caesium",
+      "clients": [
+        {
+          "title": "Caesium",
+          "at": "2026-10-28T13:16:06.098Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.0025236008889311934
+          },
+          "currentTime": 0.677951,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        },
+        {
+          "title": "Caesium",
+          "at": "2026-10-28T13:16:06.091Z",
+          "pcm": {
+            "supported": true,
+            "maxRms": 0.0025601866988570546
+          },
+          "currentTime": 0.709333,
+          "readyState": 4,
+          "muted": false,
+          "audioElements": 1
+        }
+      ]
+    }
+  ],
+  "transitions": [
+    {
+      "from": "Hydrogen",
+      "to": "Rubidium",
+      "match": {
+        "bpmDeltaPct": 0,
+        "multiplier": 1,
+        "camelotRelation": "adjacent"
+      }
+    },
+    {
+      "from": "Rubidium",
+      "to": "Caesium",
+      "match": {
+        "bpmDeltaPct": 1.5151515151515138,
+        "multiplier": 1,
+        "camelotRelation": "adjacent"
+      }
+    }
+  ],
+  "reconnect": {
+    "track": "Caesium",
+    "matched": true
+  },
+  "pageErrors": [],
+  "browserUnknown": {
+    "ok": true,
+    "epoch": "4ff0abeb-2352-4ab7-8f06-c84630f9fddd",
+    "revision": 10,
+    "durableRevision": 9,
+    "answer": "Insufficient authored metadata to answer this question.",
+    "sourceEvents": [],
+    "citations": [],
+    "generationMode": "model",
+    "fallbackReason": null,
+    "insufficientMetadata": true,
+    "generationMs": 462.170900000001,
+    "trackId": "fcbca515-b5e8-45a8-a5b5-7084e8e45a9d",
+    "profileVersion": 1
+  },
+  "node": "v24.13.0",
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz",
+    "ramBytes": 34164142080
+  }
+}

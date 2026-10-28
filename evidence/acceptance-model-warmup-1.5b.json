@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "mode": "CPU-only",
+  "model": "qwen2.5:1.5b-instruct",
+  "loadDurationNs": 1952868000,
+  "totalDurationNs": 2439018500,
+  "response": "Ready."
+}

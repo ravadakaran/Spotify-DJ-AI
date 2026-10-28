@@ -3,9 +3,11 @@ export function summarize(events) {
     endedAt = null,
     peakParticipants = 0,
     battleCount = 0,
-    questionCount = 0;
+    questionCount = 0,
+    resolvedBattleCount = 0;
   const sentimentTimeline = [],
-    trackHistory = [];
+    trackHistory = [],
+    battleOutcomes = [];
   for (const e of events) {
     const at = new Date(e.occurredAt).toISOString();
     if (e.type === "playback.start") {
@@ -23,6 +25,18 @@ export function summarize(events) {
         new Set(e.payload.userIds).size,
       );
     if (e.type === "battle.open") battleCount++;
+    if (e.type === "battle.resolved") {
+      resolvedBattleCount++;
+      battleOutcomes.push({
+        at,
+        trackId: e.payload.winningTrackId,
+        title: e.payload.track.title,
+        artist: e.payload.track.artist,
+        applicationStatus: e.payload.applicationStatus,
+        reason: e.payload.announcement.body,
+      });
+      if (battleOutcomes.length > 100) battleOutcomes.shift();
+    }
     if (e.type === "ai.question") questionCount++;
     if (e.type === "sentiment.tick")
       sentimentTimeline.push({ at, ...e.payload.sentiment });
@@ -37,6 +51,9 @@ export function summarize(events) {
     peakParticipants,
     battleCount,
     questionCount,
+    resolvedBattleCount,
+    battleOutcomes,
+    battleOutcomesTruncated: resolvedBattleCount > battleOutcomes.length,
     sentimentTimeline,
     trackHistory,
   };

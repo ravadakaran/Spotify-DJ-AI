@@ -1,0 +1,8 @@
+{
+  "pass": true,
+  "mode": "CUDA",
+  "model": "qwen2.5:1.5b-instruct",
+  "loadDurationNs": 10993694800,
+  "totalDurationNs": 11352064500,
+  "response": "Ready."
+}

@@ -81,14 +81,16 @@ export function createModels(connection) {
         default: null,
       },
       timeline: [
-        {
-          _id: false,
-          id: String,
-          ts: Number,
-          type: String,
-          text: String,
-          sourceLabel: String,
-        },
+        new Schema(
+          {
+            id: String,
+            ts: Number,
+            type: { type: String },
+            text: String,
+            sourceLabel: String,
+          },
+          { _id: false },
+        ),
       ],
       profileVersion: { type: Number, default: 1 },
       demoMetadataOnly: { type: Boolean, default: false },

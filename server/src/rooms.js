@@ -85,8 +85,10 @@ export class RoomService {
   }
   async create(userId, input, commandId = randomUUID()) {
     requireId(commandId);
-    return this.serial(`create:${userId}`, () =>
-      this.createOnce(userId, input, commandId),
+    return this.serial("catalog", () =>
+      this.serial(`create:${userId}`, () =>
+        this.createOnce(userId, input, commandId),
+      ),
     );
   }
   async createOnce(userId, input, commandId) {

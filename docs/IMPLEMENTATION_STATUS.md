@@ -1,5 +1,45 @@
 # Implementation status — 28 October 2026
 
+## Listening-flow improvements — 28 October 2026
+
+Implemented the authorized first version of all seven listening-flow priorities: server-derived compatibility feedback, full-library paginated title/artist picker, shared full/mobile playback recovery, preserved-selection stale-action resync, dismissible role-aware onboarding, reserved-next priority explanation and canonical persisted session recaps. Preserved existing catalog management, automatic continuation, hard compatibility, server authority and socket/mutation contracts. Compatibility has a separate bounded read quota; new recap outcome details are additive, optional and capped at 100. No migration/backfill is required. [Contracts, implementation and limits](LISTENING_FLOW_IMPROVEMENTS.md).
+
+Actual final validation: lint/build passed; 60 tests / 13 suites passed (47.907 s), including concurrency/replay/RBAC/catalog; all four Chromium scenarios passed (1.7 minutes overall), including the new full-library/stale/device recovery journey. Existing rendered contrast/keyboard/control/overflow checks passed, final desktop/mobile/recap views were visually reviewed, design detector found no issues and diff whitespace check passed. Browser evidence uses listening-flow-*.
+
+Intermediate browser checks caught excessive compatibility calls/rate-budget interference, repeated blocked-play retries, registration-state retention on logout and a pagination fixture ordering assumption; fixes and rerun evidence are documented. The exact pre-turn restore report was preserved. No private server restart, database migration, library edit, dependency installation or deployment occurred. Broader assistive-technology/cross-browser review and existing legal/model/evaluation/latency/deployment gates remain open; full-log summary aggregation remains a capacity limit.
+
+## Admin catalog management — 28 October 2026
+
+Implemented user-authorized IMP-002 in Overview → Local music library: title/artist/acoustic editing, authorized audio replacement and confirmed permanent deletion. Added admin-only PUT/DELETE track APIs, optimistic versions, an idle-lounge barrier serialized against room creation, server-measured replacement duration, old-timeline clearing, shared-file retention and contained cleanup with visible failure status. Existing socket names/profile API remain supported. [Contracts, recovery and limits](CATALOG_MANAGEMENT.md).
+
+Actual final verification on Windows:
+
+- `npm run lint`: passed.
+- `npm run build`: passed.
+- `npm test`: 56 tests / 12 suites passed, including six new catalog tests plus existing queue concurrency, crash/replay and HTTP/socket authorization checks (36.304 seconds).
+- `npm run test:e2e`: all three Chromium scenarios passed (one minute overall): mobile catalog management, full two-user lounge journey and automatic queue continuation. Catalog mobile screenshot inspected; no horizontal page overflow at 390px. [Evidence](../evidence/catalog-management-mobile.png).
+- `git diff --check`: passed.
+
+Initial combined browser runs exhausted the shared authentication throttle between scenarios. Each foundation scenario now creates/tears down its own disposable app/database; the catalog scenario has its own isolated fixture. Production authentication limits remain unchanged. The final complete browser rerun passed. Existing historical browser/restore evidence was preserved rather than replaced by these verification runs.
+
+All scheduled/live lounges must be ended before the new edit/replace/delete operations. MongoDB/file cleanup is not atomic; interrupted uploads or failed cleanup can leave assets requiring operator recovery. No orphan collector or in-app waveform editing is provided. No private catalog/audio change, deployment, credentials, dependency or migration change occurred. Existing legal-audio/model/evaluation/latency release gates remain open.
+
+## Frontend redesign — 28 October 2026
+
+Implemented the user's frontend review and requested replacement liquid-glass theme. Tidal Glass uses midnight navy/cyan, shared SVG controls and original CSS disc placeholders. Playback/Next Up lead the desktop lounge. Mobile has five sections, preserved drafts, one mounted audio element and a compact player with authorized Play/Pause and return-to-player. Room management, session end, analytics and diagnostics remain available in expandable sections. [Scope and unchanged contracts](FRONTEND_REDESIGN.md), [design system](../client/DESIGN.md).
+
+Actual verification on Windows / Node v24.13.0 / Intel Core i7-10875H / approximately 32 GiB RAM:
+
+- `npm run lint`: passed after final frontend changes.
+- `npm run build`: passed after final frontend changes.
+- `npm test`: all 49 tests / 11 suites passed, including queue concurrency, replay/crash and HTTP/socket authorization. Server files were unchanged throughout the redesign.
+- `npm run test:e2e`: final expanded two-context Chromium journey passed (47.4-second test; 56.5-second overall run), covering auth, private media, playback, voting, grounded questions, typing/reactions, battle, reconnect/freeze, session end, analytics, recommendations/admin, mobile sections/drafts and mini-player playback. Intermediate browser verification found an unstable implicit chat-field label; explicit accessible naming fixed it before passing reruns.
+- Six rendered audit views reported zero computed-color contrast/control-name/focusability failures. Visually reviewed welcome, desktop lounge and mobile Queue/AI screenshots. Overflow checks passed at 320, 390, 760, 768 and 1024px. `git diff --check` passed.
+
+Evidence: [desktop](../evidence/liquid-glass-lounge.png), [welcome](../evidence/liquid-glass-welcome.png), [mobile queue](../evidence/liquid-glass-mobile-queue.png), [mobile AI](../evidence/liquid-glass-mobile.png), [accessibility](../evidence/liquid-glass-accessibility.json), [browser timing](../evidence/liquid-glass-browser-latency.json), [synthetic browser recording](../evidence/liquid-glass-demo.webm). New evidence preserves historical Phase 6 browser artifacts. The full server test rewrote its disposable restore report; that generated report was restored to preserve historical evidence.
+
+No server implementation, API/socket contract, dependency, schema, migration, seed, private library, credential or deployment change. Browser verification uses disposable test data and generated silence. CSS blur has opaque/reduced-transparency fallbacks; computed contrast plus Chromium review is not comprehensive assistive-technology or cross-browser certification. Existing legal-audio, model/evaluation, latency and deployment gates below remain open.
+
 ## Phase 6 software implemented — 28 October 2026
 
 TASK-024–027 now have repeatable two-room application-latency tooling, slow-consumer/security/media-bound checks, rendered accessibility evidence and focus/contrast fixes, patched production dependencies, private Caddy/systemd templates, streamed logical backup/restore with checksums and empty-target guards, a synthetic browser demo and operating/retrospective documentation. [As-built methodology and limitations](PHASE_SIX_IMPLEMENTATION.md), [deployment/rollback runbook](PRIVATE_DEPLOYMENT.md).
@@ -166,3 +206,19 @@ Soundclash, chat/reactions/sentiment, hybrid recommendations and analytics remai
 ## Next implementation slice
 
 Phase 5 software is implemented as recorded at the top. Next is Phase 6 hardening/performance, alongside the still-open normal-use recommendation, independent sentiment, real-model and licensed-chain acceptance gates.
+
+## Enhancement implementation started — 28 October 2026
+
+Implemented IMP-001's first loaded-catalog search slice for starting tracks, queue additions and Soundclash using a shared native TrackPicker. Includes title/artist search, no-match feedback, selection retention, existing audio/acoustic metadata and explicit first-page disclosure. Full-catalog loading/retry and IMP-002–008 remain pending; no API/schema/permission/queue-authority change or release-gate closure.
+
+Actual validation: lint/build passed; 49 tests across 11 suites passed; final expanded browser journey passed (47.2 seconds / 54.9 seconds overall); diff whitespace check passed. The initial browser startup found occupied port 5173 (harness now tries another port); an intermediate mobile Pause assertion hit an existing stale-revision rejection, followed by a passing rerun. No claim that this race is fixed. Desktop picker screenshot visually reviewed; mobile overflow/accessibility checked by the existing journey. [Scope, evidence and limitations](TRACK_SELECTION_ENHANCEMENT.md).
+
+## Automatic queue continuation — 28 October 2026
+
+User requested that queued playback start at natural track completion without pressing Skip / Advance. Implemented server-owned reserved-entry/queue-head continuation through the existing FIFO, deterministic current-profile eligibility and playback.start event/replay path. Empty/blocked queues pause without dropping tracks; explicit pause, Host freeze, recovery and persistence guards remain. Pending AI proposals are not auto-approved. Updated approved-proposal UI copy. No schema, migration, dependency, socket or request change.
+
+Validation: lint/build passed; full suite 50 tests / 11 suites passed; final targeted Phase 3 integration rerun passed four tests. Existing two-context browser journey passed (50.6 seconds / 58.2 seconds overall); new natural-end browser test separately passed (3.2 seconds / 10.8 seconds overall), observing queued title, queue removal and the single audio element playing without Advance. Whitespace check passed. No private app restart or database migration occurred. Pending/unverified profiles remain ineligible and sequential file loading is not gapless playback. [Behavior, tests and limitations](AUTOMATIC_QUEUE_CONTINUATION.md).
+
+28 October 2026 acceptance: publisher-licensed CC0 three-track browser playback and real-model warm evaluation were demonstrated. Independent held-out sentiment scored 52.79% and failed the 85% threshold; first-time human reader attestation remains pending. Current-code queue maximum before optimization was 106.48 ms; final rerun pending. [Evidence and qualifications](ACCEPTANCE_CLOSURE.md).
+
+28 October 2026 final acceptance update: the optimized two-room 10-client long workload passed with queue P95 18.40 ms, max 83.21 ms, zero failures/divergence. Real legal audio and warmed real-model checks passed under the documented conditions. Independent held-out sentiment remains below target and an independent first-time reader is still required. [Results and evidence](ACCEPTANCE_CLOSURE.md).

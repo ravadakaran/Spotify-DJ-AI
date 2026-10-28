@@ -11,8 +11,15 @@ import { root } from '../../server/src/config.js';
 import { connect, migrate, seed } from '../../server/src/persistence.js';
 import { createApplication } from '../../server/src/app.js';
 let repl, db, application, vite, folder, browserUrl;
+async function chooseTrack(page, label, title) {
+  const select = page.getByLabel(label, {exact:true});
+  const option = select.locator('option').filter({hasText:new RegExp(`^${title} —`)});
+  await expect(option).toHaveCount(1);
+  await select.selectOption(await option.getAttribute('value'));
+}
 const received=new Map();
-test.beforeAll(async () => {
+test.beforeEach(async () => {
+  received.clear();
   folder = await mkdtemp(path.join(os.tmpdir(), 'dj-browser-assets-'));
   repl = await MongoMemoryReplSet.create({ replSet: { count: 1, storageEngine: 'wiredTiger' } });
   db = await connect(repl.getUri('browser_tests')); await migrate(db.connection, db.models); await seed(db.models);
@@ -33,12 +40,13 @@ test.beforeAll(async () => {
   application.rooms.command=async(...args)=>{const at=performance.timeOrigin+performance.now();const result=await originalCommand(...args);received.set(result.revision,at);return result;};
   await new Promise((resolve, reject) => { application.server.once('error', reject); application.server.listen(0, '127.0.0.1', resolve); });
   const apiUrl = `http://127.0.0.1:${application.server.address().port}`;
-  vite = await createVite({ root: path.join(root, 'client'), configFile: path.join(root, 'client/vite.config.js'), server: { port: 0, proxy: { '/api': apiUrl, '/socket.io': { target: apiUrl, ws: true } } } }); await vite.listen();
+  vite = await createVite({ root: path.join(root, 'client'), configFile: path.join(root, 'client/vite.config.js'), server: { port: 0, strictPort: false, proxy: { '/api': apiUrl, '/socket.io': { target: apiUrl, ws: true } } } }); await vite.listen();
   browserUrl = `http://127.0.0.1:${vite.httpServer.address().port}`;
   config.origin = browserUrl;
 });
-test.afterAll(async () => { await vite?.close(); await application?.close(); await db?.connection.close(); await repl?.stop(); if (folder) await rm(folder, { recursive: true, force: true }); });
+test.afterEach(async () => { await vite?.close(); await application?.close(); await db?.connection.close(); await repl?.stop(); if (folder) await rm(folder, { recursive: true, force: true }); });
 test('two independent browser sessions create/join, sync and restore authentication', async ({ browser }) => {
+  test.setTimeout(120000);
   const hostContext = await browser.newContext({recordVideo:{dir:path.join(root,'evidence','demo'),size:{width:1280,height:900}}}); const guestContext = await browser.newContext();
   const host = await hostContext.newPage(); const guest = await guestContext.newPage();
   let complete=false; const audits=[]; const faults = []; host.on('pageerror', (e) => faults.push(e.message)); guest.on('pageerror', (e) => faults.push(e.message));
@@ -47,7 +55,7 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await host.goto(browserUrl); await expect(host.getByRole('heading', { name: 'Good to have you back.' })).toBeVisible();
     audits.push(await audit(host,'welcome'));
     await host.getByLabel('Email address').focus(); await host.keyboard.press('Tab'); await expect(host.getByLabel('Password',{exact:true})).toBeFocused();
-    await host.screenshot({ path: path.join(evidence, 'phase-six-welcome.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'listening-flow-welcome.png'), fullPage: true });
     async function register(page, name) {
       await page.goto(browserUrl); await page.getByRole('button', { name: 'New here? Create an account' }).click();
       await page.getByLabel('Display name').fill(name); await page.getByLabel('Email address').fill(`${name.toLowerCase()}@example.test`); await page.getByLabel('Password', { exact: true }).fill('browser-test-password');
@@ -63,7 +71,17 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await audio.evaluate(a => a.play());
     await expect.poll(() => audio.evaluate(a => a.ended)).toBe(true);
     await host.getByLabel('Search library').fill('');
-    await host.getByLabel('Lounge vibe').fill('After Hours'); await host.getByLabel('Starting track').selectOption({ label: 'Study in Amber · 120 BPM' });
+    await host.getByLabel('Search starting track', {exact:true}).fill('no such song');
+    await expect(host.locator('.track-picker').getByRole('status')).toContainText('No matches');
+    await host.getByLabel('Search starting track', {exact:true}).fill('Amber');
+    await expect(host.getByLabel('Starting track', {exact:true}).locator('option')).toHaveCount(2);
+    await chooseTrack(host, 'Starting track', 'Study in Amber');
+    await host.getByLabel('Search starting track', {exact:true}).fill('no such song');
+    await expect(host.getByLabel('Starting track', {exact:true})).not.toHaveValue('');
+    await expect(host.locator('.track-picker').getByRole('status')).toContainText('Current selection retained');
+    await host.getByLabel('Search starting track', {exact:true}).fill('');
+    await host.screenshot({path:path.join(evidence,'listening-flow-track-picker.png'),fullPage:true});
+    await host.getByLabel('Lounge vibe').fill('After Hours'); await chooseTrack(host, 'Starting track', 'Study in Amber');
     await host.getByRole('button', { name: 'Create lounge →' }).click();
     await expect(host.getByText('Connected', { exact: true })).toBeVisible();
     const code = await host.locator('.invite-banner code').textContent();
@@ -71,6 +89,10 @@ test('two independent browser sessions create/join, sync and restore authenticat
     const joinStarted=performance.now();await guest.getByRole('button', { name: 'Join lounge ↗' }).click();
     await expect(guest.getByText('Connected', { exact: true })).toBeVisible();
     const joinRenderMs=performance.now()-joinStarted;expect(joinRenderMs).toBeLessThan(2000);
+    for (const page of [host, guest]) {
+      await page.locator('.room-management > summary').click();
+      await page.getByText('Connection diagnostics', {exact:true}).click();
+    }
     await expect(host.locator('.member')).toHaveCount(2); await expect(guest.locator('.member')).toHaveCount(2);
     await expect.poll(async()=>await host.locator('.sync-footer').textContent()===await guest.locator('.sync-footer').textContent()).toBe(true);
     await host.getByRole('button',{name:'Enable audio',exact:true}).click();
@@ -80,9 +102,9 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await expect.poll(()=>guest.getByLabel('Lounge audio').evaluate(a=>!a.paused&&a.currentTime>0)).toBe(true);
     await host.getByRole('button',{name:'Pause',exact:true}).click();
     await expect.poll(()=>guest.getByLabel('Lounge audio').evaluate(a=>a.paused)).toBe(true);
-    await host.getByLabel('Add a track').selectOption({label:'Night Geometry'});await host.getByRole('button',{name:'Add to queue',exact:true}).click();
+    await chooseTrack(host, 'Add a track', 'Night Geometry');await host.getByRole('button',{name:'Add to queue',exact:true}).click();
     await expect(guest.locator('.queue-row')).toHaveCount(1);
-    await host.getByLabel('Add a track').selectOption({label:'After the Rain'});await host.getByRole('button',{name:'Add to queue',exact:true}).click();
+    await chooseTrack(host, 'Add a track', 'After the Rain');await host.getByRole('button',{name:'Add to queue',exact:true}).click();
     await expect(guest.locator('.queue-row')).toHaveCount(2);
     for(const page of [host,guest])await page.evaluate(()=>{
       window.applied=[];
@@ -121,10 +143,10 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await expect(host.getByTestId('sentiment')).toContainText('Positive');
     await host.getByRole('button', {name:/React 🔥 to Guest/}).click();
     await expect(guest.getByRole('button', {name:/React 🔥 to Guest/})).toHaveText('🔥 1');
-    await host.getByLabel('Battle track').selectOption({label:'Study in Amber'});
+    await chooseTrack(host, 'Battle track', 'Study in Amber');
     await host.getByRole('button', {name:'Submit candidate',exact:true}).click();
     await expect(guest.locator('.battle-candidate')).toHaveCount(1);
-    await guest.getByLabel('Battle track').selectOption({label:'After the Rain'});
+    await chooseTrack(guest, 'Battle track', 'After the Rain');
     await guest.getByRole('button', {name:'Submit candidate',exact:true}).click();
     await expect(host.locator('.battle-candidate')).toHaveCount(2);
     await host.getByLabel('Voting seconds').fill('10');
@@ -136,37 +158,76 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await expect(guest.locator('.queue-row').filter({hasText:'After the Rain'})).toContainText('Reserved next');
     await expect(guest.locator('.chat-message').filter({hasText:'won Soundclash'})).toHaveCount(1);
     const sorted=[...latencies].sort((a,b)=>a-b);
-    await writeFile(path.join(evidence,'phase-six-browser-latency.json'),JSON.stringify({date:new Date().toISOString(),node:process.version,platform:process.platform,cpu:os.cpus()[0].model,memoryGiB:Math.round(os.totalmem()/1024**3),joinRenderMs,workload:'Two Chromium contexts; 2 warmup and 20 sequential votes; real local MongoDB replica set; command receipt to last client DOM revision apply',samplesMs:latencies,p50:sorted[9],p95:sorted[18],p99:sorted[19],max:sorted[19],limits:'Local smoke workload, not a 50-user or 10-minute performance certification'},null,2));
+    await writeFile(path.join(evidence,'listening-flow-browser-latency.json'),JSON.stringify({date:new Date().toISOString(),node:process.version,platform:process.platform,cpu:os.cpus()[0].model,memoryGiB:Math.round(os.totalmem()/1024**3),joinRenderMs,workload:'Two Chromium contexts; 2 warmup and 20 sequential votes; real local MongoDB replica set; command receipt to last client DOM revision apply',samplesMs:latencies,p50:sorted[9],p95:sorted[18],p99:sorted[19],max:sorted[19],limits:'Local smoke workload, not a 50-user or 10-minute performance certification'},null,2));
     expect(Math.max(...latencies)).toBeLessThan(100);
     audits.push(await audit(host,'lounge/social/AI'));
-    await host.screenshot({ path: path.join(evidence, 'phase-six-lounge.png'), fullPage: true });
+    await host.locator('.room-management > summary').click();
+    await host.screenshot({ path: path.join(evidence, 'listening-flow-lounge.png'), fullPage: true });
     await guest.reload(); await expect(guest.getByRole('heading', { name: 'Start a new lounge' })).toBeVisible();
     await guest.getByRole('button', { name: /After Hours .* ↗/ }).click(); await expect(guest.getByText('Connected', { exact: true })).toBeVisible();
     await guest.setViewportSize({ width: 390, height: 844 });
+    await guest.getByRole('navigation', {name:'Lounge sections'}).getByRole('button', {name:'AI DJ',exact:true}).click();
     await guest.getByLabel('Ask about the current track').fill('What is the BPM tempo?');
     await guest.getByRole('button',{name:'Ask AI DJ',exact:true}).click();
     await expect(guest.getByText('BPM tempo: 124.',{exact:true}).first()).toBeVisible();
     await guest.locator('.citations summary').first().click();
-    await guest.screenshot({ path: path.join(evidence, 'phase-six-mobile.png'), fullPage: true });
+    await guest.screenshot({ path: path.join(evidence, 'listening-flow-mobile.png'), fullPage: true });
     expect(await guest.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    const sections = guest.getByRole('navigation', {name:'Lounge sections'});
+    await sections.getByRole('button', {name:'Chat',exact:true}).click();
+    await guest.getByLabel('Message', {exact:true}).fill('Draft survives navigation');
+    await sections.getByRole('button', {name:'Soundclash',exact:true}).click();
+    await expect(guest.locator('.battle-panel')).toBeVisible();
+    await expect(guest.locator('.player')).not.toBeVisible();
+    await expect(guest.locator('.chat-panel')).not.toBeVisible();
+    await sections.getByRole('button', {name:'Chat',exact:true}).click();
+    await expect(guest.getByLabel('Message', {exact:true})).toHaveValue('Draft survives navigation');
+    await guest.getByLabel('Message', {exact:true}).fill('');
+    await sections.getByRole('button', {name:'Room',exact:true}).click();
+    await expect(guest.locator('.room-panel')).toBeVisible();
+    await guest.getByRole('button', {name:'Back to player',exact:true}).click();
+    await expect(guest.locator('.player')).toBeVisible();
+    await expect(guest.locator('.queue-panel')).toBeVisible();
+    await expect(guest.locator('.ai-panel')).not.toBeVisible();
+    await expect(guest.getByRole('button', {name:'Back to player',exact:true})).toBeVisible();
+    await expect(guest.getByLabel('Lounge audio')).toHaveCount(1);
+    audits.push(await audit(guest,'mobile queue/navigation'));
+    await guest.screenshot({path: path.join(evidence,'listening-flow-mobile-queue.png'),fullPage:true});
+    for (const width of [320, 760, 768, 1024]) {
+      await guest.setViewportSize({width,height:844});
+      expect(await guest.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    }
+    await guest.setViewportSize({width:390,height:844});
+
     await host.getByRole('button',{name:'Overview',exact:false}).click();
     await expect(guest.getByText('Host disconnected. Playback and queue changes are frozen.',{exact:true})).toBeVisible();
     await guest.getByRole('button', { name: 'Sign out' }).click(); await expect(guest.getByRole('heading', { name: 'Good to have you back.' })).toBeVisible();
     await host.getByRole('button', { name: /After Hours .* ↗/ }).click();
     await expect(host.getByText('Connected', { exact: true })).toBeVisible();
-    await host.getByRole('button', { name: 'Like / unlike current track', exact: true }).click();
-    await expect(host.getByRole('button', { name: 'Like / unlike current track', exact: true })).toHaveAttribute('aria-pressed','true');
+    await host.getByRole('button', { name: 'Like', exact: true }).click();
+    await expect(host.getByRole('button', { name: 'Liked', exact: true })).toHaveAttribute('aria-pressed','true');
+    await host.setViewportSize({width:390,height:844});
+    await host.getByRole('navigation', {name:'Lounge sections'}).getByRole('button', {name:'Chat',exact:true}).click();
+    await expect(host.locator('.player')).not.toBeVisible();
+    await host.getByRole('button', {name:'Play playback',exact:true}).click();
+    await expect(host.getByRole('button', {name:'Pause playback',exact:true})).toBeVisible();
+    await host.getByRole('button', {name:'Pause playback',exact:true}).click();
+    await expect(host.getByRole('button', {name:'Play playback',exact:true})).toBeVisible();
+    await host.getByRole('button', {name:'Back to player',exact:true}).click();
+    await expect(host.locator('.player')).toBeVisible();
+    await host.setViewportSize({width:1440,height:1000});
+    await host.locator('.room-management > summary').click();
     await host.getByRole('button', { name: 'End session', exact: true }).click();
     await expect(host.getByText('Session ended. Your listening history and analytics are ready.', { exact: true })).toBeVisible();
     await host.getByText('Session analytics', { exact: true }).click();
     await expect(host.getByText('Track history', { exact: true })).toBeVisible();
     audits.push(await audit(host,'analytics'));
-    await host.screenshot({ path: path.join(evidence, 'phase-six-analytics.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'listening-flow-analytics.png'), fullPage: true });
     await host.getByRole('button', { name: 'Overview', exact: false }).click();
     await expect(host.getByRole('heading', { name: 'Your listening', exact: true })).toBeVisible();
     await host.getByRole('button', { name: 'Refresh listening', exact: true }).click();
     await host.setViewportSize({ width: 390, height: 844 });
-    await host.screenshot({ path: path.join(evidence, 'phase-six-dashboard-mobile.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'listening-flow-dashboard-mobile.png'), fullPage: true });
     expect(await host.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await db.models.User.updateOne({ emailNormalized: 'host@example.test' }, { $set: { isAdmin: true } });
     await host.reload();
@@ -174,11 +235,129 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await host.getByRole('button', {name:'Fit recommendation model',exact:true}).click();
     await host.getByRole('button', {name:'Check training status',exact:true}).click();
     await expect.poll(async()=>{await host.getByRole('button',{name:'Check training status',exact:true}).click();return host.locator('.personal-dashboard').textContent();}).toContain('complete');
-    await host.screenshot({ path: path.join(evidence, 'phase-six-admin-mobile.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'listening-flow-admin-mobile.png'), fullPage: true });
     audits.push(await audit(host,'dashboard/admin/mobile'));
-    await writeFile(path.join(evidence,'phase-six-accessibility.json'),JSON.stringify(audits,null,2));
+    await writeFile(path.join(evidence,'listening-flow-accessibility.json'),JSON.stringify(audits,null,2));
     expect(audits.flatMap(a=>a.failures)).toEqual([]);
     expect(audits.flatMap(a=>a.controls).filter(c=>!c.name || !c.focusable)).toEqual([]);
     expect(faults).toEqual([]); complete=true;
-  } finally { await hostContext.close(); await guestContext.close(); if(complete) await host.video().saveAs(path.join(evidence,"phase-six-demo.webm")); }
+  } finally { await hostContext.close(); await guestContext.close(); if(complete) await host.video().saveAs(path.join(evidence,"listening-flow-demo.webm")); }
+});
+
+test('natural track completion starts the queued song without pressing Advance', async ({ page }) => {
+  await page.goto(browserUrl);
+  await page.getByRole('button', {name:'New here? Create an account'}).click();
+  await page.getByLabel('Display name').fill('Auto Next Host');
+  await page.getByLabel('Email address').fill('auto-next@example.test');
+  await page.getByLabel('Password', {exact:true}).fill('browser-test-password');
+  await page.getByRole('button', {name:'Create account →'}).click();
+  await page.getByLabel('Lounge vibe').fill('Automatic continuation');
+  await chooseTrack(page, 'Starting track', 'Study in Amber');
+  await page.getByRole('button', {name:'Create lounge →'}).click();
+  await expect(page.getByText('Connected', {exact:true})).toBeVisible();
+  await chooseTrack(page, 'Add a track', 'Night Geometry');
+  await page.getByRole('button', {name:'Add to queue',exact:true}).click();
+  await expect(page.locator('.queue-row')).toHaveCount(1);
+  await page.getByRole('button', {name:'Enable audio',exact:true}).click();
+  await page.getByRole('button', {name:'Play',exact:true}).click();
+  await expect.poll(() => page.getByLabel('Lounge audio').evaluate(audio => !audio.paused)).toBe(true);
+  const originalNow = application.rooms.now;
+  try {
+    // Advance only the authoritative clock; clients never issue a skip command.
+    application.rooms.now = () => originalNow() + 31000;
+    await application.rooms.tick();
+    await expect(page.locator('.player h2')).toHaveText('Night Geometry');
+    await expect(page.locator('.queue-row')).toHaveCount(0);
+    await expect(page.getByRole('button', {name:'Pause',exact:true})).toBeVisible();
+    await expect(page.getByLabel('Lounge audio')).toHaveCount(1);
+    await expect.poll(() => page.getByLabel('Lounge audio').evaluate(audio => !audio.paused && audio.readyState >= 2)).toBe(true);
+  } finally { application.rooms.now = originalNow; }
+});
+
+test('full-library discovery, stale-action guidance and mobile audio recovery preserve selections', async ({page}) => {
+  await db.models.Track.insertMany(Array.from({length:105}, (_, index) => ({
+    title:`Beyond page ${String(index).padStart(3,'0')}`, artist:'Across library artist',
+    durationSeconds:1, profileStatus:'pending', acoustic:null,
+  })));
+  await page.addInitScript(() => {
+    window.liveAudioUrls = new Set();
+    const create = URL.createObjectURL.bind(URL), revoke = URL.revokeObjectURL.bind(URL);
+    URL.createObjectURL = blob => { const url=create(blob); window.liveAudioUrls.add(url); return url; };
+    URL.revokeObjectURL = url => { window.liveAudioUrls.delete(url); revoke(url); };
+  });
+  await page.goto(browserUrl);
+  await page.getByRole('button', {name:'New here? Create an account'}).click();
+  await page.getByLabel('Display name').fill('Recovery Host');
+  await page.getByLabel('Email address').fill('recovery@example.test');
+  await page.getByLabel('Password', {exact:true}).fill('browser-test-password');
+  await page.getByRole('button', {name:'Create account →'}).click();
+  await page.getByLabel('Search starting track', {exact:true}).fill('Across library artist');
+  const startPicker=page.locator('.track-picker');
+  await expect(startPicker.getByRole('status')).toContainText('100 matching tracks');
+  const firstPageIds=await page.getByLabel('Starting track',{exact:true}).locator('option').evaluateAll(options=>options.map(option=>option.value).filter(Boolean));
+  await startPicker.getByRole('button',{name:'Next 100 results'}).click();
+  await expect(startPicker.getByRole('status')).toContainText('5 matching tracks');
+  const secondPageIds=await page.getByLabel('Starting track',{exact:true}).locator('option').evaluateAll(options=>options.map(option=>option.value).filter(Boolean));
+  expect(secondPageIds).toHaveLength(5);
+  expect(secondPageIds.some(id=>firstPageIds.includes(id))).toBe(false);
+  await page.getByLabel('Search starting track',{exact:true}).fill('Amber');
+  await chooseTrack(page,'Starting track','Study in Amber');
+  await page.getByLabel('Lounge vibe').fill('Recovery journey');
+  await page.getByRole('button',{name:'Create lounge →'}).click();
+  await expect(page.getByText('Connected',{exact:true})).toBeVisible();
+  await page.getByText('Listening guide',{exact:true}).click();
+  await page.getByRole('button',{name:'Dismiss guide',exact:true}).click();
+  await page.getByRole('button',{name:'Show listening guide',exact:true}).click();
+  const queuePicker=page.locator('.queue-panel .track-picker');
+  await page.getByLabel('Search add a track',{exact:true}).fill('Night Geometry');
+  await chooseTrack(page,'Add a track','Night Geometry');
+  await expect(queuePicker.getByRole('status').filter({hasText:'Eligible next'})).toBeVisible();
+  await page.route('**/api/v1/tracks?**', async route => {
+    if(new URL(route.request().url()).searchParams.get('q')==='forced-retry') {
+      await route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:{message:'Synthetic search outage'}})});
+    } else await route.continue();
+  });
+  await page.getByLabel('Search add a track',{exact:true}).fill('forced-retry');
+  await expect(queuePicker.getByRole('button',{name:'Retry library search'})).toBeVisible();
+  const retained=await page.getByLabel('Add a track',{exact:true}).inputValue();
+  await page.unroute('**/api/v1/tracks?**');
+  await queuePicker.getByRole('button',{name:'Retry library search'}).click();
+  await expect(queuePicker.getByRole('status').first()).toContainText('No matches');
+  await expect(page.getByLabel('Add a track',{exact:true})).toHaveValue(retained);
+  await page.route('**/api/v1/lounges/*/queue', route => route.fulfill({status:409,contentType:'application/json',body:JSON.stringify({error:{code:'STALE_REVISION',message:'Synthetic stale revision'}})}),{times:1});
+  await page.getByRole('button',{name:'Add to queue',exact:true}).click();
+  await expect(page.getByRole('button',{name:'Refresh lounge',exact:true})).toBeVisible();
+  await expect(page.locator('.queue-row')).toHaveCount(0);
+  await expect(page.getByLabel('Add a track',{exact:true})).toHaveValue(retained);
+  await page.getByRole('button',{name:'Dismiss update',exact:true}).click();
+  await page.getByRole('button',{name:'Add to queue',exact:true}).click();
+  await expect(page.locator('.queue-row')).toHaveCount(1);
+  await page.route('**/api/v1/assets/*/content', route => route.fulfill({status:503,body:'Synthetic media outage'}),{times:1});
+  await page.getByRole('button',{name:'Enable audio',exact:true}).click();
+  await page.getByRole('button',{name:'Play',exact:true}).click();
+  await expect(page.getByTestId('playback-status')).toContainText('Audio unavailable');
+  await page.setViewportSize({width:390,height:844});
+  await page.getByRole('navigation',{name:'Lounge sections'}).getByRole('button',{name:'Chat',exact:true}).click();
+  await expect(page.locator('.mobile-mini-player')).toContainText('Audio unavailable');
+  await page.getByRole('button',{name:'Retry audio on this device',exact:true}).click();
+  await expect(page.locator('.mobile-mini-player')).toContainText('Playing');
+  await expect.poll(() => page.getByLabel('Lounge audio').evaluate(audio => !audio.paused && audio.readyState>=2)).toBe(true);
+  expect(await page.evaluate(() => window.liveAudioUrls.size)).toBe(1);
+  await page.evaluate(() => {
+    window.blockDeviceAudio=true;
+    window.originalPlay=HTMLMediaElement.prototype.play;
+    HTMLMediaElement.prototype.play=function() { return window.blockDeviceAudio ? Promise.reject(new DOMException('Synthetic block','NotAllowedError')) : window.originalPlay.call(this); };
+    document.querySelector('audio[aria-label="Lounge audio"]').pause();
+  });
+  await expect(page.locator('.mobile-mini-player')).toContainText('Browser playback blocked');
+  await page.evaluate(() => { window.blockDeviceAudio=false; });
+  await page.getByRole('button',{name:'Enable audio again on this device',exact:true}).click();
+  await expect(page.locator('.mobile-mini-player')).toContainText('Playing');
+  await page.getByRole('button',{name:'Back to player',exact:true}).click();
+  await expect(page.getByLabel('Lounge audio')).toHaveCount(1);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+  await page.screenshot({path:path.join(root,'evidence','listening-flow-mobile.png'),fullPage:true});
+  await page.getByRole('button',{name:'Sign out',exact:true}).click();
+  await expect(page.getByRole('heading',{name:'Good to have you back.'})).toBeVisible();
+  expect(await page.evaluate(() => window.liveAudioUrls.size)).toBe(0);
 });

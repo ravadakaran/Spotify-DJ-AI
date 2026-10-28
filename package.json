@@ -29,6 +29,12 @@
     "password:calibrate": "node scripts/calibrate-passwords.js",
     "admin:create:local": "node --env-file-if-exists=.env server/src/cli.js admin --local",
     "benchmark": "node scripts/benchmark.js",
+    "acceptance:media": "node scripts/prepare-acceptance-media.js",
+    "acceptance:demo": "node scripts/acceptance-studio.js",
+    "acceptance:chain": "node scripts/evaluate-legal-chain.js",
+    "acceptance:model": "node scripts/evaluate-real-model.js",
+    "acceptance:sentiment": "node scripts/evaluate-heldout-sentiment.js",
+    "acceptance:clean": "node scripts/reproduce-clean.js",
     "backup": "node --env-file-if-exists=.env scripts/backup.js",
     "security:scan": "node scripts/scan-secrets.js"
   },
