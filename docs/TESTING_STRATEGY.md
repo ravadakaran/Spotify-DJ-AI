@@ -1,5 +1,7 @@
 # Testing strategy
 
+Phase 6 adds `phase-six.integration.test.js` for injection/origin/CSRF/body bounds, HTTP/socket end authorization, slow transport/isolation/readiness, and offline backup/clean restore/replay/validators/assets. `npm run benchmark` executes the default 60-second warmup/600-second two-room 10-client workload; BENCH_USERS supports up to 50. Reports count client failures, compare queue hashes and record per-client application delay/skew, REST, event-loop and memory samples. Browser verification adds recorded synthetic-media demo, rendered solid-color contrast/control names and keyboard checks. `npm run security:scan` scans current sources and reachable history signatures; full and production dependency audits are separate. [Exact methodology and limits](PHASE_SIX_IMPLEMENTATION.md).
+
 Phase 5 adds TEST-013/014 software checks: chronological split/baselines/coverage, bounded heartbeat and duplicate effects, paused playback, own-history isolation, HTTP/socket Host-only end, manual duration/presence audit against canonical events, and live worker swap/cold start. TEST-015 extends through like/end/analytics/dashboard/admin fitting and mobile overflow. The authored synthetic evaluator remains separate from normal-use held-out acceptance. [Phase 5 details](PHASE_FIVE_IMPLEMENTATION.md).
 
 

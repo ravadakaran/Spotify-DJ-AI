@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-28T05:34:42.556Z",
+  "node": "v24.13.0",
+  "method": "Offline Extended JSON logical backup; disposable real MongoDB replica set; separate empty restore database",
+  "collections": [
+    {
+      "name": "refresh_sessions",
+      "count": 2,
+      "indexes": 3
+    },
+    {
+      "name": "interactions",
+      "count": 0,
+      "indexes": 2
+    },
+    {
+      "name": "session_summaries",
+      "count": 0,
+      "indexes": 1
+    },
+    {
+      "name": "command_receipts",
+      "count": 2,
+      "indexes": 2
+    },
+    {
+      "name": "audio_assets",
+      "count": 1,
+      "indexes": 1
+    },
+    {
+      "name": "lounges",
+      "count": 2,
+      "indexes": 1
+    },
+    {
+      "name": "recommendation_jobs",
+      "count": 0,
+      "indexes": 0
+    },
+    {
+      "name": "chat_messages",
+      "count": 1,
+      "indexes": 2
+    },
+    {
+      "name": "memberships",
+      "count": 3,
+      "indexes": 2
+    },
+    {
+      "name": "room_snapshots",
+      "count": 2,
+      "indexes": 1
+    },
+    {
+      "name": "tracks",
+      "count": 3,
+      "indexes": 2
+    },
+    {
+      "name": "queue_events",
+      "count": 9,
+      "indexes": 2
+    },
+    {
+      "name": "schema_migrations",
+      "count": 5,
+      "indexes": 0
+    },
+    {
+      "name": "migration_locks",
+      "count": 0,
+      "indexes": 0
+    },
+    {
+      "name": "users",
+      "count": 2,
+      "indexes": 1
+    }
+  ],
+  "assets": 1,
+  "checks": {
+    "collectionCounts": true,
+    "assetBytes": true,
+    "strictValidator": true,
+    "migrationRerun": true,
+    "newEpoch": true,
+    "pausedPlayback": true,
+    "chatReplay": true,
+    "nonemptyTargetRejected": true
+  },
+  "limitations": "Not Database Tools or private-library/VM restore"
+}

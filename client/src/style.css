@@ -80,7 +80,7 @@ a {
 .workspace-label {
   font-size: 9px;
   letter-spacing: 2px;
-  color: #657369;
+  color: #8e9d91;
   margin: 60px 10px 15px;
 }
 .nav {
@@ -115,7 +115,7 @@ a {
   font-size: 12px;
   line-height: 1.9;
   letter-spacing: 0;
-  color: #657369;
+  color: #8e9d91;
   margin-top: 20px;
 }
 .status-dot {
@@ -148,7 +148,7 @@ header {
 }
 .breadcrumb span {
   margin: 0 17px;
-  color: #455048;
+  color: #8e9d91;
 }
 .account {
   display: flex;
@@ -268,7 +268,7 @@ select {
   min-height: 43px;
 }
 input::placeholder {
-  color: #647260;
+  color: #8e9d91;
 }
 input:focus,
 select:focus {
@@ -309,7 +309,7 @@ select:focus {
 }
 .join-note > span {
   font-size: 38px;
-  color: #9bba7b50;
+  color: #8e9d91;
   font-family: Georgia, serif;
 }
 .join-note p {
@@ -361,7 +361,7 @@ footer {
   margin-top: 48px;
   font-size: 8px;
   letter-spacing: 1.7px;
-  color: #596a58;
+  color: #8e9d91;
 }
 .welcome-grid {
   display: grid;
@@ -579,7 +579,7 @@ footer {
 }
 .sync-footer span {
   font-size: 10px;
-  color: #708168;
+  color: #8e9d91;
 }
 .admin {
   margin-top: 25px;
@@ -911,4 +911,13 @@ button:disabled {
   .enqueue-form {
     display: block;
   }
+}
+
+:focus-visible {
+  outline: 2px solid #b4ed84;
+  outline-offset: 4px;
+}
+@media (prefers-reduced-motion: reduce) {
+  button { transition: background-color 0s; }
+  button:active:not(:disabled) { transform: none; }
 }

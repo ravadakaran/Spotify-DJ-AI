@@ -1,5 +1,7 @@
 # Implementation plan
 
+28 October 2026: Phase 6 software/evidence tools and deployment/restore documentation implemented. Full exit gates remain qualified by real media/model and independent evaluation data, plus target-host TLS deployment. [As-built scope and retrospective](PHASE_SIX_IMPLEMENTATION.md).
+
 Implementation is authorized and the independent Phase 1 foundation slice has been built and tested. Phase 0 legal-media/model gates remain explicitly open; neither phase is declared fully complete. See [implementation status](IMPLEMENTATION_STATUS.md). MVP includes every required Epic 1–3 behavior. The source's four checkpoints map roughly to P1, P2/P3, P4/P5, P6; no calendar dates or effort estimates are assigned. One engineer should build vertical slices and measure before committing a schedule. All requirements use IDs from [requirements](PROJECT_REQUIREMENTS.md); actionable items are in [tasks](TASKS.md).
 
 ## P0 — Scope, legal data and feasibility gate

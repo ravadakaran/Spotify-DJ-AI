@@ -234,37 +234,41 @@ Software implemented; TASK-020/021 acceptance remains open for normal-use held-o
 **Objective:** Production-grade hardening, automated performance benchmarking under declared local hardware, backup/restore rehearsal, and complete submission documentation.
 
 ### [ ] TASK-024: Performance Harness, Multi-Room Stress & Latency Audit
-- [ ] Build multi-client load harness simulating 2 rooms with 5--10 users/room emitting 2 queue votes/s and 1 chat/s ([TEST-009](TESTING_STRATEGY.md#L15)).
+- [x] Build multi-client load harness simulating 2 rooms with 5--10 users/room emitting 2 queue votes/s and 1 chat/s ([TEST-009](TESTING_STRATEGY.md#L15)).
 - [ ] Measure and document real local latency distributions:
   - Queue update sync $< 100\text{ ms}$
   - Room fan-out $< 500\text{ ms}$
   - Non-AI REST API P95 $< 200\text{ ms}$
   - AI segue generation P95 $< 3\text{ s}$
-- [ ] Stress-test single-process bounds: test up to 50 concurrent participants if hardware allows; measure memory usage and event-loop lag ([TEST-012](TESTING_STRATEGY.md#L18)).
-- [ ] Save raw measurement logs and summary tables under `evidence/`.
+- [x] Stress-test single-process bounds: test up to 50 concurrent participants if hardware allows; measure memory usage and event-loop lag ([TEST-012](TESTING_STRATEGY.md#L18)).
+- [x] Save raw measurement logs and summary tables under `evidence/`.
 
 ### [ ] TASK-025: Security Audit, Penetration Checks & Accessibility Review
-- [ ] Execute security test suite ([TEST-011](TESTING_STRATEGY.md#L17)):
+- [x] Execute security test suite ([TEST-011](TESTING_STRATEGY.md#L17)):
   - NoSQL injection and prototype pollution defenses
   - Stored XSS defense in chat, titles, and lore
   - Path traversal defense on audio upload and streaming
   - CSRF protection and exact-origin CORS checks
   - Prompt injection robustness in RAG Q&A
-- [ ] Run dependency vulnerability and secret audit (`npm audit`, git scan).
+- [x] Run dependency vulnerability and secret audit (`npm audit`, git scan).
 - [ ] Verify WCAG keyboard navigation and accessible color contrast across all React console views.
 
 ### [ ] TASK-026: Private Deployment Runbook & Backup/Restore Rehearsal
-- [ ] Configure single-instance deployment behind reverse proxy with TLS terminating at edge ([ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md#L55)).
-- [ ] Implement `/health/live` and `/health/ready` endpoints verifying DB connection, asset storage, and batch writer.
-- [ ] Rehearse backup and restore procedure: dump MongoDB and asset manifest, restore to clean volume, replay recovered state, and verify room epoch bump ([TEST-010](TESTING_STRATEGY.md#L16), [TEST-015](TESTING_STRATEGY.md#L21)).
-- [ ] Document rollback runbook in `docs/ENVIRONMENT_SETUP.md`.
+- [x] Configure single-instance deployment behind reverse proxy with TLS terminating at edge ([ENVIRONMENT_SETUP.md](ENVIRONMENT_SETUP.md#L55)).
+- [x] Implement `/health/live` and `/health/ready` endpoints verifying DB connection, asset storage, and batch writer.
+- [x] Rehearse backup and restore procedure: dump MongoDB and asset manifest, restore to clean volume, replay recovered state, and verify room epoch bump ([TEST-010](TESTING_STRATEGY.md#L16), [TEST-015](TESTING_STRATEGY.md#L21)).
+- [x] Document rollback runbook in `docs/ENVIRONMENT_SETUP.md`.
 
 ### [ ] TASK-027: Multi-Session Demo, Retrospective & As-Built Documentation
-- [ ] Record end-to-end multi-browser demo video: 2 users, queue votes, chat sentiment shift, Soundclash battle, harmonic segue, cited Q&A, and session analytics dashboard.
-- [ ] Update all planning documents to reflect as-built reality (pinned package versions, real ports, measured performance).
-- [ ] Write final project retrospective: report actual vs. target metrics, hardware specifications, and documented limitations.
+- [x] Record end-to-end multi-browser demo video: 2 users, queue votes, chat sentiment shift, Soundclash battle, harmonic segue, cited Q&A, and session analytics dashboard.
+- [x] Update all planning documents to reflect as-built reality (pinned package versions, real ports, measured performance).
+- [x] Write final project retrospective: report actual vs. target metrics, hardware specifications, and documented limitations.
 
 ---
+
+Actual stress evidence: two rooms with 50 clients each, 10-second warmup plus 60-second measurement, zero failures. This is short stress evidence, not ten-minute 50-client certification. The initial long ten-client run retained REST-429 failures. The corrected 600-second run recorded zero command failures but a 225 ms queue maximum, exceeding the 100 ms gate; concurrent desktop verification was present and isolated acceptance remains open.
+
+Software checks above mean tools/templates/targeted checks, not full release certification. The restore rehearsal uses the documented custom offline logical dump (no Database Tools installed). The video uses synthetic silence and metadata. TLS deployment, full WCAG review, real-model latency and upstream data/license gates remain open. [Exact evidence and limitations](PHASE_SIX_IMPLEMENTATION.md).
 
 ## Phase Overview & Progress Tracking
 

@@ -1,5 +1,7 @@
 # Project requirements and source analysis
 
+28 October 2026: Phase 6 implements REQ-019/020/021/022 verification tooling and operating templates; measured evidence and qualified release gates are tracked in [implementation status](IMPLEMENTATION_STATUS.md). It changes no source requirement, schema or AI acceptance threshold. A scripted-client application measurement is separate from browser DOM rendering and real-model outro latency.
+
 27 October 2026: Phase 5 software implements REQ-015–017 interactions, recommendation worker/rail, dashboard and end summaries. Normal-use held-out Precision@5 acceptance remains open; authored synthetic evaluation is software evidence only. [Contracts and limits](PHASE_FIVE_IMPLEMENTATION.md).
 
 

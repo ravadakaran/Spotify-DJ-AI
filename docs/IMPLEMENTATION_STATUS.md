@@ -1,4 +1,34 @@
-# Implementation status — 27 October 2026
+# Implementation status — 28 October 2026
+
+## Phase 6 software implemented — 28 October 2026
+
+TASK-024–027 now have repeatable two-room application-latency tooling, slow-consumer/security/media-bound checks, rendered accessibility evidence and focus/contrast fixes, patched production dependencies, private Caddy/systemd templates, streamed logical backup/restore with checksums and empty-target guards, a synthetic browser demo and operating/retrospective documentation. [As-built methodology and limitations](PHASE_SIX_IMPLEMENTATION.md), [deployment/rollback runbook](PRIVATE_DEPLOYMENT.md).
+
+Actual checks on Windows, Node v24.13.0, Intel Core i7-10875H and approximately 32 GiB RAM:
+
+| Check | Actual result |
+| --- | --- |
+| Clean-directory `npm ci` | Passed; isolated from the existing private app |
+| `npm run lint` | Passed |
+| `npm test` | 49 passed across 11 suites in the clean directory, including concurrency/crash/replay and four Phase 6 tests |
+| `npm run build` | Passed in clean directory |
+| `npm run test:e2e` | Passed again after restoring workspace dependencies; two contexts, full existing journey, keyboard Tab, named/focusable controls and computed solid-color contrast |
+| `npm audit --omit=dev` | Zero findings |
+| Full `npm audit` | Five low findings in the Jest/deepmerge chain (one underlying advisory); no high/critical findings |
+| `npm run security:scan` | Zero signature findings in source and reachable Git history; not an exhaustive secret audit |
+| Restore rehearsal | Disposable database/asset backup restored to separate clean targets; collection counts, indexes/validators, migration rerun, asset bytes, paused same-track/new epoch/chat replay and nonempty/corrupt target rejection checked |
+| Two rooms × 50 clients | 10-second warmup + 60-second measurement; zero failures; queue apply P95 45.06 ms/max 83.78 ms; fan-out max 153.65 ms; REST P95 50.91 ms |
+| Two rooms × 10 clients, long run | 60-second warmup + 600-second measurement; zero command failures/divergence; 2,400 queue events, 1,200 chat events, 600 REST probes. Queue P95 24.28 ms/max 225.00 ms (100 ms max target missed); fan-out max 309.80 ms; REST P95 24.27 ms |
+| Final harness smoke | Two rooms × 5 clients, 2-second warmup + 10-second measurement passed after adding explicit threshold-failure exit status and elapsed trace timestamps |
+| Live TLS deployment | Templates/runbook prepared; not installed or executed on this Windows host |
+
+Evidence: [corrected long run and target miss](../evidence/phase-six-load-10.json), [50-client stress](../evidence/phase-six-load-50.json), [initial long run including failures](../evidence/phase-six-load-10-initial.json), [clean install](../evidence/phase-six-clean-install.json), [restore](../evidence/phase-six-restore.json), [accessibility](../evidence/phase-six-accessibility.json), [browser timings](../evidence/phase-six-browser-latency.json), [synthetic-media demo](../evidence/phase-six-demo.webm). Scripted queue application begins at the room command processor after token verification; fan-out begins before client emit and includes authentication. Browser DOM timing is separate. The 50-client stress is short, not a ten-minute capacity certification. Memory/event-loop raw samples are included; no indefinite memory-growth claim is made.
+
+An active-workspace `npm ci` attempt hit a Windows lock on an in-use MongoDB executable and temporarily removed dependencies. `npm install` restored them; clean installation/testing then passed in a separate temporary directory, followed by a passing workspace browser run. No existing app process was stopped. The first browser pass caught an existing asynchronous training-status test race, fixed by polling its status control. Historical evidence was preserved.
+
+**Phase 6 software is implemented; release acceptance remains qualified.** No private DB migration/reset, real-library restore, target-host TLS deployment, model download or credential change occurred. Queue max-latency acceptance (225 ms observed with concurrent desktop verification), real-model outro-to-render latency, licensed playable chain, independent sentiment and normal-use held-out recommendation evaluation remain open; five low development audit findings remain. All three epics are implemented, with the Phase 5 long-session aggregation/capacity limits retained. Parent tasks remain open where full release acceptance depends on those gates.
+
+Earlier records below are historical checkpoints.
 
 ## Phase 5 software implemented — 27 October 2026
 

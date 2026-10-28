@@ -14,3 +14,4 @@ data/backups/
 data/import-reports/
 data/local-connection.json
 *.log
+evidence/demo/

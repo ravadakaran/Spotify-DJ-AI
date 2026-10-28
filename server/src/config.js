@@ -21,6 +21,7 @@ export function readConfig(env = process.env) {
     origin: env.APP_ORIGIN || "http://127.0.0.1:5173",
     port: Number(env.PORT || 3000),
     secure: env.COOKIE_SECURE === "true",
+    trustLoopbackProxy: env.TRUST_LOOPBACK_PROXY === "true",
     assetRoot: path.resolve(root, env.ASSET_ROOT || "data/assets"),
     roomOptions: {
       ollamaModel:

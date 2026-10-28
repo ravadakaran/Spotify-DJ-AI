@@ -1,3 +1,4 @@
+import { audit } from './accessibility.js';
 import { test, expect } from '@playwright/test';
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import { createServer as createVite } from 'vite';
@@ -38,19 +39,21 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { await vite?.close(); await application?.close(); await db?.connection.close(); await repl?.stop(); if (folder) await rm(folder, { recursive: true, force: true }); });
 test('two independent browser sessions create/join, sync and restore authentication', async ({ browser }) => {
-  const hostContext = await browser.newContext(); const guestContext = await browser.newContext();
+  const hostContext = await browser.newContext({recordVideo:{dir:path.join(root,'evidence','demo'),size:{width:1280,height:900}}}); const guestContext = await browser.newContext();
   const host = await hostContext.newPage(); const guest = await guestContext.newPage();
-  const faults = []; host.on('pageerror', (e) => faults.push(e.message)); guest.on('pageerror', (e) => faults.push(e.message));
+  let complete=false; const audits=[]; const faults = []; host.on('pageerror', (e) => faults.push(e.message)); guest.on('pageerror', (e) => faults.push(e.message));
   const evidence = path.join(root, 'evidence'); await mkdir(evidence, { recursive: true });
   try {
     await host.goto(browserUrl); await expect(host.getByRole('heading', { name: 'Good to have you back.' })).toBeVisible();
-    await host.screenshot({ path: path.join(evidence, 'phase-four-welcome.png'), fullPage: true });
+    audits.push(await audit(host,'welcome'));
+    await host.getByLabel('Email address').focus(); await host.keyboard.press('Tab'); await expect(host.getByLabel('Password',{exact:true})).toBeFocused();
+    await host.screenshot({ path: path.join(evidence, 'phase-six-welcome.png'), fullPage: true });
     async function register(page, name) {
       await page.goto(browserUrl); await page.getByRole('button', { name: 'New here? Create an account' }).click();
       await page.getByLabel('Display name').fill(name); await page.getByLabel('Email address').fill(`${name.toLowerCase()}@example.test`); await page.getByLabel('Password', { exact: true }).fill('browser-test-password');
       await page.getByRole('button', { name: 'Create account →' }).click(); await expect(page.getByRole('heading', { name: 'Start a new lounge' })).toBeVisible();
     }
-    await register(host, 'Host');
+    await register(host, 'Host'); audits.push(await audit(host,'overview/catalog'));
     await host.getByLabel('Search library').fill('Preview fixture');
     await expect(host.getByText('Test only · 0:00 · Profile needed')).toBeVisible();
     await host.getByRole('button', {name:'Preview',exact:true}).click();
@@ -133,9 +136,10 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await expect(guest.locator('.queue-row').filter({hasText:'After the Rain'})).toContainText('Reserved next');
     await expect(guest.locator('.chat-message').filter({hasText:'won Soundclash'})).toHaveCount(1);
     const sorted=[...latencies].sort((a,b)=>a-b);
-    await writeFile(path.join(evidence,'phase-four-browser-latency.json'),JSON.stringify({date:'2026-10-26',node:process.version,platform:process.platform,cpu:os.cpus()[0].model,memoryGiB:Math.round(os.totalmem()/1024**3),joinRenderMs,workload:'Two Chromium contexts; 2 warmup and 20 sequential votes; real local MongoDB replica set; command receipt to last client DOM revision apply',samplesMs:latencies,p50:sorted[9],p95:sorted[18],p99:sorted[19],max:sorted[19],limits:'Local smoke workload, not a 50-user or 10-minute performance certification'},null,2));
+    await writeFile(path.join(evidence,'phase-six-browser-latency.json'),JSON.stringify({date:new Date().toISOString(),node:process.version,platform:process.platform,cpu:os.cpus()[0].model,memoryGiB:Math.round(os.totalmem()/1024**3),joinRenderMs,workload:'Two Chromium contexts; 2 warmup and 20 sequential votes; real local MongoDB replica set; command receipt to last client DOM revision apply',samplesMs:latencies,p50:sorted[9],p95:sorted[18],p99:sorted[19],max:sorted[19],limits:'Local smoke workload, not a 50-user or 10-minute performance certification'},null,2));
     expect(Math.max(...latencies)).toBeLessThan(100);
-    await host.screenshot({ path: path.join(evidence, 'phase-four-lounge.png'), fullPage: true });
+    audits.push(await audit(host,'lounge/social/AI'));
+    await host.screenshot({ path: path.join(evidence, 'phase-six-lounge.png'), fullPage: true });
     await guest.reload(); await expect(guest.getByRole('heading', { name: 'Start a new lounge' })).toBeVisible();
     await guest.getByRole('button', { name: /After Hours .* ↗/ }).click(); await expect(guest.getByText('Connected', { exact: true })).toBeVisible();
     await guest.setViewportSize({ width: 390, height: 844 });
@@ -143,7 +147,7 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await guest.getByRole('button',{name:'Ask AI DJ',exact:true}).click();
     await expect(guest.getByText('BPM tempo: 124.',{exact:true}).first()).toBeVisible();
     await guest.locator('.citations summary').first().click();
-    await guest.screenshot({ path: path.join(evidence, 'phase-four-mobile.png'), fullPage: true });
+    await guest.screenshot({ path: path.join(evidence, 'phase-six-mobile.png'), fullPage: true });
     expect(await guest.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await host.getByRole('button',{name:'Overview',exact:false}).click();
     await expect(guest.getByText('Host disconnected. Playback and queue changes are frozen.',{exact:true})).toBeVisible();
@@ -156,20 +160,25 @@ test('two independent browser sessions create/join, sync and restore authenticat
     await expect(host.getByText('Session ended. Your listening history and analytics are ready.', { exact: true })).toBeVisible();
     await host.getByText('Session analytics', { exact: true }).click();
     await expect(host.getByText('Track history', { exact: true })).toBeVisible();
-    await host.screenshot({ path: path.join(evidence, 'phase-five-analytics.png'), fullPage: true });
+    audits.push(await audit(host,'analytics'));
+    await host.screenshot({ path: path.join(evidence, 'phase-six-analytics.png'), fullPage: true });
     await host.getByRole('button', { name: 'Overview', exact: false }).click();
     await expect(host.getByRole('heading', { name: 'Your listening', exact: true })).toBeVisible();
     await host.getByRole('button', { name: 'Refresh listening', exact: true }).click();
     await host.setViewportSize({ width: 390, height: 844 });
-    await host.screenshot({ path: path.join(evidence, 'phase-five-dashboard-mobile.png'), fullPage: true });
+    await host.screenshot({ path: path.join(evidence, 'phase-six-dashboard-mobile.png'), fullPage: true });
     expect(await host.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await db.models.User.updateOne({ emailNormalized: 'host@example.test' }, { $set: { isAdmin: true } });
     await host.reload();
     await expect(host.getByRole('button', {name:'Fit recommendation model',exact:true})).toBeVisible();
     await host.getByRole('button', {name:'Fit recommendation model',exact:true}).click();
     await host.getByRole('button', {name:'Check training status',exact:true}).click();
-    await expect(host.locator('.personal-dashboard')).toContainText('complete');
-    await host.screenshot({ path: path.join(evidence, 'phase-five-admin-mobile.png'), fullPage: true });
-    expect(faults).toEqual([]);
-  } finally { await hostContext.close(); await guestContext.close(); }
+    await expect.poll(async()=>{await host.getByRole('button',{name:'Check training status',exact:true}).click();return host.locator('.personal-dashboard').textContent();}).toContain('complete');
+    await host.screenshot({ path: path.join(evidence, 'phase-six-admin-mobile.png'), fullPage: true });
+    audits.push(await audit(host,'dashboard/admin/mobile'));
+    await writeFile(path.join(evidence,'phase-six-accessibility.json'),JSON.stringify(audits,null,2));
+    expect(audits.flatMap(a=>a.failures)).toEqual([]);
+    expect(audits.flatMap(a=>a.controls).filter(c=>!c.name || !c.focusable)).toEqual([]);
+    expect(faults).toEqual([]); complete=true;
+  } finally { await hostContext.close(); await guestContext.close(); if(complete) await host.video().saveAs(path.join(evidence,"phase-six-demo.webm")); }
 });

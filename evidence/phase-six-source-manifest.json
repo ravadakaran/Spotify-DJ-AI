@@ -1,0 +1,23 @@
+{
+  "workingTree": "Uncommitted Phase 6 implementation; final benchmark elapsed-time/exit-code guards were verified by the separate 5-client smoke after the long run",
+  "baseCommit": "14eb2f556a3f9b9399933a7109bbdf8498a9502d",
+  "files": {
+    "tests/browser/accessibility.js": "71ddb2a98195f091a5ccb86e6951ee63ff7740957d5ef02fe87d4462a5878199",
+    "package-lock.json": "733925779a7bed8934d6ddabff342ef58eb1fbe9dd11c930566f8bf3244b77c4",
+    "tests/browser/foundation.spec.js": "4d39cd6d749637e5e54bf955e5fb0df6235f1c2f483a468598ee64e251aec7a6",
+    "scripts/scan-secrets.js": "39eb3710f643de464e3cd2bae097d0d2806a7c0473d7efa88ebb117839a8069f",
+    "server/tests/phase-six.integration.test.js": "563de3493ccccb254eabe3287639a527f053998cac9f3130812e7f63b81c04c6",
+    "scripts/phase-six-fixture.js": "d03b03f262348cdefcebbf7ba7e2f4ea61d94a61891febad6d065a1f209f7f48",
+    "deploy/ai-dj.service": "be2069c065573855638acc719fcb288c50d824387fde4ebf44a27b5b926c7c75",
+    "server/src/config.js": "216981011633807d398495e3db2b5f14fe5874c1b725cdfd71d689c0a81e1be8",
+    "server/package.json": "6c77251bf57c5872183ebfa197aeed019764ad7eead6ab8c9e30f9b6b1836deb",
+    "scripts/benchmark.js": "73721c1d441815704c1bc39f4b43586974e688c52951b00ec147dd203ff2d3e3",
+    "server/src/app.js": "fd964305edfd57456dfc9fbc244ddd1dfb81d8f794f6c28cd1cc8c3466f6c9b1",
+    "scripts/backup.js": "536297c8886a3265a0fd616fb0813a634c28113072ee2e077c5302bfb43e5604",
+    "server/src/backup.js": "fa2b96f7efd7b79a6af271eee652dfcd1edd83f9bf5f140cd782688d1ca2caa7",
+    "package.json": "044058e79396058d98f22b73c79406a0ec7cb84fd6770aff2843d1570ca3306a",
+    "client/src/style.css": "51d33107ce0e9b5d44abeb2628e5cdaa77408a35be622f9c4d599f55d1e49bf3",
+    "deploy/Caddyfile": "80c1ca92b58e98a855ba3f3ae48f7c158c8ab2ec72aa6e1c67f4b458d68e0933"
+  },
+  "recordedAt": "2026-10-28T05:19:04.2743285Z"
+}

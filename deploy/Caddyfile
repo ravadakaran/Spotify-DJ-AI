@@ -1,0 +1,7 @@
+# Set DJ_HOST to the private DNS name; restrict access at the host firewall/VPN.
+{$DJ_HOST} {
+    reverse_proxy 127.0.0.1:3000
+    log {
+        output discard
+    }
+}

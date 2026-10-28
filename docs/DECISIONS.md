@@ -1,5 +1,7 @@
 # Architecture decisions
 
+28 October 2026 — ADR-021: implement the requested Phase 6 with a same-process scripted Socket.IO load harness, offline BSON-preserving logical backup/restore into empty targets, loopback-only proxy trust, Caddy/systemd templates and targeted security/rendered accessibility checks. No migration or external integration. Increase bounded transport handshake allowance to 120/minute per peer for two-room connection bursts; proxy peers share this allowance. Keep all model/legal/data/live-TLS gates explicit. [Measurement boundaries and backup/rollback consequences](PHASE_SIX_IMPLEMENTATION.md).
+
 27 October 2026 — ADR-020: user requested Phase 5. Implement explicit admin refits, binary completion/like item cosine with 60/40 acoustic/collaborative blend; bounded identity heartbeat evidence, durable interaction projections and Host-only synchronous end barrier. Preserve legal/model/independent-evaluation gates. Authored synthetic metrics do not establish normal-use recommendation acceptance. [Definitions, bounds and migration compatibility](PHASE_FIVE_IMPLEMENTATION.md).
 
 

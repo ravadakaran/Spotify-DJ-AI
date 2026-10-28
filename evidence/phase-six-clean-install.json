@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-28T05:09:35.6857911Z",
+  "limitations": "Not an installed Caddy/systemd/TLS deployment; no private library migrated",
+  "environment": "Windows; new temporary directory; source and lockfile copied without .env, private data or existing node_modules",
+  "node": "v24.13.0",
+  "commands": [
+    {
+      "note": "679 packages; existing MongoDB executable selected for disposable tests; postinstall download disabled",
+      "result": "passed",
+      "command": "npm ci"
+    },
+    {
+      "command": "npm run lint",
+      "result": "passed"
+    },
+    {
+      "seconds": 37.46,
+      "result": "49 passed across 11 suites",
+      "command": "npm test"
+    },
+    {
+      "seconds": 1.37,
+      "result": "passed",
+      "command": "npm run build"
+    }
+  ],
+  "earlierAttempt": "Active-workspace npm ci hit Windows EPERM on in-use MongoDB executable; npm install restored dependencies and isolated clean install then passed"
+}

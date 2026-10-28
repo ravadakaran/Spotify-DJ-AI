@@ -1,10 +1,12 @@
-name: Verify foundation
+name: Verify application
 on: [push, pull_request]
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
@@ -13,3 +15,5 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - run: npm audit --omit=dev --audit-level=moderate
+      - run: npm run security:scan

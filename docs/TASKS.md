@@ -1,5 +1,7 @@
 # Ordered implementation backlog
 
+Phase 6 implementation update (28 October 2026): TASK-024–027 now have software, automated evidence tooling, a synthetic browser recording and operating/retrospective documents. Parent tasks remain unchecked where their full acceptance includes unmeasured real-model AI latency, comprehensive accessibility, actual target-host TLS deployment or upstream data/license gates. Checked software sub-items and current evidence are in [the phase checklist](PHASE_TODO_LIST.md) and [Phase 6 details](PHASE_SIX_IMPLEMENTATION.md).
+
 Phases 1–3 have software implementations; Phase 3 real-model/legal-chain acceptance remains open (see PHASE_THREE_IMPLEMENTATION.md); unchecked tasks may contain completed sub-items in [the phase checklist](PHASE_TODO_LIST.md). Phase 0 media/model gates and later release gates remain open. See [implementation status](IMPLEMENTATION_STATUS.md) for evidence and scope gaps. P0 means release-critical prerequisite, P1 means required MVP, P2 means optional later work. Phase order is in [implementation plan](IMPLEMENTATION_PLAN.md); TEST IDs refer to [testing](TESTING_STRATEGY.md). Dependencies are task IDs, not calendar dates. Every task's DoD includes reviewed code, relevant passing checks and updated documentation.
 
 > [!TIP]

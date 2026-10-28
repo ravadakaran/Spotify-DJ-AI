@@ -27,7 +27,10 @@
     "library:import": "node scripts/library.js",
     "recommendations:evaluate": "node scripts/evaluate-recommendations.js",
     "password:calibrate": "node scripts/calibrate-passwords.js",
-    "admin:create:local": "node --env-file-if-exists=.env server/src/cli.js admin --local"
+    "admin:create:local": "node --env-file-if-exists=.env server/src/cli.js admin --local",
+    "benchmark": "node scripts/benchmark.js",
+    "backup": "node --env-file-if-exists=.env scripts/backup.js",
+    "security:scan": "node scripts/scan-secrets.js"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

@@ -1,0 +1,692 @@
+{
+  "date": "2026-10-28T05:18:01.466Z",
+  "commit": "14eb2f556a3f9b9399933a7109bbdf8498a9502d",
+  "node": "v24.13.0",
+  "datasetHash": "f0017eea985d9cc12646ab16523a8ba383822d1fe56de77787211fdc39eef8b0",
+  "dependencies": {
+    "express": "5.3.0",
+    "socket.io": "4.8.4",
+    "mongoose": "8.24.5",
+    "body-parser": "2.4.0"
+  },
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz",
+    "logicalCpus": 16,
+    "ramBytes": 34164142080,
+    "platform": "win32"
+  },
+  "workload": {
+    "rooms": 2,
+    "participantsPerRoom": 5,
+    "warmupSeconds": 2,
+    "measurementSeconds": 10,
+    "votesPerSecondPerRoom": 2,
+    "chatPerSecondPerRoom": 1,
+    "restRequestsPerSecondPerRoom": 0.5,
+    "client": "Node Socket.IO snapshot application; no browser render or network impairment",
+    "fixtures": "Three metadata profiles; no media or model calls"
+  },
+  "queueMs": {
+    "samples": 40,
+    "p50": 2.5235999999986234,
+    "p95": 5.720100000000457,
+    "p99": 8.42489999999998,
+    "max": 8.42489999999998
+  },
+  "fanoutMs": {
+    "samples": 60,
+    "p50": 7.355199999999968,
+    "p95": 17.684300000000803,
+    "p99": 24.035399999998845,
+    "max": 24.035399999998845
+  },
+  "skewMs": {
+    "samples": 60,
+    "p50": 0.39909999999963475,
+    "p95": 0.8503999999993539,
+    "p99": 1.270699999999124,
+    "max": 1.270699999999124
+  },
+  "restMs": {
+    "samples": 10,
+    "p50": 8.044600000001083,
+    "p95": 12.520300000000134,
+    "p99": 12.520300000000134,
+    "max": 12.520300000000134
+  },
+  "eventLoopMs": {
+    "p99": 20.447231,
+    "max": 24.903679
+  },
+  "failures": [],
+  "resources": [
+    {
+      "elapsedMs": 45.59920000000011,
+      "rss": 136953856,
+      "heapTotal": 109842432,
+      "heapUsed": 47559864,
+      "external": 22751338,
+      "arrayBuffers": 18631040,
+      "eventLoopP99Ms": 14.032895,
+      "bufferedEvents": 22
+    },
+    {
+      "elapsedMs": 10041.134,
+      "rss": 108511232,
+      "heapTotal": 49025024,
+      "heapUsed": 44225240,
+      "external": 22741756,
+      "arrayBuffers": 18621418,
+      "eventLoopP99Ms": 20.381695,
+      "bufferedEvents": 2
+    }
+  ],
+  "traces": [
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 20,
+      "elapsedMs": 2008.4379999999996,
+      "queueApplyMs": 3.907999999999447,
+      "fanoutMs": 9.617400000000089,
+      "skewMs": 0.5774000000001251
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 20,
+      "elapsedMs": 2008.7051999999999,
+      "queueApplyMs": 4.52980000000025,
+      "fanoutMs": 12.311400000000503,
+      "skewMs": 0.5662000000002081
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "elapsedMs": 2019.2642,
+      "durationMs": 12.520300000000134
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "elapsedMs": 2022.663,
+      "durationMs": 10.681400000000394
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 21,
+      "elapsedMs": 2335.0038,
+      "queueApplyMs": 2.738299999999981,
+      "fanoutMs": 7.342599999999948,
+      "skewMs": 0.408900000000358
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 21,
+      "elapsedMs": 2335.2398,
+      "queueApplyMs": 2.3927999999996246,
+      "fanoutMs": 8.439400000000205,
+      "skewMs": 0.39909999999963475
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 23,
+      "elapsedMs": 2675.9892999999997,
+      "queueApplyMs": 2.0498999999999796,
+      "fanoutMs": 6.1208000000005995,
+      "skewMs": 0.44940000000042346
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 23,
+      "elapsedMs": 2676.3367000000003,
+      "queueApplyMs": 2.227600000000166,
+      "fanoutMs": 7.112799999999879,
+      "skewMs": 0.5192999999999302
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 24,
+      "elapsedMs": 3002.4639,
+      "queueApplyMs": 2.699800000000323,
+      "fanoutMs": 6.57510000000002,
+      "skewMs": 0.3874000000005253
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 24,
+      "elapsedMs": 3002.7724999999996,
+      "queueApplyMs": 2.3293000000003303,
+      "fanoutMs": 7.377200000000812,
+      "skewMs": 0.35750000000007276
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 25,
+      "elapsedMs": 3347.1668999999997,
+      "queueApplyMs": 6.376699999999801,
+      "fanoutMs": 14.70390000000043,
+      "skewMs": 0.6630000000004657
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 25,
+      "elapsedMs": 3347.6031,
+      "queueApplyMs": 3.5275999999994383,
+      "fanoutMs": 15.952699999999822,
+      "skewMs": 0.3309999999992215
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 27,
+      "elapsedMs": 3672.2983,
+      "queueApplyMs": 2.5479000000004817,
+      "fanoutMs": 7.0627000000004045,
+      "skewMs": 0.39540000000033615
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 27,
+      "elapsedMs": 3672.6018,
+      "queueApplyMs": 2.276100000000042,
+      "fanoutMs": 7.9780000000000655,
+      "skewMs": 0.3445000000001528
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 28,
+      "elapsedMs": 4012.8920000000003,
+      "queueApplyMs": 1.8742999999994936,
+      "fanoutMs": 5.119699999999284,
+      "skewMs": 0.28509999999914726
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 28,
+      "elapsedMs": 4013.105,
+      "queueApplyMs": 1.7757000000001426,
+      "fanoutMs": 5.943199999999706,
+      "skewMs": 0.4341999999996915
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "elapsedMs": 4019.1019,
+      "durationMs": 7.502800000000207
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "elapsedMs": 4020.8282999999997,
+      "durationMs": 6.196100000000115
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 29,
+      "elapsedMs": 4338.1855,
+      "queueApplyMs": 2.2993999999998778,
+      "fanoutMs": 6.085900000000038,
+      "skewMs": 0.3819000000003143
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 29,
+      "elapsedMs": 4338.3699,
+      "queueApplyMs": 2.361200000000281,
+      "fanoutMs": 7.355199999999968,
+      "skewMs": 0.4697999999998501
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 31,
+      "elapsedMs": 4676.322899999999,
+      "queueApplyMs": 1.8765000000003056,
+      "fanoutMs": 5.140900000000329,
+      "skewMs": 0.2893999999996595
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 31,
+      "elapsedMs": 4676.5641,
+      "queueApplyMs": 2.0518999999994776,
+      "fanoutMs": 6.210199999999531,
+      "skewMs": 0.31229999999959546
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 32,
+      "elapsedMs": 4999.936599999999,
+      "queueApplyMs": 2.5235999999986234,
+      "fanoutMs": 6.014699999999721,
+      "skewMs": 0.38040000000000873
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 32,
+      "elapsedMs": 5000.2356,
+      "queueApplyMs": 2.193199999999706,
+      "fanoutMs": 6.948999999998705,
+      "skewMs": 0.3999999999996362
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 33,
+      "elapsedMs": 5340.6353,
+      "queueApplyMs": 2.8654999999998836,
+      "fanoutMs": 5.904499999998734,
+      "skewMs": 0.424299999998766
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 33,
+      "elapsedMs": 5340.858399999999,
+      "queueApplyMs": 1.959100000000035,
+      "fanoutMs": 6.662800000000061,
+      "skewMs": 0.3029999999998836
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 35,
+      "elapsedMs": 5680.4696,
+      "queueApplyMs": 3.325300000000425,
+      "fanoutMs": 6.619399999999587,
+      "skewMs": 0.45930000000043947
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 35,
+      "elapsedMs": 5680.8135,
+      "queueApplyMs": 2.6750000000010914,
+      "fanoutMs": 7.472999999999956,
+      "skewMs": 0.3610000000007858
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 36,
+      "elapsedMs": 6004.8549,
+      "queueApplyMs": 2.2589000000007218,
+      "fanoutMs": 5.421800000000076,
+      "skewMs": 0.33330000000023574
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 36,
+      "elapsedMs": 6005.242,
+      "queueApplyMs": 1.8389999999999418,
+      "fanoutMs": 6.0173999999988155,
+      "skewMs": 0.3099999999994907
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "elapsedMs": 6011.295899999999,
+      "durationMs": 6.2524000000012165
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "elapsedMs": 6012.4131,
+      "durationMs": 5.486399999999776
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 37,
+      "elapsedMs": 6344.920199999999,
+      "queueApplyMs": 3.483799999999974,
+      "fanoutMs": 8.190300000000207,
+      "skewMs": 0.4834999999984575
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 37,
+      "elapsedMs": 6345.346799999999,
+      "queueApplyMs": 2.3734000000004016,
+      "fanoutMs": 8.897500000000946,
+      "skewMs": 0.4239000000015949
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 39,
+      "elapsedMs": 6666.620799999999,
+      "queueApplyMs": 2.6990999999998166,
+      "fanoutMs": 7.022300000000541,
+      "skewMs": 0.4817000000002736
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 39,
+      "elapsedMs": 6666.8539,
+      "queueApplyMs": 2.5185999999994237,
+      "fanoutMs": 8.142299999999523,
+      "skewMs": 0.3610000000007858
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 40,
+      "elapsedMs": 7004.932999999999,
+      "queueApplyMs": 2.152799999999843,
+      "fanoutMs": 5.59230000000025,
+      "skewMs": 0.31639999999970314
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 40,
+      "elapsedMs": 7005.3192,
+      "queueApplyMs": 1.952500000001237,
+      "fanoutMs": 6.308600000000297,
+      "skewMs": 0.4735000000000582
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 41,
+      "elapsedMs": 7343.032799999999,
+      "queueApplyMs": 2.4830000000001746,
+      "fanoutMs": 5.358000000000175,
+      "skewMs": 0.3370999999988271
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 41,
+      "elapsedMs": 7343.2287,
+      "queueApplyMs": 2.0166000000008353,
+      "fanoutMs": 6.233700000000681,
+      "skewMs": 0.2881000000015774
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 43,
+      "elapsedMs": 7672.3575,
+      "queueApplyMs": 2.5097999999998137,
+      "fanoutMs": 7.882499999999709,
+      "skewMs": 0.5882000000001426
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 43,
+      "elapsedMs": 7672.5535,
+      "queueApplyMs": 2.027799999999843,
+      "fanoutMs": 8.581199999998717,
+      "skewMs": 0.26929999999993015
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 44,
+      "elapsedMs": 8008.9048,
+      "queueApplyMs": 1.8967999999986205,
+      "fanoutMs": 4.693599999998696,
+      "skewMs": 0.25349999999889405
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 44,
+      "elapsedMs": 8009.0949,
+      "queueApplyMs": 1.6494000000002416,
+      "fanoutMs": 5.397999999999229,
+      "skewMs": 0.3425999999999476
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "elapsedMs": 8024.8017,
+      "durationMs": 10.881999999999607
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "elapsedMs": 8025.5563,
+      "durationMs": 11.269999999998618
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 45,
+      "elapsedMs": 8334.806999999999,
+      "queueApplyMs": 7.516100000000733,
+      "fanoutMs": 17.01380000000063,
+      "skewMs": 0.591099999999642
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 45,
+      "elapsedMs": 8335.4136,
+      "queueApplyMs": 5.274199999999837,
+      "fanoutMs": 18.979999999999563,
+      "skewMs": 1.270699999999124
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 47,
+      "elapsedMs": 8667.0658,
+      "queueApplyMs": 3.6216999999996915,
+      "fanoutMs": 8.655699999999342,
+      "skewMs": 0.598599999999351
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 47,
+      "elapsedMs": 8667.220599999999,
+      "queueApplyMs": 3.007400000000416,
+      "fanoutMs": 8.788500000000568,
+      "skewMs": 0.7181000000000495
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 48,
+      "elapsedMs": 9005.4624,
+      "queueApplyMs": 6.603100000000268,
+      "fanoutMs": 16.191799999998693,
+      "skewMs": 0.9285999999992782
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 48,
+      "elapsedMs": 9006.061899999999,
+      "queueApplyMs": 5.720100000000457,
+      "fanoutMs": 17.684300000000803,
+      "skewMs": 0.5174999999999272
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 49,
+      "elapsedMs": 9346.734499999999,
+      "queueApplyMs": 2.674199999999473,
+      "fanoutMs": 5.991600000001199,
+      "skewMs": 0.3382999999994354
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 49,
+      "elapsedMs": 9346.922499999999,
+      "queueApplyMs": 2.068199999999706,
+      "fanoutMs": 6.884200000000419,
+      "skewMs": 0.30860000000029686
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 51,
+      "elapsedMs": 9666.8248,
+      "queueApplyMs": 4.7555000000011205,
+      "fanoutMs": 9.959100000000035,
+      "skewMs": 0.44680000000153086
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 51,
+      "elapsedMs": 9666.972399999999,
+      "queueApplyMs": 3.790100000000166,
+      "fanoutMs": 10.059100000000399,
+      "skewMs": 0.559400000000096
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 52,
+      "elapsedMs": 10014.2628,
+      "queueApplyMs": 2.684800000000905,
+      "fanoutMs": 7.269099999999526,
+      "skewMs": 0.29759999999987485
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 52,
+      "elapsedMs": 10014.568599999999,
+      "queueApplyMs": 2.1664999999993597,
+      "fanoutMs": 7.870500000000902,
+      "skewMs": 0.26820000000043365
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "elapsedMs": 10032.2467,
+      "durationMs": 8.525100000000748
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "elapsedMs": 10033.080899999999,
+      "durationMs": 8.044600000001083
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 53,
+      "elapsedMs": 10340.4185,
+      "queueApplyMs": 4.042699999999968,
+      "fanoutMs": 7.985000000000582,
+      "skewMs": 0.3181000000004133
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 53,
+      "elapsedMs": 10340.8611,
+      "queueApplyMs": 2.363900000000285,
+      "fanoutMs": 8.7541999999994,
+      "skewMs": 0.34829999999965366
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 55,
+      "elapsedMs": 10671.0021,
+      "queueApplyMs": 5.2450000000008,
+      "fanoutMs": 11.99200000000019,
+      "skewMs": 0.5637000000006083
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 55,
+      "elapsedMs": 10671.2158,
+      "queueApplyMs": 4.363100000000486,
+      "fanoutMs": 12.215000000000146,
+      "skewMs": 0.82260000000133
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 56,
+      "elapsedMs": 11000.2056,
+      "queueApplyMs": 8.42489999999998,
+      "fanoutMs": 22.091099999999642,
+      "skewMs": 0.8503999999993539
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 56,
+      "elapsedMs": 11000.8097,
+      "queueApplyMs": 5.572999999998501,
+      "fanoutMs": 24.035399999998845,
+      "skewMs": 0.755299999998897
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 57,
+      "elapsedMs": 11342.576,
+      "queueApplyMs": 2.6520999999993364,
+      "fanoutMs": 5.639600000000428,
+      "skewMs": 0.3204999999998108
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 57,
+      "elapsedMs": 11342.7902,
+      "queueApplyMs": 2.0987000000004628,
+      "fanoutMs": 6.412700000000768,
+      "skewMs": 0.29759999999987485
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 59,
+      "elapsedMs": 11668.555,
+      "queueApplyMs": 3.0395000000007713,
+      "fanoutMs": 9.005999999999403,
+      "skewMs": 0.46410000000105356
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 59,
+      "elapsedMs": 11668.7682,
+      "queueApplyMs": 3.363499999999476,
+      "fanoutMs": 10.552199999998265,
+      "skewMs": 0.9584999999988213
+    }
+  ],
+  "acceptance": {
+    "queue": true,
+    "fanout": true,
+    "rest": true,
+    "ai": "unmeasured; real model gate open"
+  }
+}

@@ -1,5 +1,7 @@
 # Security
 
+Phase 6 verifies cookie-refresh exact Origin/CSRF (bearer APIs use explicit tokens), object/prototype injection, size limits, HTTP/socket authorization and slow consumers. Body-parser 2.4.0 and Multer 2.5.0 patch reviewed DoS advisories. A low-severity Jest/deepmerge development advisory remains; consult saved audit reports. Backups contain private users/sessions/chat, require stopped writers, trusted storage/owner-only ACLs and empty restore targets. [Scope of audit and accessibility evidence](PHASE_SIX_IMPLEMENTATION.md).
+
 REQ-003, REQ-008 and REQ-021 apply to all implementation phases. Threat model is a private demo with untrusted participant input, not a permissionless production service. Protect credentials, chat history, role boundaries, local files, and room integrity. A malicious Listener may forge IDs, votes, socket events, metadata prompts and repeated requests; the server remains authoritative.
 
 ## Permission matrix (provisional room scoping)

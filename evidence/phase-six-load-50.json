@@ -1,0 +1,3322 @@
+{
+  "date": "2026-10-28T05:04:33.803Z",
+  "commit": "14eb2f556a3f9b9399933a7109bbdf8498a9502d",
+  "node": "v24.13.0",
+  "datasetHash": "f0017eea985d9cc12646ab16523a8ba383822d1fe56de77787211fdc39eef8b0",
+  "dependencies": {
+    "express": "5.3.0",
+    "socket.io": "4.8.4",
+    "mongoose": "8.24.5",
+    "body-parser": "2.4.0"
+  },
+  "hardware": {
+    "cpu": "Intel(R) Core(TM) i7-10875H CPU @ 2.30GHz",
+    "logicalCpus": 16,
+    "ramBytes": 34164142080,
+    "platform": "win32"
+  },
+  "workload": {
+    "rooms": 2,
+    "participantsPerRoom": 50,
+    "warmupSeconds": 10,
+    "measurementSeconds": 60,
+    "votesPerSecondPerRoom": 2,
+    "chatPerSecondPerRoom": 1,
+    "restRequestsPerSecondPerRoom": 0.5,
+    "client": "Node Socket.IO snapshot application; no browser render or network impairment",
+    "fixtures": "Three metadata profiles; no media or model calls"
+  },
+  "queueMs": {
+    "samples": 240,
+    "p50": 26.366299999994226,
+    "p95": 45.05529999999999,
+    "p99": 60.71940000000177,
+    "max": 83.77709999999206
+  },
+  "fanoutMs": {
+    "samples": 360,
+    "p50": 38.92760000000271,
+    "p95": 76.15129999999772,
+    "p99": 138.56260000000475,
+    "max": 153.65499999999884
+  },
+  "skewMs": {
+    "samples": 360,
+    "p50": 7.9112999999997555,
+    "p95": 15.900900000000547,
+    "p99": 21.92039999998815,
+    "max": 31.269599999999627
+  },
+  "restMs": {
+    "samples": 60,
+    "p50": 12.570400000004156,
+    "p95": 50.90660000000207,
+    "p99": 62.455699999998615,
+    "max": 62.455699999998615
+  },
+  "eventLoopMs": {
+    "p99": 35.880959,
+    "max": 68.419583
+  },
+  "failures": [],
+  "resources": [
+    {
+      "elapsedMs": 87.92259999999987,
+      "rss": 174120960,
+      "heapTotal": 117968896,
+      "heapUsed": 54476656,
+      "external": 23679304,
+      "arrayBuffers": 19559006,
+      "eventLoopP99Ms": 17.104895,
+      "bufferedEvents": 38
+    },
+    {
+      "elapsedMs": 10047.4811,
+      "rss": 211062784,
+      "heapTotal": 184553472,
+      "heapUsed": 77787432,
+      "external": 29040581,
+      "arrayBuffers": 24925988,
+      "eventLoopP99Ms": 23.560191,
+      "bufferedEvents": 6
+    },
+    {
+      "elapsedMs": 20081.4349,
+      "rss": 235798528,
+      "heapTotal": 187961344,
+      "heapUsed": 47803184,
+      "external": 24149261,
+      "arrayBuffers": 20036073,
+      "eventLoopP99Ms": 26.673151,
+      "bufferedEvents": 6
+    },
+    {
+      "elapsedMs": 30073.9623,
+      "rss": 255471616,
+      "heapTotal": 187699200,
+      "heapUsed": 93857608,
+      "external": 33141970,
+      "arrayBuffers": 29028782,
+      "eventLoopP99Ms": 29.261823,
+      "bufferedEvents": 4
+    },
+    {
+      "elapsedMs": 40060.2935,
+      "rss": 252887040,
+      "heapTotal": 190844928,
+      "heapUsed": 73421648,
+      "external": 27414637,
+      "arrayBuffers": 23301449,
+      "eventLoopP99Ms": 30.588927,
+      "bufferedEvents": 2
+    },
+    {
+      "elapsedMs": 50058.9608,
+      "rss": 259928064,
+      "heapTotal": 193204224,
+      "heapUsed": 86731760,
+      "external": 30595739,
+      "arrayBuffers": 26482551,
+      "eventLoopP99Ms": 31.522815,
+      "bufferedEvents": 2
+    },
+    {
+      "elapsedMs": 60058.8412,
+      "rss": 270090240,
+      "heapTotal": 199757824,
+      "heapUsed": 107418688,
+      "external": 33391941,
+      "arrayBuffers": 29278753,
+      "eventLoopP99Ms": 32.735231,
+      "bufferedEvents": 2
+    }
+  ],
+  "traces": [
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 142,
+      "queueApplyMs": 17.564800000000105,
+      "fanoutMs": 21.665299999996932,
+      "skewMs": 4.975699999999051
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 142,
+      "queueApplyMs": 21.62029999999868,
+      "fanoutMs": 37.12779999999839,
+      "skewMs": 7.242799999999988
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.587100000000646
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 5.273299999997107
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 143,
+      "queueApplyMs": 17.108299999999872,
+      "fanoutMs": 21.41070000000036,
+      "skewMs": 6.352200000001176
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 143,
+      "queueApplyMs": 22.19249999999738,
+      "fanoutMs": 35.82179999999789,
+      "skewMs": 5.9966999999996915
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 145,
+      "queueApplyMs": 17.56840000000011,
+      "fanoutMs": 22.331500000000233,
+      "skewMs": 5.7906999999977415
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 145,
+      "queueApplyMs": 20.675899999998364,
+      "fanoutMs": 35.4590999999964,
+      "skewMs": 6.660399999997026
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 146,
+      "queueApplyMs": 20.573700000000827,
+      "fanoutMs": 23.913300000000163,
+      "skewMs": 6.430099999997765
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 146,
+      "queueApplyMs": 20.943100000000413,
+      "fanoutMs": 36.86899999999878,
+      "skewMs": 5.052200000001903
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 147,
+      "queueApplyMs": 18.394799999998213,
+      "fanoutMs": 22.53679999999804,
+      "skewMs": 5.797999999998865
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 147,
+      "queueApplyMs": 21.367899999997462,
+      "fanoutMs": 36.52509999999893,
+      "skewMs": 5.318999999999505
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 149,
+      "queueApplyMs": 21.290099999998347,
+      "fanoutMs": 24.66649999999936,
+      "skewMs": 5.82129999999961
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 149,
+      "queueApplyMs": 19.296900000001187,
+      "fanoutMs": 36.27089999999953,
+      "skewMs": 5.312000000001717
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 150,
+      "queueApplyMs": 15.116900000000896,
+      "fanoutMs": 18.409300000002986,
+      "skewMs": 5.124700000000303
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 150,
+      "queueApplyMs": 19.75959999999759,
+      "fanoutMs": 31.584899999998015,
+      "skewMs": 5.009399999999005
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.703400000002148
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 7.1480999999985215
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 151,
+      "queueApplyMs": 14.858700000000681,
+      "fanoutMs": 17.9958000000006,
+      "skewMs": 4.647600000000239
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 151,
+      "queueApplyMs": 17.6762000000017,
+      "fanoutMs": 29.57890000000043,
+      "skewMs": 4.776900000000751
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 153,
+      "queueApplyMs": 21.71549999999843,
+      "fanoutMs": 42.12019999999757,
+      "skewMs": 10.93369999999777
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 153,
+      "queueApplyMs": 24.9929000000011,
+      "fanoutMs": 54.63680000000022,
+      "skewMs": 5.63379999999961
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 154,
+      "queueApplyMs": 20.97019999999975,
+      "fanoutMs": 24.159899999998743,
+      "skewMs": 5.906100000000151
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 154,
+      "queueApplyMs": 24.263899999998102,
+      "fanoutMs": 39.69549999999799,
+      "skewMs": 7.062900000000809
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 155,
+      "queueApplyMs": 15.939399999999296,
+      "fanoutMs": 19.274199999999837,
+      "skewMs": 5.122100000000501
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 155,
+      "queueApplyMs": 22.02479999999923,
+      "fanoutMs": 34.64119999999821,
+      "skewMs": 7.460299999998824
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 157,
+      "queueApplyMs": 18.429300000003423,
+      "fanoutMs": 29.770300000000134,
+      "skewMs": 7.6745000000009895
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 157,
+      "queueApplyMs": 24.051299999999173,
+      "fanoutMs": 44.33269999999902,
+      "skewMs": 6.869099999999889
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 158,
+      "queueApplyMs": 18.210900000001857,
+      "fanoutMs": 22.947100000001228,
+      "skewMs": 6.508700000002136
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 158,
+      "queueApplyMs": 23.130400000001828,
+      "fanoutMs": 38.060199999999895,
+      "skewMs": 6.73240000000078
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 18.15439999999944
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 9.710900000001857
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 159,
+      "queueApplyMs": 23.03310000000056,
+      "fanoutMs": 28.335399999999936,
+      "skewMs": 7.893499999998312
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 159,
+      "queueApplyMs": 30.850099999999657,
+      "fanoutMs": 48.231299999999464,
+      "skewMs": 9.282999999999447
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 161,
+      "queueApplyMs": 29.72940000000017,
+      "fanoutMs": 71.87700000000041,
+      "skewMs": 6.507399999998597
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 161,
+      "queueApplyMs": 33.79520000000048,
+      "fanoutMs": 77.67139999999927,
+      "skewMs": 12.301800000001094
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 162,
+      "queueApplyMs": 18.788699999997334,
+      "fanoutMs": 22.909999999999854,
+      "skewMs": 5.143499999998312
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 162,
+      "queueApplyMs": 25.589599999999336,
+      "fanoutMs": 41.796800000000076,
+      "skewMs": 8.071599999999307
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 163,
+      "queueApplyMs": 24.253399999997782,
+      "fanoutMs": 29.4387999999999,
+      "skewMs": 9.342499999998836
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 163,
+      "queueApplyMs": 37.948599999999715,
+      "fanoutMs": 55.845900000000256,
+      "skewMs": 11.223300000001473
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 164,
+      "queueApplyMs": 33.185700000001816,
+      "fanoutMs": 40.1717000000026,
+      "skewMs": 9.712100000000646
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 165,
+      "queueApplyMs": 52.89400000000023,
+      "fanoutMs": 80.78199999999924,
+      "skewMs": 16.608500000002095
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 166,
+      "queueApplyMs": 17.364700000001903,
+      "fanoutMs": 20.28729999999996,
+      "skewMs": 6.011699999999109
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 166,
+      "queueApplyMs": 24.351399999999558,
+      "fanoutMs": 36.58039999999892,
+      "skewMs": 6.649799999999232
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.764100000000326
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 5.69970000000103
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 167,
+      "queueApplyMs": 15.469699999997829,
+      "fanoutMs": 18.87539999999717,
+      "skewMs": 6.1414999999979045
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 167,
+      "queueApplyMs": 19.468199999999342,
+      "fanoutMs": 30.815600000001723,
+      "skewMs": 4.718600000000151
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 168,
+      "queueApplyMs": 37.61779999999999,
+      "fanoutMs": 43.38290000000052,
+      "skewMs": 14.90400000000227
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 168,
+      "queueApplyMs": 40.58770000000004,
+      "fanoutMs": 48.23270000000048,
+      "skewMs": 19.791299999997136
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 170,
+      "queueApplyMs": 23.143599999999424,
+      "fanoutMs": 29.82259999999951,
+      "skewMs": 7.065299999998388
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 170,
+      "queueApplyMs": 24.53490000000238,
+      "fanoutMs": 44.519500000002154,
+      "skewMs": 6.650800000003073
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 171,
+      "queueApplyMs": 16.67540000000008,
+      "fanoutMs": 19.73309999999765,
+      "skewMs": 5.361000000000786
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 171,
+      "queueApplyMs": 22.38220000000001,
+      "fanoutMs": 34.71069999999963,
+      "skewMs": 6.731999999999971
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 172,
+      "queueApplyMs": 15.67450000000099,
+      "fanoutMs": 19.59019999999873,
+      "skewMs": 5.076000000000931
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 172,
+      "queueApplyMs": 24.819800000001123,
+      "fanoutMs": 37.52089999999953,
+      "skewMs": 11.006000000001222
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 174,
+      "queueApplyMs": 15.462800000001153,
+      "fanoutMs": 19.343000000000757,
+      "skewMs": 5.177800000001298
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 174,
+      "queueApplyMs": 18.899499999999534,
+      "fanoutMs": 31.35440000000017,
+      "skewMs": 4.897399999998015
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 11.364300000001094
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.732899999999063
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 175,
+      "queueApplyMs": 20.786299999999756,
+      "fanoutMs": 24.30359999999928,
+      "skewMs": 6.768199999998615
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 175,
+      "queueApplyMs": 26.302700000000186,
+      "fanoutMs": 40.72569999999905,
+      "skewMs": 7.303299999999581
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 176,
+      "queueApplyMs": 16.84219999999914,
+      "fanoutMs": 20.502199999998993,
+      "skewMs": 5.833999999998923
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 176,
+      "queueApplyMs": 21.034899999998743,
+      "fanoutMs": 33.796299999998155,
+      "skewMs": 5.2862999999997555
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 178,
+      "queueApplyMs": 22.671900000001187,
+      "fanoutMs": 28.47940000000017,
+      "skewMs": 6.338400000000547
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 178,
+      "queueApplyMs": 22.947000000000116,
+      "fanoutMs": 42.230500000001484,
+      "skewMs": 4.6762000000017
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 179,
+      "queueApplyMs": 23.802299999999377,
+      "fanoutMs": 27.532400000000052,
+      "skewMs": 8.38890000000174
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 179,
+      "queueApplyMs": 30.46229999999923,
+      "fanoutMs": 47.66969999999856,
+      "skewMs": 8.084999999999127
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 180,
+      "queueApplyMs": 15.80109999999695,
+      "fanoutMs": 19.00209999999788,
+      "skewMs": 5.719999999997526
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 180,
+      "queueApplyMs": 21.022799999998824,
+      "fanoutMs": 33.07879999999932,
+      "skewMs": 7.206399999999121
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 182,
+      "queueApplyMs": 21.086699999999837,
+      "fanoutMs": 26.55489999999918,
+      "skewMs": 8.572299999999814
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 182,
+      "queueApplyMs": 28.660500000001775,
+      "fanoutMs": 44.17740000000049,
+      "skewMs": 5.522499999999127
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 30.89810000000216
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 24.327300000000832
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 183,
+      "queueApplyMs": 24.839700000000448,
+      "fanoutMs": 33.336599999998725,
+      "skewMs": 8.332500000000437
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 183,
+      "queueApplyMs": 26.860200000002806,
+      "fanoutMs": 49.740499999999884,
+      "skewMs": 6.450300000000425
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 184,
+      "queueApplyMs": 18.736300000000483,
+      "fanoutMs": 23.675500000001193,
+      "skewMs": 6.71480000000156
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 184,
+      "queueApplyMs": 33.29619999999704,
+      "fanoutMs": 48.34609999999884,
+      "skewMs": 11.153299999998126
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 186,
+      "queueApplyMs": 57.479699999999866,
+      "fanoutMs": 66.30879999999888,
+      "skewMs": 25.009899999997288
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 186,
+      "queueApplyMs": 78.47549999999683,
+      "fanoutMs": 116.5727999999981,
+      "skewMs": 24.532499999997526
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 187,
+      "queueApplyMs": 32.390699999999924,
+      "fanoutMs": 40.048900000001595,
+      "skewMs": 9.705200000000332
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 187,
+      "queueApplyMs": 40.15309999999954,
+      "fanoutMs": 66.92540000000008,
+      "skewMs": 13.518499999998312
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 188,
+      "queueApplyMs": 18.651400000002468,
+      "fanoutMs": 22.14020000000164,
+      "skewMs": 5.853900000001886
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 188,
+      "queueApplyMs": 19.945599999999104,
+      "fanoutMs": 34.84619999999995,
+      "skewMs": 5.684499999999389
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 190,
+      "queueApplyMs": 16.542199999999866,
+      "fanoutMs": 19.329499999999825,
+      "skewMs": 7.517700000000332
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 190,
+      "queueApplyMs": 23.04739999999947,
+      "fanoutMs": 33.56339999999909,
+      "skewMs": 4.808799999998882
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 14.250899999999092
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 7.953099999998813
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 191,
+      "queueApplyMs": 17.806700000001,
+      "fanoutMs": 21.455300000001444,
+      "skewMs": 4.802700000000186
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 191,
+      "queueApplyMs": 20.02570000000196,
+      "fanoutMs": 34.526200000000244,
+      "skewMs": 5.499100000000908
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 192,
+      "queueApplyMs": 16.15990000000238,
+      "fanoutMs": 19.401200000000244,
+      "skewMs": 6.605299999999261
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 192,
+      "queueApplyMs": 21.53559999999925,
+      "fanoutMs": 32.8862999999983,
+      "skewMs": 6.339799999997922
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 194,
+      "queueApplyMs": 20.31550000000061,
+      "fanoutMs": 23.284899999998743,
+      "skewMs": 6.8245999999999185
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 194,
+      "queueApplyMs": 22.19629999999961,
+      "fanoutMs": 37.212899999998626,
+      "skewMs": 6.242999999998574
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 195,
+      "queueApplyMs": 29.461100000000442,
+      "fanoutMs": 33.224700000002485,
+      "skewMs": 13.77020000000266
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 195,
+      "queueApplyMs": 31.802200000001903,
+      "fanoutMs": 49.03110000000015,
+      "skewMs": 5.6009999999987485
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 196,
+      "queueApplyMs": 14.835100000000239,
+      "fanoutMs": 17.483400000000984,
+      "skewMs": 5.778600000001461
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 196,
+      "queueApplyMs": 20.465899999999237,
+      "fanoutMs": 30.7471000000005,
+      "skewMs": 6.043900000000576
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 198,
+      "queueApplyMs": 20.458999999998923,
+      "fanoutMs": 24.02390000000014,
+      "skewMs": 5.684600000000501
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 198,
+      "queueApplyMs": 25.657400000000052,
+      "fanoutMs": 41.72279999999955,
+      "skewMs": 8.575400000001537
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 22.103500000001077
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 10.830799999999726
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 199,
+      "queueApplyMs": 21.54620000000068,
+      "fanoutMs": 25.330300000001444,
+      "skewMs": 7.502500000002328
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 199,
+      "queueApplyMs": 27.59979999999996,
+      "fanoutMs": 43.18470000000161,
+      "skewMs": 7.003199999999197
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 200,
+      "queueApplyMs": 17.29320000000007,
+      "fanoutMs": 32.32140000000072,
+      "skewMs": 7.016799999997602
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 200,
+      "queueApplyMs": 26.182600000000093,
+      "fanoutMs": 50.21740000000136,
+      "skewMs": 7.264000000002852
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 202,
+      "queueApplyMs": 26.366299999994226,
+      "fanoutMs": 30.443399999996473,
+      "skewMs": 9.802399999993213
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 202,
+      "queueApplyMs": 36.3946999999971,
+      "fanoutMs": 54.097200000003795,
+      "skewMs": 10.413000000000466
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 203,
+      "queueApplyMs": 30.17460000000574,
+      "fanoutMs": 35.887399999999616,
+      "skewMs": 9.488199999999779
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 203,
+      "queueApplyMs": 32.7583999999988,
+      "fanoutMs": 55.662499999998545,
+      "skewMs": 8.853299999995215
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 204,
+      "queueApplyMs": 19.246899999998277,
+      "fanoutMs": 38.67699999999604,
+      "skewMs": 7.346899999996822
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 204,
+      "queueApplyMs": 23.525500000003376,
+      "fanoutMs": 53.4887000000017,
+      "skewMs": 5.619100000003527
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 206,
+      "queueApplyMs": 44.814100000003236,
+      "fanoutMs": 54.73369999999704,
+      "skewMs": 13.618499999996857
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 206,
+      "queueApplyMs": 48.08039999999892,
+      "fanoutMs": 105.15570000000298,
+      "skewMs": 17.691100000003644
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 62.455699999998615
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 16.753599999996368
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 207,
+      "queueApplyMs": 25.92540000000008,
+      "fanoutMs": 31.957900000001246,
+      "skewMs": 9.88590000000113
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 207,
+      "queueApplyMs": 34.074500000002445,
+      "fanoutMs": 53.31889999999839,
+      "skewMs": 8.15110000000277
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 208,
+      "queueApplyMs": 35.56750000000466,
+      "fanoutMs": 43.09780000000319,
+      "skewMs": 8.28570000000036
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 208,
+      "queueApplyMs": 41.84780000000319,
+      "fanoutMs": 50.713800000004994,
+      "skewMs": 15.753499999998894
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 210,
+      "queueApplyMs": 23.286999999996624,
+      "fanoutMs": 28.226299999994808,
+      "skewMs": 9.219199999999546
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 210,
+      "queueApplyMs": 28.550999999999476,
+      "fanoutMs": 45.73270000000048,
+      "skewMs": 7.663499999995111
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 211,
+      "queueApplyMs": 20.333200000000943,
+      "fanoutMs": 24.18239999999787,
+      "skewMs": 5.591000000000349
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 211,
+      "queueApplyMs": 26.48920000000362,
+      "fanoutMs": 42.833700000002864,
+      "skewMs": 8.63980000000447
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 212,
+      "queueApplyMs": 28.502999999996973,
+      "fanoutMs": 32.71450000000186,
+      "skewMs": 7.751799999998184
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 212,
+      "queueApplyMs": 35.67000000000553,
+      "fanoutMs": 41.00520000000688,
+      "skewMs": 15.900900000000547
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 214,
+      "queueApplyMs": 20.687300000005052,
+      "fanoutMs": 24.046000000002095,
+      "skewMs": 7.261700000002747
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 214,
+      "queueApplyMs": 26.786699999996927,
+      "fanoutMs": 41.334600000001956,
+      "skewMs": 7.703499999995984
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 15.415600000000268
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 5.8312000000005355
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 215,
+      "queueApplyMs": 23.043799999999464,
+      "fanoutMs": 26.347900000000664,
+      "skewMs": 8.359199999998964
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 215,
+      "queueApplyMs": 33.71669999999722,
+      "fanoutMs": 49.54000000000087,
+      "skewMs": 8.787899999995716
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 216,
+      "queueApplyMs": 26.375299999999697,
+      "fanoutMs": 29.839999999996508,
+      "skewMs": 5.990399999995134
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 216,
+      "queueApplyMs": 31.008600000001024,
+      "fanoutMs": 35.57690000000002,
+      "skewMs": 11.683100000002014
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 218,
+      "queueApplyMs": 24.749800000005052,
+      "fanoutMs": 58.6111000000019,
+      "skewMs": 5.722900000000664
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 218,
+      "queueApplyMs": 29.167799999995623,
+      "fanoutMs": 64.30319999999483,
+      "skewMs": 11.35729999999603
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 219,
+      "queueApplyMs": 24.720000000001164,
+      "fanoutMs": 28.80069999999978,
+      "skewMs": 7.996100000003935
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 219,
+      "queueApplyMs": 35.419199999996636,
+      "fanoutMs": 53.713700000000244,
+      "skewMs": 11.335299999998824
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 220,
+      "queueApplyMs": 39.62299999999959,
+      "fanoutMs": 46.22819999999774,
+      "skewMs": 12.536500000001979
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 220,
+      "queueApplyMs": 44.73689999999624,
+      "fanoutMs": 53.60369999999966,
+      "skewMs": 19.760199999996985
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 221,
+      "queueApplyMs": 22.290000000000873,
+      "fanoutMs": 26.11909999999625,
+      "skewMs": 6.807099999998172
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 222,
+      "queueApplyMs": 41.83669999999984,
+      "fanoutMs": 59.11649999999645,
+      "skewMs": 16.55519999999524
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 27.78070000000298
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 9.313799999996263
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 223,
+      "queueApplyMs": 17.350400000002992,
+      "fanoutMs": 20.552999999999884,
+      "skewMs": 6.167099999998754
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 223,
+      "queueApplyMs": 26.05449999999837,
+      "fanoutMs": 38.772799999998824,
+      "skewMs": 10.093799999995099
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 224,
+      "queueApplyMs": 26.01940000000468,
+      "fanoutMs": 29.19789999999921,
+      "skewMs": 6.477200000001176
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 224,
+      "queueApplyMs": 31.904999999998836,
+      "fanoutMs": 36.60759999999573,
+      "skewMs": 13.81710000000021
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 225,
+      "queueApplyMs": 24.6903999999995,
+      "fanoutMs": 28.216800000001967,
+      "skewMs": 7.658799999997427
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 225,
+      "queueApplyMs": 34.49689999999828,
+      "fanoutMs": 52.67710000000079,
+      "skewMs": 9.273999999997613
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 227,
+      "queueApplyMs": 29.262699999999313,
+      "fanoutMs": 33.359199999998964,
+      "skewMs": 8.832299999994575
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 227,
+      "queueApplyMs": 30.670899999997346,
+      "fanoutMs": 52.324099999998,
+      "skewMs": 9.85570000000007
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 228,
+      "queueApplyMs": 19.804300000003423,
+      "fanoutMs": 23.913400000004913,
+      "skewMs": 7.405100000003586
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 228,
+      "queueApplyMs": 28.470399999998335,
+      "fanoutMs": 42.16389999999956,
+      "skewMs": 8.186099999998987
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 229,
+      "queueApplyMs": 20.726399999999558,
+      "fanoutMs": 23.473500000000058,
+      "skewMs": 7.442199999997683
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 229,
+      "queueApplyMs": 25.202299999997194,
+      "fanoutMs": 38.92760000000271,
+      "skewMs": 6.832000000002154
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 52.15490000000136
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 43.595500000003085
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 231,
+      "queueApplyMs": 22.0737999999983,
+      "fanoutMs": 27.58430000000226,
+      "skewMs": 6.58969999999681
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 231,
+      "queueApplyMs": 25.185199999999895,
+      "fanoutMs": 44.260699999998906,
+      "skewMs": 6.993000000002212
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 232,
+      "queueApplyMs": 18.562000000005355,
+      "fanoutMs": 23.228900000001886,
+      "skewMs": 7.230000000003201
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 232,
+      "queueApplyMs": 27.88850000000093,
+      "fanoutMs": 41.35890000000654,
+      "skewMs": 7.577400000001944
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 233,
+      "queueApplyMs": 21.10149999999703,
+      "fanoutMs": 24.066500000000815,
+      "skewMs": 9.925799999997253
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 233,
+      "queueApplyMs": 34.039700000001176,
+      "fanoutMs": 46.63260000000446,
+      "skewMs": 9.42489999999816
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 235,
+      "queueApplyMs": 52.884100000002945,
+      "fanoutMs": 59.02230000000418,
+      "skewMs": 19.81810000000405
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 235,
+      "queueApplyMs": 63.05309999999736,
+      "fanoutMs": 96.27649999999994,
+      "skewMs": 15.846700000001874
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 236,
+      "queueApplyMs": 24.451600000000326,
+      "fanoutMs": 27.372400000000198,
+      "skewMs": 8.478699999999662
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 236,
+      "queueApplyMs": 30.292900000000373,
+      "fanoutMs": 46.40699999999924,
+      "skewMs": 7.748500000001513
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 237,
+      "queueApplyMs": 26.915000000000873,
+      "fanoutMs": 32.39480000000185,
+      "skewMs": 9.650999999998021
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 237,
+      "queueApplyMs": 41.01440000000002,
+      "fanoutMs": 60.71719999999914,
+      "skewMs": 13.281300000002375
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 27.648999999997613
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 14.291100000002189
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 239,
+      "queueApplyMs": 27.14329999999609,
+      "fanoutMs": 31.720799999995506,
+      "skewMs": 9.260299999994459
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 239,
+      "queueApplyMs": 29.898499999995693,
+      "fanoutMs": 49.103799999997136,
+      "skewMs": 7.775099999998929
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 240,
+      "queueApplyMs": 22.636499999993248,
+      "fanoutMs": 27.728100000000268,
+      "skewMs": 6.555499999994936
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 240,
+      "queueApplyMs": 35.15720000000147,
+      "fanoutMs": 54.084200000004785,
+      "skewMs": 11.121800000000803
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 241,
+      "queueApplyMs": 21.225100000003295,
+      "fanoutMs": 26.123200000001816,
+      "skewMs": 5.4474000000045635
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 241,
+      "queueApplyMs": 22.36250000000291,
+      "fanoutMs": 41.027900000000955,
+      "skewMs": 6.120699999999488
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 243,
+      "queueApplyMs": 21.267199999994773,
+      "fanoutMs": 25.063300000001618,
+      "skewMs": 7.849799999996321
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 243,
+      "queueApplyMs": 26.271600000000035,
+      "fanoutMs": 41.363100000002305,
+      "skewMs": 6.179700000000594
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 244,
+      "queueApplyMs": 25.986500000006345,
+      "fanoutMs": 31.10620000000199,
+      "skewMs": 12.182200000002922
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 244,
+      "queueApplyMs": 37.19810000000143,
+      "fanoutMs": 53.40690000000177,
+      "skewMs": 8.089400000004389
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 245,
+      "queueApplyMs": 24.387699999999313,
+      "fanoutMs": 28.8804999999993,
+      "skewMs": 7.0437999999994645
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 245,
+      "queueApplyMs": 26.638899999998102,
+      "fanoutMs": 46.78719999999885,
+      "skewMs": 6.30000000000291
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.73120000000199
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 5.598999999994703
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 247,
+      "queueApplyMs": 33.03230000000622,
+      "fanoutMs": 39.67170000000624,
+      "skewMs": 7.374200000005658
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 247,
+      "queueApplyMs": 29.028299999998126,
+      "fanoutMs": 58.914599999996426,
+      "skewMs": 7.85280000000057
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 248,
+      "queueApplyMs": 23.53530000000319,
+      "fanoutMs": 26.89510000000155,
+      "skewMs": 8.216300000000047
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 248,
+      "queueApplyMs": 28.640599999998813,
+      "fanoutMs": 44.59100000000035,
+      "skewMs": 7.9320000000006985
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 249,
+      "queueApplyMs": 25.336200000005192,
+      "fanoutMs": 31.213999999999942,
+      "skewMs": 8.854700000003504
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 249,
+      "queueApplyMs": 32.98559999999998,
+      "fanoutMs": 52.17779999999766,
+      "skewMs": 7.752800000002026
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 251,
+      "queueApplyMs": 17.85729999999603,
+      "fanoutMs": 20.323099999994156,
+      "skewMs": 6.330399999998917
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 251,
+      "queueApplyMs": 23.129400000005262,
+      "fanoutMs": 35.44840000000113,
+      "skewMs": 5.877500000002328
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 252,
+      "queueApplyMs": 34.42299999999523,
+      "fanoutMs": 38.42289999999775,
+      "skewMs": 11.525399999998626
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 252,
+      "queueApplyMs": 41.59130000000005,
+      "fanoutMs": 64.86339999999473,
+      "skewMs": 10.256999999997788
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 253,
+      "queueApplyMs": 22.751799999998184,
+      "fanoutMs": 27.419600000001083,
+      "skewMs": 8.643600000003062
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 253,
+      "queueApplyMs": 28.588900000002468,
+      "fanoutMs": 44.552999999999884,
+      "skewMs": 6.315300000002026
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.893600000003062
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 6.054100000001199
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 255,
+      "queueApplyMs": 20.668500000007043,
+      "fanoutMs": 23.74170000000595,
+      "skewMs": 6.814600000005157
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 255,
+      "queueApplyMs": 26.412300000003597,
+      "fanoutMs": 40.63429999999789,
+      "skewMs": 7.753900000003341
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 256,
+      "queueApplyMs": 24.022500000006403,
+      "fanoutMs": 26.80340000000433,
+      "skewMs": 9.15690000000177
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 256,
+      "queueApplyMs": 27.947000000000116,
+      "fanoutMs": 42.56760000000213,
+      "skewMs": 5.977600000005623
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 257,
+      "queueApplyMs": 23.89220000000205,
+      "fanoutMs": 27.082900000001246,
+      "skewMs": 7.36540000000241
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 257,
+      "queueApplyMs": 26.80529999999999,
+      "fanoutMs": 44.420600000004924,
+      "skewMs": 7.24210000000312
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 259,
+      "queueApplyMs": 21.65520000000106,
+      "fanoutMs": 25.103100000000268,
+      "skewMs": 7.16990000000078
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 259,
+      "queueApplyMs": 24.32209999999759,
+      "fanoutMs": 40.38549999999668,
+      "skewMs": 7.118599999994331
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 260,
+      "queueApplyMs": 18.218500000002678,
+      "fanoutMs": 20.440099999999802,
+      "skewMs": 5.864500000003318
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 260,
+      "queueApplyMs": 23.206399999995483,
+      "fanoutMs": 35.63329999999405,
+      "skewMs": 6.017199999994773
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 261,
+      "queueApplyMs": 18.92229999999836,
+      "fanoutMs": 22.604099999996834,
+      "skewMs": 7.546199999997043
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 261,
+      "queueApplyMs": 28.17720000000554,
+      "fanoutMs": 41.426900000005844,
+      "skewMs": 8.531300000002375
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 14.978900000001886
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.388300000005984
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 263,
+      "queueApplyMs": 25.32430000000022,
+      "fanoutMs": 27.678500000001804,
+      "skewMs": 9.219600000003993
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 263,
+      "queueApplyMs": 28.127699999997276,
+      "fanoutMs": 44.619800000000396,
+      "skewMs": 8.304599999995844
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 264,
+      "queueApplyMs": 21.72620000000461,
+      "fanoutMs": 24.120300000002317,
+      "skewMs": 6.2796999999991385
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 264,
+      "queueApplyMs": 30.580699999998615,
+      "fanoutMs": 45.685099999995145,
+      "skewMs": 10.399699999994482
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 265,
+      "queueApplyMs": 21.013700000003155,
+      "fanoutMs": 23.95470000000205,
+      "skewMs": 8.262900000001537
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 265,
+      "queueApplyMs": 30.438300000001618,
+      "fanoutMs": 44.183100000002014,
+      "skewMs": 6.924400000003516
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 267,
+      "queueApplyMs": 22.387900000001537,
+      "fanoutMs": 24.95230000000447,
+      "skewMs": 6.789100000001781
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 267,
+      "queueApplyMs": 32.53780000000552,
+      "fanoutMs": 48.658500000005006,
+      "skewMs": 13.75460000000021
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 268,
+      "queueApplyMs": 32.60570000000007,
+      "fanoutMs": 37.675600000002305,
+      "skewMs": 9.746099999996659
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 268,
+      "queueApplyMs": 34.7786000000051,
+      "fanoutMs": 59.56170000000566,
+      "skewMs": 7.3774000000048545
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 269,
+      "queueApplyMs": 24.775399999998626,
+      "fanoutMs": 27.881500000003143,
+      "skewMs": 7.766400000000431
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 269,
+      "queueApplyMs": 28.228800000004412,
+      "fanoutMs": 45.12390000000596,
+      "skewMs": 6.548900000001595
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 12.570400000004156
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.504699999997683
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 271,
+      "queueApplyMs": 26.504300000000512,
+      "fanoutMs": 30.94390000000567,
+      "skewMs": 9.470000000001164
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 271,
+      "queueApplyMs": 33.19239999999991,
+      "fanoutMs": 51.60939999999391,
+      "skewMs": 8.533699999999953
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 272,
+      "queueApplyMs": 20.45980000000418,
+      "fanoutMs": 23.250200000002224,
+      "skewMs": 6.472000000001572
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 272,
+      "queueApplyMs": 30.08810000000085,
+      "fanoutMs": 44.79969999999594,
+      "skewMs": 10.08350000000064
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 273,
+      "queueApplyMs": 19.958800000000338,
+      "fanoutMs": 22.64730000000418,
+      "skewMs": 6.308800000006158
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 273,
+      "queueApplyMs": 24.319600000002538,
+      "fanoutMs": 38.83320000000094,
+      "skewMs": 6.793400000002293
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 275,
+      "queueApplyMs": 27.94100000000617,
+      "fanoutMs": 32.45690000000468,
+      "skewMs": 9.121900000005553
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 275,
+      "queueApplyMs": 34.948099999994156,
+      "fanoutMs": 56.34850000000006,
+      "skewMs": 10.137199999997392
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 276,
+      "queueApplyMs": 22.549400000003516,
+      "fanoutMs": 25.010500000003958,
+      "skewMs": 6.79490000000078
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 276,
+      "queueApplyMs": 32.80550000000221,
+      "fanoutMs": 49.14589999999589,
+      "skewMs": 9.706500000000233
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 277,
+      "queueApplyMs": 27.30829999999696,
+      "fanoutMs": 30.382299999997485,
+      "skewMs": 10.84100000000035
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 277,
+      "queueApplyMs": 31.967799999998533,
+      "fanoutMs": 49.56670000000304,
+      "skewMs": 6.1106999999974505
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 11.425500000004831
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.151899999997113
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 279,
+      "queueApplyMs": 23.062799999999697,
+      "fanoutMs": 26.829299999997602,
+      "skewMs": 7.3818000000028405
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 279,
+      "queueApplyMs": 28.10949999999866,
+      "fanoutMs": 45.695299999999406,
+      "skewMs": 6.72729999999865
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 280,
+      "queueApplyMs": 20.171699999998964,
+      "fanoutMs": 23.519200000002456,
+      "skewMs": 6.2467000000033295
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 280,
+      "queueApplyMs": 28.112999999997555,
+      "fanoutMs": 43.46609999999782,
+      "skewMs": 8.36019999999553
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 281,
+      "queueApplyMs": 22.821600000002945,
+      "fanoutMs": 26.242700000002515,
+      "skewMs": 7.708100000003469
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 281,
+      "queueApplyMs": 25.73649999999907,
+      "fanoutMs": 42.39140000000043,
+      "skewMs": 6.430899999999383
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 283,
+      "queueApplyMs": 25.495300000002317,
+      "fanoutMs": 28.92949999999837,
+      "skewMs": 9.313600000001315
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 283,
+      "queueApplyMs": 29.80460000000312,
+      "fanoutMs": 46.10190000000148,
+      "skewMs": 6.94720000000234
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 284,
+      "queueApplyMs": 22.998500000001513,
+      "fanoutMs": 25.966699999997218,
+      "skewMs": 8.611799999998766
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 284,
+      "queueApplyMs": 31.817000000002736,
+      "fanoutMs": 47.201700000005076,
+      "skewMs": 10.734199999998964
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 285,
+      "queueApplyMs": 20.817399999999907,
+      "fanoutMs": 23.483500000002095,
+      "skewMs": 7.441100000003644
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 285,
+      "queueApplyMs": 29.973299999997835,
+      "fanoutMs": 43.65030000000115,
+      "skewMs": 6.966899999999441
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 12.244500000000698
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.712200000001758
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 287,
+      "queueApplyMs": 21.929400000000896,
+      "fanoutMs": 25.99899999999616,
+      "skewMs": 7.192900000001828
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 287,
+      "queueApplyMs": 31.063600000001315,
+      "fanoutMs": 47.23050000000512,
+      "skewMs": 9.234600000003411
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 288,
+      "queueApplyMs": 19.603799999997136,
+      "fanoutMs": 22.349600000001374,
+      "skewMs": 6.3487999999997555
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 288,
+      "queueApplyMs": 29.501399999993737,
+      "fanoutMs": 43.62159999999858,
+      "skewMs": 10.382099999995262
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 289,
+      "queueApplyMs": 23.936900000000605,
+      "fanoutMs": 29.295700000002398,
+      "skewMs": 7.9112999999997555
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 289,
+      "queueApplyMs": 29.77230000000418,
+      "fanoutMs": 48.879100000005565,
+      "skewMs": 8.288899999999558
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 291,
+      "queueApplyMs": 18.74250000000029,
+      "fanoutMs": 43.726199999997334,
+      "skewMs": 6.29320000000007
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 291,
+      "queueApplyMs": 23.75409999999829,
+      "fanoutMs": 59.12169999999605,
+      "skewMs": 6.221699999994598
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 292,
+      "queueApplyMs": 27.839799999994284,
+      "fanoutMs": 30.559900000000198,
+      "skewMs": 9.434399999998277
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 292,
+      "queueApplyMs": 29.278400000002875,
+      "fanoutMs": 47.89220000000205,
+      "skewMs": 7.333800000000338
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 293,
+      "queueApplyMs": 23.239500000003318,
+      "fanoutMs": 26.603100000000268,
+      "skewMs": 8.912800000005518
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 293,
+      "queueApplyMs": 33.153999999994994,
+      "fanoutMs": 48.86059999999998,
+      "skewMs": 10.040099999998347
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 20.79490000000078
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 8.841899999999441
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 295,
+      "queueApplyMs": 19.730400000000373,
+      "fanoutMs": 36.29590000000462,
+      "skewMs": 6.991900000000896
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 295,
+      "queueApplyMs": 25.35809999999765,
+      "fanoutMs": 52.866399999998976,
+      "skewMs": 7.034599999999045
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 296,
+      "queueApplyMs": 22.807499999995343,
+      "fanoutMs": 25.857499999998254,
+      "skewMs": 8.098699999995006
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 296,
+      "queueApplyMs": 29.005599999996775,
+      "fanoutMs": 43.7612999999983,
+      "skewMs": 7.174200000001292
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 297,
+      "queueApplyMs": 21.228799999997136,
+      "fanoutMs": 24.647499999999127,
+      "skewMs": 8.804700000000594
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 297,
+      "queueApplyMs": 29.568000000006577,
+      "fanoutMs": 43.32370000000083,
+      "skewMs": 7.931800000005751
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 299,
+      "queueApplyMs": 57.333000000005995,
+      "fanoutMs": 138.56260000000475,
+      "skewMs": 16.63130000000092
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 299,
+      "queueApplyMs": 68.58090000000084,
+      "fanoutMs": 153.3127999999997,
+      "skewMs": 31.269599999999627
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 300,
+      "queueApplyMs": 26.965700000000652,
+      "fanoutMs": 29.69430000000284,
+      "skewMs": 9.048799999996845
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 300,
+      "queueApplyMs": 28.972900000000664,
+      "fanoutMs": 46.89589999999589,
+      "skewMs": 6.968199999995704
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 301,
+      "queueApplyMs": 20.278599999997823,
+      "fanoutMs": 22.713900000002468,
+      "skewMs": 8.710100000003877
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 301,
+      "queueApplyMs": 27.470500000003085,
+      "fanoutMs": 39.86500000000524,
+      "skewMs": 7.028000000005704
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 14.219800000006217
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 6.094799999998941
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 302,
+      "queueApplyMs": 24.506000000001222,
+      "fanoutMs": 27.657599999998638,
+      "skewMs": 6.815300000002026
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 303,
+      "queueApplyMs": 47.79559999999765,
+      "fanoutMs": 66.38390000000072,
+      "skewMs": 17.747599999995145
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 304,
+      "queueApplyMs": 30.798499999997148,
+      "fanoutMs": 33.0393999999942,
+      "skewMs": 15.43069999999716
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 304,
+      "queueApplyMs": 45.05529999999999,
+      "fanoutMs": 60.5,
+      "skewMs": 11.014400000000023
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 305,
+      "queueApplyMs": 22.498399999996764,
+      "fanoutMs": 26.65610000000015,
+      "skewMs": 7.7641999999978
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 305,
+      "queueApplyMs": 29.52690000000439,
+      "fanoutMs": 46.16820000000007,
+      "skewMs": 6.971900000004098
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 306,
+      "queueApplyMs": 19.489300000001094,
+      "fanoutMs": 22.14050000000134,
+      "skewMs": 6.3496999999988475
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 306,
+      "queueApplyMs": 30.19090000000142,
+      "fanoutMs": 43.871399999996356,
+      "skewMs": 6.278800000000047
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 308,
+      "queueApplyMs": 21.202900000003865,
+      "fanoutMs": 23.884500000000116,
+      "skewMs": 7.122300000002724
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 308,
+      "queueApplyMs": 28.578300000001036,
+      "fanoutMs": 42.54529999999795,
+      "skewMs": 7.279999999998836
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 309,
+      "queueApplyMs": 22.951999999997497,
+      "fanoutMs": 25.959799999996903,
+      "skewMs": 8.350199999993492
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 309,
+      "queueApplyMs": 29.194000000003143,
+      "fanoutMs": 44.78390000000218,
+      "skewMs": 7.341800000001967
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.34440000000177
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.743900000001304
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 310,
+      "queueApplyMs": 26.54899999999907,
+      "fanoutMs": 29.908699999999953,
+      "skewMs": 10.930299999999988
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 310,
+      "queueApplyMs": 32.153999999994994,
+      "fanoutMs": 48.43089999999938,
+      "skewMs": 7.625199999994948
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 312,
+      "queueApplyMs": 22.153599999997823,
+      "fanoutMs": 24.6195000000007,
+      "skewMs": 6.886500000000524
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 312,
+      "queueApplyMs": 26.389999999999418,
+      "fanoutMs": 41.1762000000017,
+      "skewMs": 7.16830000000482
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 313,
+      "queueApplyMs": 29.699299999992945,
+      "fanoutMs": 32.524899999996705,
+      "skewMs": 12.298599999994622
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 313,
+      "queueApplyMs": 41.84560000000056,
+      "fanoutMs": 58.43340000000171,
+      "skewMs": 12.38130000000092
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 314,
+      "queueApplyMs": 43.47300000000541,
+      "fanoutMs": 47.89240000000427,
+      "skewMs": 14.980900000002293
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 314,
+      "queueApplyMs": 51.810899999996764,
+      "fanoutMs": 78.46029999999882,
+      "skewMs": 13.047299999998359
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 316,
+      "queueApplyMs": 22.55149999999412,
+      "fanoutMs": 26.0425999999934,
+      "skewMs": 7.3729999999995925
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 316,
+      "queueApplyMs": 26.186699999998382,
+      "fanoutMs": 42.73909999999887,
+      "skewMs": 7.286000000000058
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 317,
+      "queueApplyMs": 26.158000000003085,
+      "fanoutMs": 29.53229999999894,
+      "skewMs": 9.492500000000291
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 317,
+      "queueApplyMs": 34.77300000000105,
+      "fanoutMs": 52.16290000000299,
+      "skewMs": 8.936000000001513
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 15.92960000000312
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 5.560400000002119
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 318,
+      "queueApplyMs": 28.324899999999616,
+      "fanoutMs": 31.60779999999795,
+      "skewMs": 7.119299999998475
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 318,
+      "queueApplyMs": 30.17899999999645,
+      "fanoutMs": 51.610099999998056,
+      "skewMs": 9.508900000000722
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 320,
+      "queueApplyMs": 31.240200000000186,
+      "fanoutMs": 34.723799999999756,
+      "skewMs": 9.584000000002561
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 320,
+      "queueApplyMs": 36.489800000003015,
+      "fanoutMs": 58.945599999999104,
+      "skewMs": 13.324899999999616
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 321,
+      "queueApplyMs": 34.38890000000538,
+      "fanoutMs": 37.919400000006135,
+      "skewMs": 11.962900000005902
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 321,
+      "queueApplyMs": 36.33299999999872,
+      "fanoutMs": 58.50880000000325,
+      "skewMs": 9.404699999999139
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 322,
+      "queueApplyMs": 19.799200000001292,
+      "fanoutMs": 22.39650000000256,
+      "skewMs": 6.867500000000291
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 322,
+      "queueApplyMs": 23.949200000002747,
+      "fanoutMs": 37.33879999999772,
+      "skewMs": 6.204700000002049
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 324,
+      "queueApplyMs": 23.43630000000121,
+      "fanoutMs": 26.177000000003318,
+      "skewMs": 6.4144000000014785
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 324,
+      "queueApplyMs": 26.1591000000044,
+      "fanoutMs": 43.090400000000955,
+      "skewMs": 6.11540000000241
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 325,
+      "queueApplyMs": 25.613600000004226,
+      "fanoutMs": 28.299200000001292,
+      "skewMs": 9.603300000002491
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 325,
+      "queueApplyMs": 29.737099999998463,
+      "fanoutMs": 45.053399999997055,
+      "skewMs": 6.620799999996962
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 12.398300000000745
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.520400000001246
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 326,
+      "queueApplyMs": 34.52590000000055,
+      "fanoutMs": 42.349999999998545,
+      "skewMs": 11.05399999999645
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 326,
+      "queueApplyMs": 51.501200000006065,
+      "fanoutMs": 79.41410000000178,
+      "skewMs": 18.75420000000304
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 328,
+      "queueApplyMs": 21.656199999997625,
+      "fanoutMs": 24.74529999999504,
+      "skewMs": 8.47099999999773
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 328,
+      "queueApplyMs": 35.62980000000243,
+      "fanoutMs": 49.35960000000341,
+      "skewMs": 9.699400000004971
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 329,
+      "queueApplyMs": 24.49460000000545,
+      "fanoutMs": 27.706200000000536,
+      "skewMs": 9.69770000000426
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 329,
+      "queueApplyMs": 34.64130000000296,
+      "fanoutMs": 49.874900000002526,
+      "skewMs": 11.092600000003586
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 330,
+      "queueApplyMs": 30.34049999999843,
+      "fanoutMs": 34.169300000001385,
+      "skewMs": 9.086699999999837
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 330,
+      "queueApplyMs": 30.934399999998277,
+      "fanoutMs": 53.12800000000425,
+      "skewMs": 7.448600000003353
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 332,
+      "queueApplyMs": 21.76589999999851,
+      "fanoutMs": 25.147299999996903,
+      "skewMs": 8.135399999999208
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 332,
+      "queueApplyMs": 26.621199999994133,
+      "fanoutMs": 41.38969999999972,
+      "skewMs": 6.627999999996973
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 333,
+      "queueApplyMs": 25.331500000000233,
+      "fanoutMs": 27.987000000008265,
+      "skewMs": 8.949400000012247
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 333,
+      "queueApplyMs": 32.42309999999998,
+      "fanoutMs": 48.85899999999674,
+      "skewMs": 8.931800000005751
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 18.04179999999178
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 7.642200000002049
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 334,
+      "queueApplyMs": 24.366699999998673,
+      "fanoutMs": 27.66249999999127,
+      "skewMs": 7.973599999997532
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 334,
+      "queueApplyMs": 30.699099999997998,
+      "fanoutMs": 48.15469999999914,
+      "skewMs": 9.064100000003236
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 336,
+      "queueApplyMs": 34.366399999998976,
+      "fanoutMs": 38.89379999999073,
+      "skewMs": 10.110699999990175
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 336,
+      "queueApplyMs": 41.99000000000524,
+      "fanoutMs": 67.87919999999576,
+      "skewMs": 13.473499999992782
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 337,
+      "queueApplyMs": 32.8692999999912,
+      "fanoutMs": 35.87399999999616,
+      "skewMs": 11.880199999999604
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 337,
+      "queueApplyMs": 36.325600000011036,
+      "fanoutMs": 56.939100000003236,
+      "skewMs": 7.897300000011455
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 338,
+      "queueApplyMs": 18.742400000002817,
+      "fanoutMs": 21.189400000002934,
+      "skewMs": 6.48059999999532
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 338,
+      "queueApplyMs": 23.943700000003446,
+      "fanoutMs": 36.69130000000587,
+      "skewMs": 6.455499999996391
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 340,
+      "queueApplyMs": 20.584399999992456,
+      "fanoutMs": 23.22839999999269,
+      "skewMs": 7.02029999998922
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 340,
+      "queueApplyMs": 27.49079999999958,
+      "fanoutMs": 40.86250000000291,
+      "skewMs": 6.760399999999208
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 341,
+      "queueApplyMs": 25.30319999999483,
+      "fanoutMs": 30.160599999988335,
+      "skewMs": 7.188099999999395
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 341,
+      "queueApplyMs": 29.239999999990687,
+      "fanoutMs": 49.18330000000424,
+      "skewMs": 8.040999999997439
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 14.501499999998487
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.872300000002724
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 342,
+      "queueApplyMs": 29.821299999995972,
+      "fanoutMs": 33.61669999999867,
+      "skewMs": 11.580399999991641
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 342,
+      "queueApplyMs": 44.47699999999895,
+      "fanoutMs": 62.79859999999462,
+      "skewMs": 16.30920000000333
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 344,
+      "queueApplyMs": 26.934299999993527,
+      "fanoutMs": 30.836899999994785,
+      "skewMs": 9.240200000000186
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 344,
+      "queueApplyMs": 30.278900000004796,
+      "fanoutMs": 49.66270000000077,
+      "skewMs": 9.19910000001255
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 345,
+      "queueApplyMs": 28.759699999995064,
+      "fanoutMs": 32.11220000000321,
+      "skewMs": 9.12050000000454
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 345,
+      "queueApplyMs": 36.68950000000768,
+      "fanoutMs": 56.698400000008405,
+      "skewMs": 11.876799999998184
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 346,
+      "queueApplyMs": 64.57190000000992,
+      "fanoutMs": 73.53220000000147,
+      "skewMs": 15.29790000000503
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 346,
+      "queueApplyMs": 62.85649999999441,
+      "fanoutMs": 111.914300000004,
+      "skewMs": 15.864300000001094
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 348,
+      "queueApplyMs": 22.69429999998829,
+      "fanoutMs": 25.283699999999953,
+      "skewMs": 6.9482999999891035
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 348,
+      "queueApplyMs": 32.28740000000107,
+      "fanoutMs": 47.45299999999406,
+      "skewMs": 9.998299999992014
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 349,
+      "queueApplyMs": 29.443899999998393,
+      "fanoutMs": 33.049500000008265,
+      "skewMs": 11.83990000000631
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 349,
+      "queueApplyMs": 33.95909999999276,
+      "fanoutMs": 52.60529999999562,
+      "skewMs": 7.8804999999993015
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 13.978700000006938
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 4.705499999996391
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 350,
+      "queueApplyMs": 25.073399999993853,
+      "fanoutMs": 27.841700000004494,
+      "skewMs": 7.103600000002189
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 350,
+      "queueApplyMs": 26.831300000005285,
+      "fanoutMs": 45.542700000005425,
+      "skewMs": 8.360800000009476
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 352,
+      "queueApplyMs": 21.662800000005518,
+      "fanoutMs": 24.519000000000233,
+      "skewMs": 6.699399999997695
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 352,
+      "queueApplyMs": 30.71730000000389,
+      "fanoutMs": 45.053899999998976,
+      "skewMs": 11.158200000005309
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 353,
+      "queueApplyMs": 22.655899999997928,
+      "fanoutMs": 43.494000000006054,
+      "skewMs": 7.980500000005122
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 353,
+      "queueApplyMs": 31.163099999990663,
+      "fanoutMs": 64.14500000000407,
+      "skewMs": 9.277499999996508
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 354,
+      "queueApplyMs": 27.628899999996065,
+      "fanoutMs": 32.365399999995134,
+      "skewMs": 9.860399999990477
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 354,
+      "queueApplyMs": 35.15150000000722,
+      "fanoutMs": 54.96400000000722,
+      "skewMs": 9.685200000007171
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 356,
+      "queueApplyMs": 24.480200000005425,
+      "fanoutMs": 27.790399999998044,
+      "skewMs": 8.132200000007288
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 356,
+      "queueApplyMs": 28.916499999992084,
+      "fanoutMs": 46.275699999998324,
+      "skewMs": 6.549299999998766
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 357,
+      "queueApplyMs": 25.033400000000256,
+      "fanoutMs": 46.18790000000445,
+      "skewMs": 7.705199999996694
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 357,
+      "queueApplyMs": 38.39320000000589,
+      "fanoutMs": 74.53600000000733,
+      "skewMs": 13.768800000005285
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 25.995999999999185
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 11.148600000000442
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 358,
+      "queueApplyMs": 23.976800000004005,
+      "fanoutMs": 26.815199999997276,
+      "skewMs": 7.692399999999907
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 358,
+      "queueApplyMs": 32.37699999999313,
+      "fanoutMs": 48.050900000002,
+      "skewMs": 10.010199999989709
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 360,
+      "queueApplyMs": 21.36579999999958,
+      "fanoutMs": 24.616200000004028,
+      "skewMs": 7.28979999999865
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 360,
+      "queueApplyMs": 28.26820000000589,
+      "fanoutMs": 43.41220000000612,
+      "skewMs": 7.249800000005052
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 361,
+      "queueApplyMs": 24.68499999999767,
+      "fanoutMs": 43.37940000000526,
+      "skewMs": 8.383500000010827
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 361,
+      "queueApplyMs": 39.123400000011316,
+      "fanoutMs": 71.43180000000575,
+      "skewMs": 12.8579000000027
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 362,
+      "queueApplyMs": 39.34859999999753,
+      "fanoutMs": 43.691199999986566,
+      "skewMs": 15.25779999999213
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 362,
+      "queueApplyMs": 64.66229999999632,
+      "fanoutMs": 89.07769999999437,
+      "skewMs": 19.884699999995064
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 364,
+      "queueApplyMs": 55.624500000005355,
+      "fanoutMs": 144.50530000000435,
+      "skewMs": 12.699300000007497
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 364,
+      "queueApplyMs": 60.71940000000177,
+      "fanoutMs": 153.65499999999884,
+      "skewMs": 21.731500000008964
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 365,
+      "queueApplyMs": 25.8804999999993,
+      "fanoutMs": 52.71700000000419,
+      "skewMs": 8.368900000001304
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 365,
+      "queueApplyMs": 38.15799999999581,
+      "fanoutMs": 80.40589999999793,
+      "skewMs": 11.876900000002934
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 22.65230000000156
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 9.0509999999922
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 366,
+      "queueApplyMs": 24.733800000001793,
+      "fanoutMs": 29.058799999998882,
+      "skewMs": 7.020400000008522
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 366,
+      "queueApplyMs": 33.07709999999497,
+      "fanoutMs": 52.750599999999395,
+      "skewMs": 10.212199999994482
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 368,
+      "queueApplyMs": 44.80340000000433,
+      "fanoutMs": 97.92339999999967,
+      "skewMs": 13.09450000000652
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 368,
+      "queueApplyMs": 50.48500000000058,
+      "fanoutMs": 106.88390000000072,
+      "skewMs": 21.92039999998815
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 369,
+      "queueApplyMs": 47.448099999994156,
+      "fanoutMs": 52.69090000000142,
+      "skewMs": 14.930099999997765
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 369,
+      "queueApplyMs": 83.77709999999206,
+      "fanoutMs": 108.45849999999336,
+      "skewMs": 15.097200000003795
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 370,
+      "queueApplyMs": 40.08999999999651,
+      "fanoutMs": 45.38390000000072,
+      "skewMs": 12.684699999997974
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 370,
+      "queueApplyMs": 44.066299999991315,
+      "fanoutMs": 71.99469999999565,
+      "skewMs": 10.146599999992759
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 371,
+      "queueApplyMs": 35.49629999999888,
+      "fanoutMs": 38.91109999999753,
+      "skewMs": 17.229800000000978
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 371,
+      "queueApplyMs": 46.5969000000041,
+      "fanoutMs": 64.2609000000084,
+      "skewMs": 8.682200000010198
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 373,
+      "queueApplyMs": 41.732300000003306,
+      "fanoutMs": 46.64420000000973,
+      "skewMs": 8.665699999997742
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 373,
+      "queueApplyMs": 45.27419999999984,
+      "fanoutMs": 54.465400000000955,
+      "skewMs": 16.351500000004307
+    },
+    {
+      "room": 0,
+      "type": "REST",
+      "durationMs": 50.90660000000207
+    },
+    {
+      "room": 1,
+      "type": "REST",
+      "durationMs": 50.97709999998915
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 374,
+      "queueApplyMs": 33.028999999994994,
+      "fanoutMs": 39.02829999999085,
+      "skewMs": 8.412899999995716
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 374,
+      "queueApplyMs": 36.167499999995925,
+      "fanoutMs": 62.15419999998994,
+      "skewMs": 8.501699999993434
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 375,
+      "queueApplyMs": 38.407500000001164,
+      "fanoutMs": 43.31029999999737,
+      "skewMs": 14.291299999997136
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 375,
+      "queueApplyMs": 50.45449999999255,
+      "fanoutMs": 76.15129999999772,
+      "skewMs": 14.428199999994831
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 377,
+      "queueApplyMs": 34.656500000011874,
+      "fanoutMs": 42.112000000008265,
+      "skewMs": 10.676800000001094
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 377,
+      "queueApplyMs": 44.43319999999949,
+      "fanoutMs": 71.56100000000151,
+      "skewMs": 8.995699999999488
+    },
+    {
+      "room": 0,
+      "type": "chat.message",
+      "revision": 378,
+      "queueApplyMs": 45.85490000000573,
+      "fanoutMs": 51.6420000000071,
+      "skewMs": 13.478000000002794
+    },
+    {
+      "room": 1,
+      "type": "chat.message",
+      "revision": 378,
+      "queueApplyMs": 46.36000000000058,
+      "fanoutMs": 80.73979999999574,
+      "skewMs": 15.128599999996368
+    },
+    {
+      "room": 0,
+      "type": "queue.vote",
+      "revision": 379,
+      "queueApplyMs": 34.84750000000349,
+      "fanoutMs": 41.076700000005076,
+      "skewMs": 12.951100000005681
+    },
+    {
+      "room": 1,
+      "type": "queue.vote",
+      "revision": 379,
+      "queueApplyMs": 44.11590000000433,
+      "fanoutMs": 69.08779999999388,
+      "skewMs": 10.696100000001024
+    }
+  ],
+  "acceptance": {
+    "queue": true,
+    "fanout": true,
+    "rest": true,
+    "ai": "unmeasured; real model gate open"
+  }
+}

@@ -24,9 +24,11 @@ export function createApplication({
   logger = console,
 }) {
   const app = express();
+  // Only an operator-enabled loopback edge can supply forwarded client addresses.
+  if (config.trustLoopbackProxy) app.set("trust proxy", "loopback");
   const server = createServer(app);
   const handshakeAllowed = createThrottle({
-    limit: config.handshakeLimit || 30,
+    limit: config.handshakeLimit || 120,
   });
   const io = new Server(server, {
     cors: { origin: config.origin, credentials: true },

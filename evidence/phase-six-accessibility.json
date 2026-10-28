@@ -1,0 +1,547 @@
+[
+  {
+    "view": "welcome",
+    "failures": [],
+    "controls": [
+      {
+        "tag": "A",
+        "name": "DJ Studio home",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "◫ Overview",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Email address",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Password",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Enter the studio →",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "New here? Create an account",
+        "focusable": true
+      }
+    ],
+    "limitations": "Computed solid colors; gradients, icons, opacity groups, focus visibility and screen-reader announcements need manual review"
+  },
+  {
+    "view": "overview/catalog",
+    "failures": [],
+    "controls": [
+      {
+        "tag": "A",
+        "name": "DJ Studio home",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "◫ Overview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Sign out",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Lounge vibe",
+        "focusable": true
+      },
+      {
+        "tag": "SELECT",
+        "name": "Starting trackChoose from your catalogStudy in Amber · 120 BPMNight Geometry · 124 BPMAfter the Rain · 128 BPMPreview fixture · Profile needed",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Create lounge →",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Invite code",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Join lounge ↗",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Refresh listening",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Listening history",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Search library",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      }
+    ],
+    "limitations": "Computed solid colors; gradients, icons, opacity groups, focus visibility and screen-reader announcements need manual review"
+  },
+  {
+    "view": "lounge/social/AI",
+    "failures": [],
+    "controls": [
+      {
+        "tag": "A",
+        "name": "DJ Studio home",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "◫ Overview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Sign out",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Copy code ↗",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Session analytics",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "End session",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Enable audio again",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Like / unlike current track",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Play",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Pause",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Skip / Advance",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Lock room",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Rotate invite",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Leave lounge",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Manage Guest",
+        "focusable": true
+      },
+      {
+        "tag": "SELECT",
+        "name": "Add a trackStudy in AmberNight GeometryAfter the RainPreview fixture · Profile needed",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Add to queue",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Upvote After the Rain",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Reserve next",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Remove",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Suggest segue",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Ask about the current track",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Ask AI DJ",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Load older messages",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 👍 to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React ❤️ to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🔥 to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🎵 to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 👍 to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React ❤️ to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🔥 to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🎵 to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "Message",
+        "focusable": true
+      },
+      {
+        "tag": "SELECT",
+        "name": "Battle trackStudy in AmberNight GeometryAfter the RainPreview fixture",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Submit candidate",
+        "focusable": true
+      }
+    ],
+    "limitations": "Computed solid colors; gradients, icons, opacity groups, focus visibility and screen-reader announcements need manual review"
+  },
+  {
+    "view": "analytics",
+    "failures": [],
+    "controls": [
+      {
+        "tag": "A",
+        "name": "DJ Studio home",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "◫ Overview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Sign out",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Session analytics",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Enable audio",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Like / unlike current track",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Lock room",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Rotate invite",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Leave lounge",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Manage Guest",
+        "focusable": true
+      },
+      {
+        "tag": "SELECT",
+        "name": "Add a trackStudy in AmberNight GeometryAfter the RainPreview fixture · Profile needed",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Ask about the current track",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Load older messages",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 👍 to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React ❤️ to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🔥 to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🎵 to Guest: I really love this track <script>al",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 👍 to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React ❤️ to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🔥 to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "React 🎵 to DJ: After the Rain won Soundclash. Comp",
+        "focusable": true
+      },
+      {
+        "tag": "TEXTAREA",
+        "name": "Message",
+        "focusable": true
+      },
+      {
+        "tag": "SELECT",
+        "name": "Battle trackStudy in AmberNight GeometryAfter the RainPreview fixture",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Submit candidate",
+        "focusable": true
+      }
+    ],
+    "limitations": "Computed solid colors; gradients, icons, opacity groups, focus visibility and screen-reader announcements need manual review"
+  },
+  {
+    "view": "dashboard/admin/mobile",
+    "failures": [],
+    "controls": [
+      {
+        "tag": "A",
+        "name": "DJ Studio home",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Sign out",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Lounge vibe",
+        "focusable": true
+      },
+      {
+        "tag": "SELECT",
+        "name": "Starting trackChoose from your catalogStudy in Amber · 120 BPMNight Geometry · 124 BPMAfter the Rain · 128 BPMPreview fixture · Profile needed",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Create lounge →",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Invite code",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Join lounge ↗",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "After Hoursended ↗",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Refresh listening",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Listening history",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Fit recommendation model",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Check training status",
+        "focusable": true
+      },
+      {
+        "tag": "INPUT",
+        "name": "Search library",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Edit profile",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Edit profile",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Edit profile",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Preview",
+        "focusable": true
+      },
+      {
+        "tag": "BUTTON",
+        "name": "Edit profile",
+        "focusable": true
+      },
+      {
+        "tag": "SUMMARY",
+        "name": "Admin · Authorized local catalog",
+        "focusable": true
+      }
+    ],
+    "limitations": "Computed solid colors; gradients, icons, opacity groups, focus visibility and screen-reader announcements need manual review"
+  }
+]

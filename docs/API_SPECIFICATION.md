@@ -1,5 +1,7 @@
 # API specification
 
+Phase 6 preserves all HTTP examples and socket event names. Health routes are `/api/v1/health/live` and `/api/v1/health/ready`. `TRUST_LOOPBACK_PROXY=true` enables loopback-only forwarded HTTP client addresses. Socket transport handshake allowance is bounded at 120/minute per peer; slow transports exceeding 20 queued packets are disconnected and must resync. No operational backup API is exposed. [Contracts and limitations](PHASE_SIX_IMPLEMENTATION.md).
+
 Phase 5 implements interaction PUT, dashboard/recommendations, paginated own lounges, own-session analytics and admin job POST/GET. Socket commands add interaction.record and Host-only room.end. End returns synchronous 200 with acknowledgement and summaryStatus:complete after the flush barrier, replacing the planned 202. Analytics returns 202 while unavailable. Dashboard/recommendation reads declare durability/cutoff and bounded scope. [Exact definitions and limitations](PHASE_FIVE_IMPLEMENTATION.md).
 
 

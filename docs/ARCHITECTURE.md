@@ -1,5 +1,7 @@
 # Architecture
 
+Phase 6 retains one process/one database pool and unchanged room FIFO/reducer. It adds an offline streaming logical backup, bounded client-application timing harness, loopback HTTP proxy trust and deployment templates. Snapshot buffers still disconnect slow transports. [As-built protocol and limits](PHASE_SIX_IMPLEMENTATION.md).
+
 Phase 5 adds an in-process personal API module and bounded worker-thread recommendation fitting with durable-before-swap artifacts. Interaction events and end summaries share room batching/transactions; no additional service or database client. [As-built limits and end barrier](PHASE_FIVE_IMPLEMENTATION.md).
 
 

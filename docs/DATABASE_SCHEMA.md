@@ -1,5 +1,7 @@
 # Database schema
 
+Phase 6 adds no migration or collection changes. Offline backups preserve Extended JSON BSON types, collection validators/options, indexes including text weights, migration ledger and hashed referenced assets. Restore refuses nonempty targets; ordinary recovery creates a new epoch and pauses playback. [Backup and compatibility limits](PHASE_SIX_IMPLEMENTATION.md).
+
 Migration 005-personal adds interactions (unique loungeId/userId/playbackId; userId/createdAt/ID history index), session_summaries (unique loungeId) and recommendation_jobs (private bounded artifact). Interactions store server-bounded playedSeconds, completion/like, profile snapshot, observedAt and revision. The summary stores canonical-log counts/timeline/history and final revision. [Compatibility and backup review](PHASE_FIVE_IMPLEMENTATION.md#migration-and-rollback).
 
 

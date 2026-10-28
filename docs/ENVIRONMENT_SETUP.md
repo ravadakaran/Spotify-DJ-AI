@@ -1,6 +1,8 @@
 # Environment setup and operations
 
-The **foundation is runnable**. Use the current instructions below; the later sections describe the full future setup contract and include settings/features not implemented yet.
+Phase 6 operations are documented in [the private deployment and rollback runbook](PRIVATE_DEPLOYMENT.md). Supported setting `TRUST_LOOPBACK_PROXY=true` trusts only loopback HTTP proxies; defaults remain disabled. Production uses one loopback Node server behind Caddy with authenticated private MongoDB. Templates are not an executed Linux/TLS deployment. `npm run backup -- backup|restore DIRECTORY` requires BACKUP_WRITERS_STOPPED=true and empty restore destinations. `npm run benchmark` and `npm run security:scan` are implemented. See [measured verification](IMPLEMENTATION_STATUS.md).
+
+The application is runnable through Phase 6 software. Use the current instructions below and the private deployment runbook; the historical planned-contract tables still include proposed settings that are not runtime environment variables. See IMPLEMENTATION_STATUS.md for current gates.
 
 Phase 2 is now included in these commands. Stop the prior app before migration. Migration 003 adds live event/checkpoint collections; preserve a database backup and asset manifest first. The `library:import` helper creates an ignored Extended JSON backup before migrating the persistent local database. Never run two application instances against these room states. Recovery pauses playback and requires Host resume. See [Phase 2 operating and rollback notes](PHASE_TWO_IMPLEMENTATION.md).
 
@@ -12,7 +14,7 @@ npm run setup
 npm run dev:local
 ```
 
-Open `http://127.0.0.1:5173` (use this exact host, not localhost, for configured Origin/cookies). This local helper launches a real single-node MongoDB replica set without Docker, applies indexes, seeds three metadata-only tracks, and starts Express/Vite. It may download the MongoDB executable on first run. DB files live under ignored `data/local-db`; assets under ignored `data/assets`. The app remains local-only; no LLM or Spotify credentials are needed for this slice. Ctrl+C stops the helper. Do not run browser E2E tests while the app occupies ports 3000/5173.
+Open `http://127.0.0.1:5173` (use this exact host, not localhost, for configured Origin/cookies). This local helper launches a real single-node MongoDB replica set without Docker, applies indexes, seeds three metadata-only tracks, and starts Express/Vite. It may download the MongoDB executable on first run. DB files live under ignored `data/local-db`; assets under ignored `data/assets`. The app remains local-only; no LLM or Spotify credentials are needed for this slice. Ctrl+C stops the helper. Browser E2E tests allocate disposable database/API/Vite ports and can coexist with local development; run performance measurements separately for isolation.
 
 Alternative: start Docker Engine, run `docker compose up -d mongo`, then `npm run db:migrate`, `npm run db:seed`, `npm run dev`. The Compose file is deliberately loopback-only without DB authentication and is **not a production deployment configuration**. The Docker path has not been executed here because Docker Engine was stopped.
 
@@ -24,7 +26,7 @@ To import the user's local library, stop `dev:local` first, then run `npm run li
 
 Migrations 001/002 are immutable after application. A checksum mismatch fails startup. A stale migration lock requires verifying that the old runner has stopped before an operator removes that exact lock; never reset the database to bypass it. Import backups preserve documents as Extended JSON; production backup/restore rehearsal remains Phase 6 work.
 
-Checks: `npm run lint`, `npm test`, `npm run test:integration`, `npm run build`; install browser with `npx playwright install chromium`, then `npm run test:e2e`. Unit/API tests and browser tests create their own disposable MongoDB replica sets. There is no load-test or AI-evaluation command yet. `npm start` serves the compiled client/API after build against an already configured database. See [implementation status](IMPLEMENTATION_STATUS.md) for validated results and incomplete features.
+Checks: `npm run lint`, `npm test`, `npm run test:integration`, `npm run build`; install browser with `npx playwright install chromium`, then `npm run test:e2e`. Unit/API tests and browser tests create their own disposable MongoDB replica sets. Load testing is available via `npm run benchmark`; synthetic recommendation evaluation via `npm run recommendations:evaluate`. Real-model evaluation remains gated. `npm start` serves the compiled client/API after build against an already configured database. See [implementation status](IMPLEMENTATION_STATUS.md) for validated results and incomplete features.
 
 ## Planned full-system contract
 

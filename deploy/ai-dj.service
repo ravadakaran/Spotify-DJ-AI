@@ -1,0 +1,25 @@
+[Unit]
+Description=Private AI DJ single application instance
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ai-dj
+Group=ai-dj
+WorkingDirectory=/opt/ai-dj
+EnvironmentFile=/etc/ai-dj/environment
+ExecStart=/usr/bin/node server/src/index.js
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=60
+KillSignal=SIGTERM
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/ai-dj/assets
+
+[Install]
+WantedBy=multi-user.target
