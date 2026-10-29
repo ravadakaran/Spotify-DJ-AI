@@ -1,0 +1,35 @@
+# Free portfolio demo. Keep one authority and disable automatic rolling deploys.
+services:
+  - type: web
+    name: ai-dj-studio-demo
+    runtime: node
+    plan: free
+    region: oregon
+    numInstances: 1
+    autoDeploy: false
+    buildCommand: npm ci --omit=dev && node scripts/prepare-public-demo.js
+    startCommand: node scripts/start-public-demo.js
+    healthCheckPath: /api/v1/health/ready
+    envVars:
+      - key: NODE_VERSION
+        value: 24.22.2
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS
+        value: --max-old-space-size=256
+      - key: HOST
+        value: 0.0.0.0
+      - key: APP_ORIGIN
+        value: https://ai-dj-studio-ten.vercel.app
+      - key: COOKIE_SECURE
+        value: "true"
+      - key: ASSET_ROOT
+        value: data/public-demo-assets
+      - key: DEMO_READ_ONLY_CATALOG
+        value: "true"
+      - key: AI_METADATA_APPROVED
+        value: "false"
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SIGNING_KEY
+        sync: false

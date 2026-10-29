@@ -6,8 +6,8 @@ const config = readConfig();
 await mkdir(config.assetRoot, { recursive: true });
 const db = await connect(config.mongoUri);
 const application = createApplication({ ...db, config });
-application.server.listen(config.port, "127.0.0.1", () =>
-  console.log(`API listening on http://127.0.0.1:${config.port}`),
+application.server.listen(config.port, config.host, () =>
+  console.log(`API listening on http://${config.host}:${config.port}`),
 );
 let closing = false;
 const stop = async () => {

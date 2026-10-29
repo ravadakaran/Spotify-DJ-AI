@@ -11,6 +11,7 @@ import { root } from '../../server/src/config.js';
 import { connect, migrate, seed } from '../../server/src/persistence.js';
 import { createApplication } from '../../server/src/app.js';
 let repl, db, application, vite, folder, browserUrl;
+const browserEvidence = path.resolve(process.env.BROWSER_EVIDENCE_DIR || path.join(root, 'evidence'));
 async function chooseTrack(page, label, title) {
   const select = page.getByLabel(label, {exact:true});
   const option = select.locator('option').filter({hasText:new RegExp(`^${title} —`)});
@@ -47,10 +48,10 @@ test.beforeEach(async () => {
 test.afterEach(async () => { await vite?.close(); await application?.close(); await db?.connection.close(); await repl?.stop(); if (folder) await rm(folder, { recursive: true, force: true }); });
 test('two independent browser sessions create/join, sync and restore authentication', async ({ browser }) => {
   test.setTimeout(120000);
-  const hostContext = await browser.newContext({recordVideo:{dir:path.join(root,'evidence','demo'),size:{width:1280,height:900}}}); const guestContext = await browser.newContext();
+  const hostContext = await browser.newContext({recordVideo:{dir:path.join(browserEvidence,'demo'),size:{width:1280,height:900}}}); const guestContext = await browser.newContext();
   const host = await hostContext.newPage(); const guest = await guestContext.newPage();
   let complete=false; const audits=[]; const faults = []; host.on('pageerror', (e) => faults.push(e.message)); guest.on('pageerror', (e) => faults.push(e.message));
-  const evidence = path.join(root, 'evidence'); await mkdir(evidence, { recursive: true });
+  const evidence = browserEvidence; await mkdir(evidence, { recursive: true });
   try {
     await host.goto(browserUrl); await expect(host.getByRole('heading', { name: 'Good to have you back.' })).toBeVisible();
     audits.push(await audit(host,'welcome'));
@@ -356,7 +357,8 @@ test('full-library discovery, stale-action guidance and mobile audio recovery pr
   await page.getByRole('button',{name:'Back to player',exact:true}).click();
   await expect(page.getByLabel('Lounge audio')).toHaveCount(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth<=innerWidth)).toBe(true);
-  await page.screenshot({path:path.join(root,'evidence','listening-flow-mobile.png'),fullPage:true});
+  await mkdir(browserEvidence, { recursive: true });
+  await page.screenshot({path:path.join(browserEvidence,'listening-flow-mobile.png'),fullPage:true});
   await page.getByRole('button',{name:'Sign out',exact:true}).click();
   await expect(page.getByRole('heading',{name:'Good to have you back.'})).toBeVisible();
   expect(await page.evaluate(() => window.liveAudioUrls.size)).toBe(0);

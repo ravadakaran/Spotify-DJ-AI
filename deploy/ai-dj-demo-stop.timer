@@ -1,0 +1,10 @@
+[Unit]
+Description=Limit each AI DJ demo VM boot to approximately 90 minutes
+
+[Timer]
+OnBootSec=90min
+AccuracySec=30s
+Unit=ai-dj-demo-stop.service
+
+[Install]
+WantedBy=timers.target

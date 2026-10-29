@@ -1,5 +1,9 @@
 # Database schema
 
+Prepared public demo adds one bounded deployment-control collection, `deployment_locks`, with `_id: public-demo-runtime`, random `owner`, and `startedAt`. Built-in unique `_id` enforces one owner; no TTL or timeout takeover. Only matching-owner graceful shutdown deletes it. No user/event schema or existing migration changes. Bootstrap refuses any database other than `ai_dj_public_demo`; existing accounts and catalog records are preserved by insert-only seeding. No VM database transfer/reset is performed. [Recovery](PUBLIC_DEMO_SETUP.md).
+
+29 October 2026 Vercel integration changes only routing/client transport. Existing MongoDB data, migrations, indexes and event schemas are unchanged; no reset or migration was performed during integration.
+
 29 October 2026 hosting preparation introduces no schema/migration/seed changes. MongoDB remains an authenticated replica set, not Firestore; media stays on durable VM storage. Populate only a deliberately selected new cloud database after provisioning and backup review. [Deployment and recovery](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md).
 
 28 October 2026 IMP-002 uses existing tracks/audio_assets fields and profileVersion; no schema migration. Replacement keeps track ID and updates assetId/duration/profile with an incremented version. Deletion removes the track, then unreferenced media; historical room/event/interaction/summary records remain. MongoDB/filesystem cleanup is not atomic and may leave recoverable orphans. [Compatibility and recovery](CATALOG_MANAGEMENT.md).

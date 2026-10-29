@@ -100,9 +100,26 @@ function App() {
     }
   }
   useEffect(() => {
-    refresh()
-      .catch(() => {})
-      .finally(() => setReady(true));
+    let cancelled = false;
+    const controller = new AbortController();
+    async function openStudio() {
+      const until = Date.now() + 90000;
+      while (!cancelled) {
+        try {
+          const response = await fetch("/api/v1/health/ready", {
+            cache: "no-store",
+            signal: AbortSignal.any([controller.signal, AbortSignal.timeout(10000)]),
+          });
+          if (response.ok && (await response.json()).status === "ready") break;
+        } catch { /* A sleeping demo may return a loading page or time out. */ }
+        if (Date.now() >= until) throw new Error("The demo is still starting. Please refresh in about a minute.");
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+      if (!cancelled) await refresh().catch(() => {});
+    }
+    openStudio().catch((error) => { if (!cancelled) setError(error.message); })
+      .finally(() => { if (!cancelled) setReady(true); });
+    return () => { cancelled = true; controller.abort(); };
   }, []);
   useEffect(() => {
     if (!session) return;
@@ -116,7 +133,9 @@ function App() {
   useEffect(() => {
     if (!session || !room?.loungeId) return;
     const socket = io("/lounges", {
-      transports: ["websocket"],
+      // External CDN proxies can reject upgrades; polling keeps the same
+      // authenticated Socket.IO protocol and single server authority.
+      transports: ["polling", "websocket"],
       auth: { accessToken: session.accessToken },
     });
     socketRef.current = socket;
@@ -359,7 +378,7 @@ function App() {
           </div>
         )}
         {!ready ? (
-          <p className="loading">Opening your workspace…</p>
+          <p className="loading" role="status">Opening your workspace… The demo may take about a minute to wake up.</p>
         ) : !session ? (
           <section className="welcome-grid">
             <div className="welcome-copy">

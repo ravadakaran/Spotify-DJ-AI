@@ -2,6 +2,9 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 export const root = fileURLToPath(new URL("../../", import.meta.url));
 export function readConfig(env = process.env) {
+  const host = env.HOST || "127.0.0.1";
+  if (!["127.0.0.1", "0.0.0.0"].includes(host))
+    throw new Error("HOST must be 127.0.0.1 or 0.0.0.0.");
   const key = env.JWT_SIGNING_KEY;
   if (!key || key.length < 48)
     throw new Error(
@@ -20,6 +23,8 @@ export function readConfig(env = process.env) {
     audience: env.JWT_AUDIENCE || "ai-dj-client",
     origin: env.APP_ORIGIN || "http://127.0.0.1:5173",
     port: Number(env.PORT || 3000),
+    host,
+    readOnlyCatalog: env.DEMO_READ_ONLY_CATALOG === "true",
     secure: env.COOKIE_SECURE === "true",
     trustLoopbackProxy: env.TRUST_LOOPBACK_PROXY === "true",
     assetRoot: path.resolve(root, env.ASSET_ROOT || "data/assets"),

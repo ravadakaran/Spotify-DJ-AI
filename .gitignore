@@ -18,3 +18,4 @@ evidence/demo/
 
 # Acceptance downloads and local evaluation artifacts (never credentials or production data).
 data/evaluations/
+data/public-demo-assets/

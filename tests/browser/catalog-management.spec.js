@@ -181,9 +181,10 @@ test("admin edits, replaces, previews and deletes a catalog track on mobile", as
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await mkdir(path.join(root, "evidence"), { recursive: true });
+  const browserEvidence = path.resolve(process.env.BROWSER_EVIDENCE_DIR || path.join(root, "evidence"));
+  await mkdir(browserEvidence, { recursive: true });
   await page.screenshot({
-    path: path.join(root, "evidence", "catalog-management-mobile.png"),
+    path: path.join(browserEvidence, "catalog-management-mobile.png"),
     fullPage: true,
   });
   const replacement = (await db.models.Track.findById(managed._id)).assetId;
