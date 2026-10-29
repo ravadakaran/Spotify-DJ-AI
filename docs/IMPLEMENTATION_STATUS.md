@@ -1,4 +1,14 @@
-# Implementation status — 28 October 2026
+# Implementation status — 29 October 2026
+
+## Cloud hosting preparation — 29 October 2026
+
+User authorized Vercel frontend plus a single Google Cloud VM backend and requested a new cloud project. Added root Vercel build/output settings, CLI private-file exclusions, an alternate same-origin Caddy edge and production environment reference. [Topology, cloud setup, live checks and rollback](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md). Existing Node/JWT/MongoDB/API/socket/schema behavior is unchanged; Firebase Auth/Firestore/Storage were not introduced.
+
+Actual validation: `npm run lint`, `npm run build`, Vercel JSON/build-output checks and `git diff --check` passed. Caddy is unavailable locally, so its configuration has not been validated with Caddy or exercised on a target host. No application test rerun, migration, private catalog upload, backend restart or cloud deployment occurred. Existing acceptance limitations remain.
+
+Vercel account identity is connected, but the account's default team returned 403; a team-consent link was issued. Unscoped empty project results do not prove absence of projects in the inaccessible team. Firebase CLI 15.34.2 works in a separate temporary npm cache after the existing cache failed with missing registry-url; account listing reported no authorized accounts. Google Cloud CLI is unavailable. New project ID, Google login/billing, VM size/region, DNS/private access and live deployment verification remain pending.
+
+Firebase login was initiated and returned a browser authorization URL plus a local authorization-code completion step; it did not automatically open/complete a browser callback. Complete the CLI step locally, without sending authorization codes through chat. No authenticated cloud project was created.
 
 ## Listening-flow improvements — 28 October 2026
 

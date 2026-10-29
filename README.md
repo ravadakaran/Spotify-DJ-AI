@@ -26,6 +26,8 @@ Build private lounges with an authoritative live queue, votes and Soundclash bat
 
 ## Read and develop in this order
 
+For the requested Vercel frontend and single Google Cloud VM setup, see [cloud deployment](docs/VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md). Configuration is prepared; cloud provisioning and live verification remain pending.
+
 | File | Purpose |
 | --- | --- |
 | [PROJECT_REQUIREMENTS](docs/PROJECT_REQUIREMENTS.md) | Source analysis, requirement IDs, contradictions, scope and questions |

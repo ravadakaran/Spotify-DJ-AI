@@ -1,5 +1,14 @@
 # Ordered implementation backlog
 
+## Hosting — 29 October 2026
+
+- [x] Prepare Vercel root build/output configuration, private-file upload exclusions, VM edge routing and production environment reference.
+- [x] Document unchanged auth/API/schema and single-instance deployment/rollback boundaries.
+- [ ] Obtain Vercel team consent and create/verify a frontend deployment from reviewed source.
+- [ ] Authenticate Google/Firebase, choose a new project ID, configure billing and select VM size/region.
+- [ ] Provision private access, domain/TLS, durable disk, MongoDB replica set and the single Node service.
+- [ ] Validate Caddy on target; verify final-origin HTTP/socket RBAC, auth refresh, media, two-user journey, restart/recovery and cloud latency. Existing release acceptance gates remain open.
+
 28 October 2026 IMP-002: admin catalog title/artist/acoustic editing, audio replacement and confirmed deletion implemented with server RBAC, optimistic versions, idle-room exclusion and contained/shared-file cleanup. TEST-001/002/010/011/015 coverage and actual validation are in [catalog management](CATALOG_MANAGEMENT.md) and [status](IMPLEMENTATION_STATUS.md). Release gates remain open.
 
 28 October 2026 additional user scope: implement the frontend review and liquid-glass redesign without changing backend requirements. Layout, player, mobile sections, room management and theme are described in [frontend redesign](FRONTEND_REDESIGN.md); verification results are in [implementation status](IMPLEMENTATION_STATUS.md). Existing release-gate tasks retain their statuses.

@@ -1,5 +1,7 @@
 # Architecture
 
+29 October 2026 deployment alternative: one VM Caddy edge retains the application HTTPS origin; API/socket requests go to loopback Node, static frontend GET/HEAD requests to a pinned Vercel deployment with credentials stripped. MongoDB and media remain private/durable; no distributed authority or Firebase runtime dependencies. The Vercel URL alone is not the complete application. [Topology, rollout and limitations](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md).
+
 28 October 2026 IMP-002: a bounded RoomService catalog FIFO serializes room creation, track creation, whole-track edits and deletion; the idle-lounge check is inside the lock. Existing profile-version compare-and-set prevents stale writes. Post-mutation cleanup preserves shared assets and enforces real-path containment. No queue/reducer/socket change. [Authority and failure boundaries](CATALOG_MANAGEMENT.md).
 
 28 October 2026 frontend redesign preserves the deployed architecture, room FIFO and snapshot protocol. Mobile section selection is local presentation state; the sole Player and social components remain mounted across section changes. [Frontend layout and integrity boundaries](FRONTEND_REDESIGN.md).

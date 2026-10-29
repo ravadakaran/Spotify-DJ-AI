@@ -1,0 +1,29 @@
+# Alternate edge for the Vercel frontend + one VM backend.
+# DJ_HOST: user-facing DNS hostname; VERCEL_FRONTEND_HOST: immutable deployment
+# hostname ONLY (no scheme/path), e.g. ai-dj-studio-abc-team.vercel.app.
+# Apply VPN/firewall access restrictions before opening this private prototype.
+{$DJ_HOST} {
+    @backend path /api /api/* /socket.io /socket.io/*
+    handle @backend {
+        reverse_proxy 127.0.0.1:3000
+    }
+
+    @static method GET HEAD
+    handle @static {
+        reverse_proxy https://{$VERCEL_FRONTEND_HOST} {
+            header_up Host {$VERCEL_FRONTEND_HOST}
+            # Never forward private app credentials to the static host.
+            header_up -Authorization
+            header_up -Cookie
+            header_up -X-CSRF-Protection
+            header_up -X-Command-Id
+            header_down -Set-Cookie
+        }
+    }
+    handle {
+        respond "Method not allowed" 405
+    }
+    log {
+        output discard
+    }
+}

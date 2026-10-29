@@ -1,5 +1,7 @@
 # API specification
 
+29 October 2026 hosting preparation preserves all API/socket names, examples and permission rules. The user-facing origin remains the VM edge; `/api` and `/socket.io` retain their paths and original browser Origin. Refresh cookies remain secure/strict and no browser CORS exception is added. The static Vercel URL has no application API. [Routing contract](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md).
+
 28 October 2026 IMP-002 adds admin `PUT /tracks/:id` (complete title/artist/acoustic/timeline/asset edit with expectedProfileVersion) and `DELETE /tracks/:id` (expectedProfileVersion). Both require all lounges ended; replacement uses existing POST /assets, derives duration and clears the prior timeline. Responses include assetCleanup. Existing examples and socket events remain supported. [Payloads, errors and cleanup](CATALOG_MANAGEMENT.md).
 
 28 October 2026 frontend redesign changes no endpoint, request payload, mandatory example or socket event name. Play/Pause and Like/Liked use existing commands. [Frontend compatibility](FRONTEND_REDESIGN.md).

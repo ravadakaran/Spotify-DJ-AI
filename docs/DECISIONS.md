@@ -1,5 +1,7 @@
 # Architecture decisions
 
+29 October 2026 — ADR-022: user authorized Vercel frontend plus one paid Google Cloud VM backend and requested a new project. Prepare same-origin Caddy edge routing to Node for API/socket and a pinned Vercel static deployment for frontend. Preserve strict cookies/Origin, MongoDB and local private assets. Firebase services are not substituted for MongoDB or JWT auth. New project ID, region/size, billing, DNS/private access and account authorization remain unresolved; no cloud release is claimed. [Hosting configuration and tradeoffs](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md).
+
 28 October 2026 IMP-002 decision: implement user-requested catalog editing/replacement/deletion with an idle-lounge barrier serialized against room creation in the single application instance. Preserve the legacy acoustic endpoint. Use existing profileVersion instead of a new migration. Keep shared audio and historical session evidence; report cleanup failures without pretending MongoDB/file deletion is atomic. Per-track live mutation and orphan collection remain outside this slice. [Contracts and tradeoffs](CATALOG_MANAGEMENT.md).
 
 28 October 2026 — frontend presentation decision: implement the user's requested Tidal Glass navy/cyan redesign within existing React JavaScript. Keep a single mounted player, server-owned commands and all three epics; mobile sections hide without unmounting. No dependency, API or schema changes. [Design and compatibility](FRONTEND_REDESIGN.md), [visual system](../client/DESIGN.md).

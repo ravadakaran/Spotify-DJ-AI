@@ -1,5 +1,7 @@
 # Project requirements and source analysis
 
+29 October 2026 hosting scope: user authorized preparing Vercel frontend and a single Google Cloud VM backend, then requested a new cloud project. REQ-001/018/020/021 retain private access, single server authority, authenticated media and existing storage/auth. Region, budget/size, domain, project ID and account setup remain open. This is hosting preparation, not a switch to Firebase Auth/Firestore or public streaming. [Deployment scope](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md).
+
 28 October 2026 IMP-002: user requested admin library Edit, Replace audio and Delete controls, extending REQ-001/010/021. Whole-track mutations require all lounges ended, preserve shared files, validate versions and use authorized local media. Replacement requires confirmed acoustic values and clears old timeline notes. This enhancement is not an original PRD requirement. [Scope and limits](CATALOG_MANAGEMENT.md).
 
 28 October 2026 frontend redesign: user authorized a new liquid-glass theme and frontend navigation/layout improvements while preserving all PRD requirements. No acceptance threshold or product scope changed. [Presentation and compatibility details](FRONTEND_REDESIGN.md).

@@ -1,5 +1,7 @@
 # Database schema
 
+29 October 2026 hosting preparation introduces no schema/migration/seed changes. MongoDB remains an authenticated replica set, not Firestore; media stays on durable VM storage. Populate only a deliberately selected new cloud database after provisioning and backup review. [Deployment and recovery](VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md).
+
 28 October 2026 IMP-002 uses existing tracks/audio_assets fields and profileVersion; no schema migration. Replacement keeps track ID and updates assetId/duration/profile with an incremented version. Deletion removes the track, then unreferenced media; historical room/event/interaction/summary records remain. MongoDB/filesystem cleanup is not atomic and may leave recoverable orphans. [Compatibility and recovery](CATALOG_MANAGEMENT.md).
 
 28 October 2026 frontend redesign adds no schema, migration, seed or persistence changes. Mobile navigation and expanded diagnostics are client-local presentation state. [Scope](FRONTEND_REDESIGN.md).
