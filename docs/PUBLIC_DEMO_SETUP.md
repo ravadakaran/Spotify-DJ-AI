@@ -4,6 +4,14 @@ Status: repository configuration is prepared; Render/Atlas accounts, cluster,
 deployment and public cutover are not yet verified. The existing Vercel URL
 still uses the operator-restricted Google Cloud backend until cutover.
 
+Latest provisioning: the user enabled Atlas AI-client access. Dedicated project
+`AI DJ Public Demo` (`6ae35a9de34f277814f94b5f`) and Free AWS/Oregon cluster
+`ai-dj-demo` exist; cluster inspection reports IDLE on MongoDB 8.0.34. Database
+user creation was not executed because the integration's confirmation step
+failed even after chat approval; the project currently has zero DB users and
+no opened network access. Render access and deployment remain pending. Do not
+create a duplicate project/cluster when resuming.
+
 ## Services and limits
 
 - Vercel Hobby: existing static frontend and same-origin API/Socket.IO proxy.
