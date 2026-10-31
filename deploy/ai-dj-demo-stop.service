@@ -1,0 +1,6 @@
+[Unit]
+Description=Power off the on-demand AI DJ demo VM
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl poweroff

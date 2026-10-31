@@ -1,5 +1,9 @@
 # API specification
 
+Prepared public demo: optional `DEMO_READ_ONLY_CATALOG=true` rejects authenticated mutations below `/assets` and `/tracks` with HTTP 403 / `DEMO_CATALOG_READ_ONLY`, including admin writes. Anonymous requests remain 401; room creation and personal/social operations remain supported. Default deployments preserve all catalog APIs. No route/event name or core payload changed. The existing `/health/ready` endpoint supports browser cold-wake retries for up to 90 seconds. Render/Atlas public cutover remains pending. [Setup](PUBLIC_DEMO_SETUP.md).
+
+29 October 2026 final hosting preserves all API/socket names, examples and role rules. The user-facing origin is `https://ai-dj-studio-ten.vercel.app`; Vercel proxies `/api` and `/socket.io` with the original browser Origin. Secure/strict refresh cookies remain on the Vercel host. Socket.IO uses HTTP polling when the edge rejects upgrades; server authority and socket event envelopes are unchanged. Direct VM requests are denied by the authenticated edge gate. No new application endpoint or browser CORS exception was added. [Routing contract](CLOUD_DEMO_OPERATIONS.md).
+
 28 October 2026 IMP-002 adds admin `PUT /tracks/:id` (complete title/artist/acoustic/timeline/asset edit with expectedProfileVersion) and `DELETE /tracks/:id` (expectedProfileVersion). Both require all lounges ended; replacement uses existing POST /assets, derives duration and clears the prior timeline. Responses include assetCleanup. Existing examples and socket events remain supported. [Payloads, errors and cleanup](CATALOG_MANAGEMENT.md).
 
 28 October 2026 frontend redesign changes no endpoint, request payload, mandatory example or socket event name. Play/Pause and Like/Liked use existing commands. [Frontend compatibility](FRONTEND_REDESIGN.md).

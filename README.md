@@ -2,6 +2,16 @@
 
 Implementation and documentation for **AI DJ Studio: Collaborative Live Queue Curation & Sentiment-Aware Audio Engine**. This is a private prototype based on the supplied PRD, not a Spotify integration or an assertion of Spotify affiliation.
 
+## Hosted demo
+
+[Open the hosted preview](https://ai-dj-studio-ten.vercel.app).
+
+**Public access is being configured.** The current preview is still restricted
+to the operator's network and uses an on-demand backend. The free portfolio
+deployment is prepared for Vercel + Render Free + MongoDB Atlas Free, with
+visitor accounts, private lounges and three licensed demo tracks. It is not
+publicly activated yet. [Setup and current limits](docs/PUBLIC_DEMO_SETUP.md).
+
 **Status: Phases 1–6 software is implemented with qualified release acceptance.** All three epics include queue/playback/moderation, grounded text Q&A/segue approval, chat/sentiment/battles, hybrid recommendations and personal/session analytics. Phase 6 adds repeatable multi-room load evidence, security/accessibility checks, private deployment templates and an offline backup/restore rehearsal. Templates are labeled; strict long-run queue max latency, real-model, licensed media and independent evaluation gates remain open. No live private TLS deployment is claimed. See [actual verification](docs/IMPLEMENTATION_STATUS.md), [Phase 6 details](docs/PHASE_SIX_IMPLEMENTATION.md) and [private deployment runbook](docs/PRIVATE_DEPLOYMENT.md).
 
 ## Run the current application
@@ -25,6 +35,8 @@ Recommended delivery: PRD Track A (full stack), Option B: React, JavaScript, Vit
 Build private lounges with an authoritative live queue, votes and Soundclash battles; local audio playback; BPM/Camelot matching; chat sentiment; grounded text banter and Q&A; hybrid recommendations; session analytics; and four-role access control. Use original or appropriately licensed local audio and authored metadata. Real Spotify accounts/catalog/API access, waveform mixing, synthesized speech/music and public streaming are excluded by PRD §4.2.
 
 ## Read and develop in this order
+
+For the hosted Vercel frontend and private Google Cloud demo VM, see [demo start/stop, login and limits](docs/CLOUD_DEMO_OPERATIONS.md). The VM is on demand with a 90-minute stop safeguard; its address changes after stop/start. [Deployment preparation and historical setup](docs/VERCEL_GOOGLE_CLOUD_DEPLOYMENT.md) remain available.
 
 | File | Purpose |
 | --- | --- |

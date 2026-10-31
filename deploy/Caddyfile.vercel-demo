@@ -1,0 +1,33 @@
+{
+    default_sni {$DJ_HOST}
+}
+https://{$DJ_HOST} {
+    tls {
+        issuer acme {
+            dir https://acme-v02.api.letsencrypt.org/directory
+            profile shortlived
+            disable_tlsalpn_challenge
+        }
+    }
+    # Vercel replaces the secret header; its authenticated forwarded IP keeps
+    # this demo restricted to the existing operator, including media requests.
+    @vercel {
+        path /api /api/* /socket.io /socket.io/*
+        header X-Ai-Dj-Origin {$VERCEL_ORIGIN_SECRET}
+        header X-Vercel-Forwarded-For {$DEMO_CLIENT_IP}
+    }
+    handle @vercel {
+        header Cache-Control "private, no-store"
+        header CDN-Cache-Control "no-store"
+        header Vercel-CDN-Cache-Control "no-store"
+        reverse_proxy 127.0.0.1:3000 {
+            header_up -X-Ai-Dj-Origin
+        }
+    }
+    handle {
+        respond "Forbidden" 403
+    }
+    log {
+        output discard
+    }
+}

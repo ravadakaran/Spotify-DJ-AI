@@ -1,16 +1,10 @@
 import { execFileSync, spawn } from 'node:child_process';
 import { readFile, writeFile } from 'node:fs/promises';
 import { createInterface } from 'node:readline';
+import { secretKinds } from './secret-signatures.js';
 
-// Deliberately narrow signatures avoid dumping private data or flagging fixture passwords.
-const signatures = [
-  ['private-key', /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/],
-  ['jwt', /\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{20,}\b/],
-  ['provider-key', /\b(?:sk-[A-Za-z0-9_-]{24,}|ghp_[A-Za-z0-9]{30,}|AKIA[A-Z0-9]{16})\b/],
-  ['database-credentials', /mongodb(?:\+srv)?:\/\/[^\s/:]+:[^\s/@]+@/],
-];
 const findings=[];
-const check = (text, location) => { for(const [kind,pattern] of signatures) if(pattern.test(text)) findings.push({kind,location}); };
+const check = (text, location) => { for(const kind of secretKinds(text)) findings.push({kind,location}); };
 const files=execFileSync('git',['ls-files','--cached','--others','--exclude-standard','-z'],{encoding:'utf8'}).split('\0').filter(Boolean);
 for(const file of files) {
   if(!/\.(?:js|jsx|json|md|ya?ml|html|css|env|example|service|txt)$/.test(file) || file==='package-lock.json') continue;

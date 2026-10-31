@@ -1,0 +1,39 @@
+{
+    default_sni {$DJ_HOST}
+}
+https://{$DJ_HOST} {
+    header {
+        X-Content-Type-Options nosniff
+        X-Frame-Options SAMEORIGIN
+        Referrer-Policy no-referrer
+        Content-Security-Policy "default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; object-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; media-src 'self' blob:; connect-src 'self' wss://{$DJ_HOST}"
+    }
+    tls {
+        issuer acme {
+            dir https://acme-v02.api.letsencrypt.org/directory
+            profile shortlived
+            disable_tlsalpn_challenge
+        }
+    }
+    @backend path /api /api/* /socket.io /socket.io/*
+    handle @backend {
+        reverse_proxy 127.0.0.1:3000
+    }
+    @static method GET HEAD
+    handle @static {
+        reverse_proxy https://{$VERCEL_FRONTEND_HOST} {
+            header_up Host {$VERCEL_FRONTEND_HOST}
+            header_up -Authorization
+            header_up -Cookie
+            header_up -X-CSRF-Protection
+            header_up -X-Command-Id
+            header_down -Set-Cookie
+        }
+    }
+    handle {
+        respond "Method not allowed" 405
+    }
+    log {
+        output discard
+    }
+}

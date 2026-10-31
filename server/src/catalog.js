@@ -41,6 +41,11 @@ export function parseRange(header, size) {
 }
 export function catalogRouter(models, auth, config, rooms) {
   const router = Router();
+  router.use((req, _res, next) => {
+    if (config.readOnlyCatalog && /^\/(?:assets|tracks)(?:\/|$)/.test(req.path) && !["GET", "HEAD", "OPTIONS"].includes(req.method))
+      return next(new HttpError(403, "DEMO_CATALOG_READ_ONLY", "Catalog edits are disabled in this public demo."));
+    next();
+  });
   const serial = (action) => rooms.serial("catalog", action);
   async function requireIdle() {
     if (await models.Lounge.exists({ status: { $ne: "ended" } }))
